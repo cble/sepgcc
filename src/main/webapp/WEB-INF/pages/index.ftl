@@ -1,4 +1,5 @@
-<#include "common/header.ftl" />
+<#include "common/pageFrame.ftl" />
+<@pageFrame>
 
 <div class="container">
 
@@ -36,4 +37,4 @@
 
 </div>
 
-<#include "common/footer.ftl" />
+</@pageFrame>
