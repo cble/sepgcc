@@ -2,19 +2,37 @@
 
 <div class="container">
 
-    <form class="form-signin">
-        <h2 class="form-signin-heading">请先登录</h2>
-        <label for="inputEmail" class="sr-only">用户名</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="用户名" required="" autofocus="">
-        <label for="inputPassword" class="sr-only">密码</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="密码" required="">
-    <#--<div class="checkbox">-->
-    <#--<label>-->
-    <#--<input type="checkbox" value="remember-me"> Remember me-->
-    <#--</label>-->
-    <#--</div>-->
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-    </form>
+    <ul class="nav nav-pills" style="padding: 15px 0;">
+        <li role="presentation" class="active"><a href="#">项目列表</a></li>
+        <li role="presentation"><a href="#">我的上传</a></li>
+    </ul>
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+        <tr>
+            <td>项目名</td>
+            <td>截止日期</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>反法西斯战争胜利70周年</td>
+            <td>2015-10-21 23:23:24</td>
+            <td><a href="">上传</a></td>
+        </tr>
+        <tr>
+            <td>反法西斯战争胜利70周年</td>
+            <td>2015-10-21 23:23:24</td>
+            <td><a href="">上传</a></td>
+        </tr>
+        <tr>
+            <td>反法西斯战争胜利70周年</td>
+            <td>2015-10-21 23:23:24</td>
+            <td><a href="">上传</a></td>
+        </tr>
+        </tbody>
+    </table>
 
 </div>
 
