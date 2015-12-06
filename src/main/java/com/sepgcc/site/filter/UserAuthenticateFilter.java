@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class UserInfoFilter implements Filter {
+public class UserAuthenticateFilter implements Filter {
 
-    private static final Logger log = Logger.getLogger(UserInfoFilter.class);
+    private static final Logger log = Logger.getLogger(UserAuthenticateFilter.class);
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {

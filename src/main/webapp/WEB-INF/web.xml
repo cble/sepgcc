@@ -33,8 +33,8 @@
         </init-param>
     </filter>
     <filter>
-        <filter-name>userInfoFilter</filter-name>
-        <filter-class>com.sepgcc.site.filter.UserInfoFilter</filter-class>
+        <filter-name>userAuthenticateFilter</filter-name>
+        <filter-class>com.sepgcc.site.filter.UserAuthenticateFilter</filter-class>
     </filter>
 
 
@@ -45,7 +45,7 @@
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
     <filter-mapping>
-        <filter-name>userInfoFilter</filter-name>
+        <filter-name>userAuthenticateFilter</filter-name>
         <url-pattern>/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
