@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
+    <title>上海教育报刊总社资料收集平台</title>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/css/base.css" />
 </head>
@@ -18,15 +18,15 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Project name</a>
+            <a class="navbar-brand" href="#">上海教育报刊总社资料收集平台</a>
         </div>
 
-        <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </div>
+        <#--<div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">-->
+            <#--<ul class="nav navbar-nav">-->
+                <#--<li class="active"><a href="#">Home</a></li>-->
+                <#--<li><a href="#about">About</a></li>-->
+                <#--<li><a href="#contact">Contact</a></li>-->
+            <#--</ul>-->
+        <#--</div>-->
     </div>
 </nav>
