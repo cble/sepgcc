@@ -3,7 +3,7 @@
 
 <div class="container">
 
-    <form class="form-signin" method="post" action="#">
+    <form class="form-signin" method="post" action="/login">
         <h2 class="form-signin-heading">请先登录</h2>
         <input type="text" name="username" id="inputEmail" class="form-control" placeholder="用户名" required="" autofocus="">
         <input type="password" name="password" id="inputPassword" class="form-control" placeholder="密码" required="">
