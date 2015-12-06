@@ -25,8 +25,8 @@
         <property name="exposeSpringMacroHelpers" value="true" />
     </bean>
     <!--<mvc:resources mapping="/img/**" location="/WEB-INF/static/img/" cache-period="31556926" />-->
-    <!--<mvc:resources mapping="/js/**" location="/WEB-INF/static/js/" cache-period="31556926" />-->
-    <!--<mvc:resources mapping="/css/**" location="/WEB-INF/static/css/" cache-period="31556926" />-->
+    <mvc:resources mapping="/js/**" location="/WEB-INF/static/js/" cache-period="31556926" />
+    <mvc:resources mapping="/css/**" location="/WEB-INF/static/css/" cache-period="31556926" />
 
     <bean name="/index.html" class="com.sepgcc.site.IndexController"/>
 </beans>

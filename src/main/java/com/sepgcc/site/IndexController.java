@@ -14,6 +14,6 @@ public class IndexController implements Controller {
     @Override
     public ModelAndView handleRequest(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
         log.info("in IndexController");
-        return new ModelAndView("index");
+        return new ModelAndView("login");
     }
 }
