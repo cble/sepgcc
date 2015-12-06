@@ -32,6 +32,7 @@
 
             <#if !loginPage>
             <ul class="nav navbar-nav navbar-right">
+                <li><a style="color: white;">您好，${user.nickname}</a></li>
                 <li><a href="/logout">退出登录</a></li>
             </ul>
             </#if>
