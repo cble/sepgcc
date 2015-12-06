@@ -1,7 +1,7 @@
 package com.sepgcc.site.controller;
 
 import com.sepgcc.site.dto.User;
-import com.sepgcc.utils.UserUtils;
+import com.sepgcc.site.utils.UserUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="user">
+
+    <typeAlias alias="userDO" type="com.sepgcc.site.dao.entity.UserDO" />
+
+    <resultMap id="userResult" class="userDO">
+        <result column="ID" property="id" />
+        <result column="Username" property="username" />
+        <result column="Password" property="password" />
+        <result column="Nickname" property="nickname" />
+    </resultMap>
+
+    <select id="loadByUsername" resultMap="userResult">
+        SELECT ID,
+            Username,
+            Password,
+            Nickname
+        FROM ZL_User
+        WHERE Username = #username#
+    </select>
+
+</sqlMap>

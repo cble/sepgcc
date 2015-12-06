@@ -1,4 +1,4 @@
-package com.sepgcc.constants;
+package com.sepgcc.site.constants;
 
 public class SessionConstants {
 

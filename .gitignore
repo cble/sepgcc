@@ -30,3 +30,5 @@
 target/
 *.versionsBackup
 **/*.versionsBackup
+
+**/*.properties

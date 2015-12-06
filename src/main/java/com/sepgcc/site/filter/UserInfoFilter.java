@@ -1,6 +1,6 @@
 package com.sepgcc.site.filter;
 
-import com.sepgcc.constants.SessionConstants;
+import com.sepgcc.site.constants.SessionConstants;
 import com.sepgcc.site.dto.User;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
