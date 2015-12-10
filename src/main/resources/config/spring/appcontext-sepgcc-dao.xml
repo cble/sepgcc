@@ -5,5 +5,8 @@
 <beans default-autowire="byName">
 
     <bean id="userDAO" class="com.sepgcc.site.dao.impl.UserDAOImpl" parent="sepgccAbstractDAO" />
+    <bean id="projectDAO" class="com.sepgcc.site.dao.impl.ProjectDAOImpl" parent="sepgccAbstractDAO" />
+    <bean id="projectItemDAO" class="com.sepgcc.site.dao.impl.ProjectItemDAOImpl" parent="sepgccAbstractDAO" />
+    <bean id="projectContactDAO" class="com.sepgcc.site.dao.impl.ProjectContactDAOImpl" parent="sepgccAbstractDAO" />
 
 </beans>

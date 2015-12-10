@@ -4,4 +4,7 @@
 <sqlMapConfig>
 	<settings useStatementNamespaces="true"/>
 	<sqlMap resource="config/sqlmap/User.xml" />
+	<sqlMap resource="config/sqlmap/Project.xml" />
+	<sqlMap resource="config/sqlmap/ProjectItem.xml" />
+	<sqlMap resource="config/sqlmap/ProjectContact.xml" />
 </sqlMapConfig>

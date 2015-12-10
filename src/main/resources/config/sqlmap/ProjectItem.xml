@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="projectItem">
+
+    <typeAlias alias="projectItemDO" type="com.sepgcc.site.dao.entity.ProjectItemDO" />
+
+    <resultMap id="projectItemResult" class="projectItemDO">
+        <result column="ID" property="id" />
+        <result column="ProjectID" property="projectId" />
+        <result column="Name" property="name" />
+        <result column="Description" property="description" />
+        <result column="DescriptionImage" property="descriptionImage" />
+        <result column="Required" property="required" />
+        <result column="FileType" property="fileType" />
+        <result column="AddTime" property="addTime" />
+    </resultMap>
+
+    <select id="queryByProjectId" resultMap="projectItemResult" parameterClass="int">
+        SELECT ID,
+            ProjectID,
+            Name,
+            Description,
+            DescriptionImage,
+            Required,
+            FileType,
+            AddTime
+        FROM ZL_ProjectItem
+        WHERE ProjectID = #projectId#
+    </select>
+
+</sqlMap>

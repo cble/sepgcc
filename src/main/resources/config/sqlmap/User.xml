@@ -11,7 +11,7 @@
         <result column="Nickname" property="nickname" />
     </resultMap>
 
-    <select id="loadByUsername" resultMap="userResult">
+    <select id="loadByUsername" resultMap="userResult" parameterClass="string">
         SELECT ID,
             Username,
             Password,

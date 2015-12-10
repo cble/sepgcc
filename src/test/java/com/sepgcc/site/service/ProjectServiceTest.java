@@ -1,5 +1,6 @@
 package com.sepgcc.site.service;
 
+import com.sepgcc.site.dto.Project;
 import com.sepgcc.site.dto.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,21 +9,19 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import java.sql.Connection;
-import java.sql.DriverManager;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
         "classpath*:config/spring/appcontext-*.xml"
 })
-public class UserServiceTest {
+public class ProjectServiceTest {
 
     @Resource
-    private UserService userService;
+    private ProjectService projectService;
 
     @Test
-    public void testLoadUser() throws Exception {
-        User user = userService.loadUser("test", "test");
-        Assert.notNull(user, "oops...");
+    public void testLoadProjectById() throws Exception {
+        Project project = projectService.loadProjectById(1);
+        Assert.notNull(project, "oops...");
     }
 }
