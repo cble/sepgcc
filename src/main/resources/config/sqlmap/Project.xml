@@ -28,6 +28,27 @@
             UpdateTime
         FROM ZL_Project
         WHERE ID = #id#
+        AND Status > 0
+    </select>
+
+    <select id="queryAll" resultMap="projectResult">
+        SELECT ID,
+            Name,
+            Description,
+            BeginTime,
+            EndTime,
+            Owner,
+            Status,
+            AddTime,
+            UpdateTime
+        FROM ZL_Project
+        WHERE Status > 0
+    </select>
+
+    <select id="countAll" resultClass="int">
+        SELECT IFNULL(COUNT(ID), 0)
+        FROM ZL_Project
+        WHERE Status > 0
     </select>
 
 </sqlMap>

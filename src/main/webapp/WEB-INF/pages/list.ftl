@@ -16,23 +16,17 @@
             <td>操作</td>
         </tr>
         </thead>
+        <#if projectList?exists && projectList?size gt 0>
         <tbody>
+        <#list projectList as project>
         <tr>
-            <td>2015高雅艺术进校园活动</td>
-            <td>2015-12-31 23:59:59</td>
-            <td><a href="">上传</a></td>
+            <td>${project.name}</td>
+            <td>${project.endTime?datetime}</td>
+            <td><a href="notice?projectId=${project.id}">上传</a></td>
         </tr>
-        <tr>
-            <td>反法西斯战争胜利70周年系列活动</td>
-            <td>2015-12-31 23:59:59</td>
-            <td><a href="">上传</a></td>
-        </tr>
-        <tr>
-            <td>“说在上海”系列活动</td>
-            <td>2015-12-31 23:59:59</td>
-            <td><a href="">上传</a></td>
-        </tr>
+        </#list>
         </tbody>
+        </#if>
     </table>
 
 </div>

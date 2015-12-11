@@ -20,7 +20,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/index">上海教育报刊总社资料收集平台</a>
+            <a class="navbar-brand" href="index">上海教育报刊总社资料收集平台</a>
         </div>
 
         <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
@@ -33,7 +33,7 @@
             <#if !loginPage>
             <ul class="nav navbar-nav navbar-right">
                 <li><a style="color: white;">您好，${user.nickname}</a></li>
-                <li><a href="/logout">退出登录</a></li>
+                <li><a href="logout">退出登录</a></li>
             </ul>
             </#if>
         </div>
