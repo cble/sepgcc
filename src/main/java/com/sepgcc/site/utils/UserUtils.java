@@ -31,6 +31,16 @@ public class UserUtils {
     }
 
     public static String encryptPassword(String password) {
-        return DigestUtils.md5DigestAsHex((PWD_SALT + password).getBytes()).toUpperCase();
+        try {
+            return DigestUtils.md5DigestAsHex((PWD_SALT + password).getBytes("UTF-8")).toUpperCase();
+        } catch (Exception e) {
+            // TODO log
+            return null;
+        }
     }
+
+    public static String generateToken() {
+        return "";
+    }
+
 }

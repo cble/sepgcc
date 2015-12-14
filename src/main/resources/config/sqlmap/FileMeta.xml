@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="fileMeta">
+
+    <typeAlias alias="fileMetaDO" type="com.sepgcc.site.dao.entity.FileMetaDO" />
+
+    <resultMap id="fileMetaResult" class="fileMetaDO">
+        <result column="ID" property="id" />
+        <result column="FileID" property="fileId" />
+        <result column="FileName" property="fileName" />
+        <result column="StoragePath" property="storagePath" />
+        <result column="UserID" property="userId" />
+        <result column="FileType" property="fileType" />
+        <result column="Status" property="status" />
+        <result column="AddTime" property="addTime" />
+        <result column="UpdateTime" property="updateTime" />
+    </resultMap>
+
+    <select id="loadById" resultMap="fileMetaResult" parameterClass="string">
+        SELECT ID,
+            FileID,
+            FileName,
+            StoragePath,
+            UserID,
+            FileType,
+            Status,
+            AddTime,
+            UpdateTime
+        FROM ZL_FileMeta
+        WHERE FileID = #fileId#
+        AND Status > 0
+    </select>
+
+    <insert id="insert" parameterClass="fileMetaDO">
+        INSERT INTO ZL_FileMeta (
+            FileID,
+            FileName,
+            StoragePath,
+            UserID,
+            FileType,
+            Status,
+            AddTime,
+            UpdateTime
+        ) VALUES (
+            #fileId#,
+            #fileName#,
+            #storagePath#,
+            #userID#,
+            #fileType#,
+            1,
+            NOW(),
+            NOW()
+        )
+        <selectKey resultClass="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+</sqlMap>

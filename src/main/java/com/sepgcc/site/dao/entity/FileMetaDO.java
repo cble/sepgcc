@@ -1,17 +1,26 @@
-package com.sepgcc.site.dto;
+package com.sepgcc.site.dao.entity;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import java.util.Date;
 
-import java.io.Serializable;
+public class FileMetaDO {
 
-@JsonIgnoreProperties({"storagePath", "userId", "bytes"})
-public class FileMeta implements Serializable {
+    private int id;
     private String fileId;
     private String fileName;
     private String storagePath;
     private int userId;
     private String fileType;
-    private byte[] bytes;
+    private int status;
+    private Date addTime;
+    private Date updateTime;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getFileId() {
         return fileId;
@@ -53,11 +62,27 @@ public class FileMeta implements Serializable {
         this.fileType = fileType;
     }
 
-    public byte[] getBytes() {
-        return bytes;
+    public int getStatus() {
+        return status;
     }
 
-    public void setBytes(byte[] bytes) {
-        this.bytes = bytes;
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public Date getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

@@ -2,12 +2,15 @@ package com.sepgcc.site.controller;
 
 import com.sepgcc.site.dto.FileMeta;
 import com.sepgcc.site.dto.Project;
+import com.sepgcc.site.dto.User;
 import com.sepgcc.site.service.FileService;
 import com.sepgcc.site.service.ProjectService;
+import com.sepgcc.site.utils.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,21 +52,24 @@ public class UploadController extends BaseController {
 
     @RequestMapping(value = {"/upload"}, method = RequestMethod.GET)
     public ModelAndView upload(int projectId, ModelMap modelMap) throws Exception {
-//        Project project = projectService.loadProjectById(projectId);
-//        modelMap.put("project", project);
-//        return new ModelAndView("upload");
+        Project project = projectService.loadProjectById(projectId);
+        modelMap.put("project", project);
+        return new ModelAndView("upload");
+    }
+
+    @RequestMapping(value = {"/uploadtest"}, method = RequestMethod.GET)
+    public ModelAndView uploadtest() throws Exception {
         return new ModelAndView("uploadtest");
     }
 
     @RequestMapping(value = {"/uploadFile"}, method = RequestMethod.POST)
-    public @ResponseBody List<FileMeta> uploadFile(MultipartHttpServletRequest request) throws Exception {
+    public @ResponseBody List<FileMeta> uploadFile(
+            @ModelAttribute User user,
+            MultipartHttpServletRequest request) throws Exception {
         Map<String, MultipartFile> mpfMap = request.getFileMap();
         List<FileMeta> fileMetaList = new ArrayList<FileMeta>(mpfMap.size());
         for (MultipartFile mpf : mpfMap.values()) {
-            FileMeta fileMeta = new FileMeta();
-            fileMeta.setFileName(mpf.getOriginalFilename());
-            fileMeta.setFileType(mpf.getContentType());
-            fileMeta.setBytes(mpf.getBytes());
+            FileMeta fileMeta = FileUtils.toFileMeta(mpf, user.getId());
             String fileId = fileService.saveFile(fileMeta);
             if (StringUtils.isNotBlank(fileId)) {
                 fileMeta.setFileId(fileId);

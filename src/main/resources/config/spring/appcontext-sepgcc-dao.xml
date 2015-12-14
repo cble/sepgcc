@@ -8,5 +8,6 @@
     <bean id="projectDAO" class="com.sepgcc.site.dao.impl.ProjectDAOImpl" parent="sepgccAbstractDAO" />
     <bean id="projectItemDAO" class="com.sepgcc.site.dao.impl.ProjectItemDAOImpl" parent="sepgccAbstractDAO" />
     <bean id="projectContactDAO" class="com.sepgcc.site.dao.impl.ProjectContactDAOImpl" parent="sepgccAbstractDAO" />
+    <bean id="fileMetaDAO" class="com.sepgcc.site.dao.impl.FileMetaDAOImpl" parent="sepgccAbstractDAO" />
 
 </beans>

@@ -24,7 +24,8 @@ public class LoginController extends BaseController {
     private UserService userService;
 
     @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
-    public ModelAndView login(@ModelAttribute User user,
+    public ModelAndView login(
+            @ModelAttribute User user,
             String username,
             String password,
             String redirect,

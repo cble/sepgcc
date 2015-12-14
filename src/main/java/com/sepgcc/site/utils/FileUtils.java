@@ -1,32 +1,104 @@
 package com.sepgcc.site.utils;
 
-import com.google.common.io.Files;
+import com.sepgcc.site.constants.FileConstants;
+import com.sepgcc.site.dao.entity.FileMetaDO;
+import com.sepgcc.site.dto.FileMeta;
+import net.sf.cglib.beans.BeanCopier;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileUtils {
 
-    public static boolean createDir(String path) {
+    private static final BeanCopier toFileMetaDOCopier = BeanCopier.create(FileMeta.class, FileMetaDO.class, false);
+    private static final BeanCopier toFileMetaCopier = BeanCopier.create(FileMetaDO.class, FileMeta.class, false);
+
+    public static String joinPath(String... paths) {
+        if (paths == null) {
+            return null;
+        }
+        List<String> pathList = new ArrayList<String>();
+        for (String path : paths) {
+            String s = path.trim();
+            if (s.startsWith(FileConstants.SEP)) {
+                s = s.substring(1, s.length());
+            }
+            if (s.endsWith(FileConstants.SEP)) {
+                s = s.substring(0, s.length() - 1);
+            }
+            pathList.add(path);
+        }
+        return StringUtils.join(pathList, FileConstants.SEP);
+    }
+
+    /**
+     * md5(md5(fileName + userId) + checksum(file))
+     * @param fileMeta
+     * @return
+     */
+    public static String generateId(FileMeta fileMeta) {
         try {
-            File dir = new File(path);
-            if (!dir.exists()) {
-                return dir.mkdirs();
-            } else {
-                return true;
+            if (fileMeta != null) {
+                String header = Md5Utils.md5((fileMeta.getFileName() + fileMeta.getUserId()).getBytes("UTF-8"));
+                String body = Md5Utils.md5(fileMeta.getBytes());
+                return Md5Utils.md5((header + body).getBytes());
             }
         } catch (Exception e) {
-            return false;
+            // TODO log
         }
+        return null;
     }
 
-    public static boolean writeFile(File file, String path) {
-        try {
-            Files.copy(file, new File(path));
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
+    public static String generateStoragePath(FileMeta fileMeta) {
+        return joinPath(
+                String.valueOf(fileMeta.getFileId().charAt(0)),
+                String.valueOf(fileMeta.getFileId().charAt(1)),
+                fileMeta.getFileId());
     }
 
+    public static FileMeta toFileMeta(MultipartFile mpf, int userId) throws Exception {
+        FileMeta fileMeta = new FileMeta();
+        fileMeta.setFileName(mpf.getOriginalFilename());
+        fileMeta.setFileType(mpf.getContentType());
+        fileMeta.setBytes(mpf.getBytes());
+        fileMeta.setUserId(userId);
+        return fileMeta;
+    }
 
+    public static FileMeta toFileMeta(FileMetaDO fileMetaDO) {
+        FileMeta fileMeta = new FileMeta();
+        toFileMetaCopier.copy(fileMetaDO, fileMeta, null);
+        return fileMeta;
+    }
+
+    public static FileMetaDO toFileMetaDO(FileMeta fileMeta, String fileId) {
+        FileMetaDO result = new FileMetaDO();
+        toFileMetaCopier.copy(fileMeta, result, null);
+        result.setFileId(fileId);
+        return result;
+    }
+
+    public static void saveToDisk(String storagePath, byte[] bytes) throws IOException {
+        createDir(storagePath);
+        FileCopyUtils.copy(bytes, new FileOutputStream(storagePath));
+    }
+
+    public static byte[] readFromDisk(String path) throws IOException {
+        return IOUtils.toByteArray(new FileInputStream(path));
+    }
+
+    public static void createDir(String path) throws IOException {
+        File dir = new File(path);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+    }
 }
