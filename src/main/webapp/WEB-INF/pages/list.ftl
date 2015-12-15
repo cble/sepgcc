@@ -17,17 +17,8 @@
                 <td>操作</td>
             </tr>
             </thead>
-            <#if projectList?exists && projectList?size gt 0>
-                <tbody>
-                    <#list projectList as project>
-                    <tr>
-                        <td>${project.name}</td>
-                        <td>${project.endTime?datetime}</td>
-                        <td><a href="notice?projectId=${project.id}">上传</a></td>
-                    </tr>
-                    </#list>
-                </tbody>
-            </#if>
+            <tbody>
+            </tbody>
         </table>
     </div>
 </div>
