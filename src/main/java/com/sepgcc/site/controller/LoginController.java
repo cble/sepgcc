@@ -25,19 +25,19 @@ public class LoginController extends BaseController {
 
     @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView login(
-            @ModelAttribute User user,
+            @ModelAttribute Integer userId,
             String username,
             String password,
             String redirect,
             HttpServletRequest request) throws Exception {
-        if (user != null) {
+        if (userId != null && userId > 0) {
             if (StringUtils.isNotBlank(redirect)) {
                 return new ModelAndView("redirect:" + redirect);
             } else {
                 return new ModelAndView(new RedirectView("index"));
             }
         } else if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)) {
-            user = userService.loadUser(username, password);
+            User user = userService.loadUser(username, password);
             if (user != null) {
                 setUser(request, user);
                 return new ModelAndView(new RedirectView("index"));

@@ -1,7 +1,9 @@
 package com.sepgcc.site.filter;
 
+import com.sepgcc.site.constants.SecurityConstants;
 import com.sepgcc.site.constants.SessionConstants;
 import com.sepgcc.site.dto.User;
+import com.sepgcc.site.utils.SecurityUtils;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 
@@ -15,6 +17,9 @@ public class UserAuthenticateFilter implements Filter {
 
     private static final Logger log = Logger.getLogger(UserAuthenticateFilter.class);
 
+    private static final String[] staticPaths = {"css", "js", "favicon.ico"};
+    private static final String[] noLoginPaths = {"login", "logout"};
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         if (!(servletRequest instanceof HttpServletRequest) || !(servletResponse instanceof HttpServletResponse)) {
@@ -25,27 +30,47 @@ public class UserAuthenticateFilter implements Filter {
         HttpSession session = httpRequest.getSession(true);
 
         StringBuffer url = httpRequest.getRequestURL();
-        String[] strs = {"login", "css", "js"};
-        for (String str : strs) {
-            if (url.indexOf(str) >= 0) {
-                filterChain.doFilter(servletRequest, servletResponse);
+        for (String s : staticPaths) {
+            if (url.indexOf(s) >= 0) {
+                invokeNextFilter(filterChain, servletRequest, servletResponse, null);
                 return;
             }
         }
+
         Object object = session.getAttribute(SessionConstants.SESSION_USER);
         User user = object == null ? null : (User) object;
-        if (user == null) {
-            boolean isAjaxRequest = isAjaxRequest(httpRequest);
-            if (isAjaxRequest) {
-                httpResponse.setCharacterEncoding("UTF-8");
-                httpResponse.sendError(HttpStatus.UNAUTHORIZED.value(),
-                        "您已经太长时间没有操作,请刷新页面");
+        if (user != null) {
+            int userId = SecurityUtils.parseToken(user.getToken());
+            if (userId > 0) {
+                invokeNextFilter(filterChain, servletRequest, servletResponse, userId);
+                return;
             }
-            httpResponse.sendRedirect("/login?redirect="+url);
-            return;
         }
-        filterChain.doFilter(servletRequest, servletResponse);
-        return;
+
+        for (String s : noLoginPaths) {
+            if (url.indexOf(s) >= 0) {
+                invokeNextFilter(filterChain, servletRequest, servletResponse, null);
+                return;
+            }
+        }
+
+        httpRequest.getSession().removeAttribute(SessionConstants.SESSION_USER);
+        boolean isAjaxRequest = isAjaxRequest(httpRequest);
+        if (isAjaxRequest) {
+            httpResponse.setCharacterEncoding("UTF-8");
+            httpResponse.sendError(HttpStatus.UNAUTHORIZED.value(),
+                    "您已经太长时间没有操作,请刷新页面");
+        }
+        httpResponse.sendRedirect("/login?redirect="+url);
+    }
+
+    private void invokeNextFilter(FilterChain filterChain, ServletRequest servletRequest, ServletResponse servletResponse, Integer userId) throws IOException, ServletException {
+        try {
+            servletRequest.setAttribute(SecurityConstants.REQUEST_USERID, userId);
+            filterChain.doFilter(servletRequest, servletResponse);
+        } finally {
+            servletRequest.removeAttribute(SecurityConstants.REQUEST_USERID);
+        }
     }
 
     /**
