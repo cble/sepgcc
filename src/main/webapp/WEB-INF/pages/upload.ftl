@@ -28,6 +28,15 @@
                        class="form-control"
                        id="item_${projectItem.id}"
                        <#if projectItem.required>required=""</#if> />
+                <div class="file_upload_container">
+                    <input class="fileupload" type="file" name="files[]" data-url="uploadFile" style="display:none;">
+                    <div id="progress" class="progress">
+                        <div class="progress-bar" style="width: 0%;"></div>
+                    </div>
+                    <div class="file_list">
+
+                    </div>
+                </div>
             </#list>
         </div>
     </form>
@@ -36,5 +45,10 @@
         ${project.owner}
     </div>
 </div>
+
+<script src="/js/component/jquery.fileupload.js"></script>
+<script src="/js/component/jquery.iframe-transport.js"></script>
+<script src="/js/component/fileupload.js"></script>
+<script src="/js/page/addproject.js"></script>
 
 </@pageFrame>
