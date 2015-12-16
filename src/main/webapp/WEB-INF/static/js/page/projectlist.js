@@ -1,6 +1,6 @@
 (function () {
 
-    var list = new PageList(".J_pagelist", {
+    new PageList(".J_pagelist", {
         url: "/ajax/projectlist",
         parseData: function (res) {
             if (res.code == 200 && res.data) {
@@ -17,5 +17,4 @@
         lastColumn: '<a href="/notice?projectId={id}">上传资料</a>'
     });
 
-    window.list = list;
 })();
