@@ -9,10 +9,12 @@
         this.getList(1);
         var self = this;
         this.pageNav.on("click", "a", function (e) {
-            var page = $(this).data("page");
-            if (page) {
-                self.getList(page);
+            var link = $(this);
+            var page = link.data("page");
+            if (link.parent().hasClass("disabled") || link.parent().hasClass("active")) {
+                return;
             }
+            self.getList(page);
         });
     };
 
@@ -26,19 +28,21 @@
         $.ajax({
             url: this.url + "?page=" + page,
             dataType: "json",
+            type: "post",
             success: function (res) {
                 var data = self.parseData(res);
                 self.table.empty();
                 data.list.forEach(function (rowData) {
                     var row = $("<tr></tr>");
                     rowData.forEach(function (cell, i) {
+                        var content = cell;
                         if (i == rowData.length - 1 && self.lastColumn) {
-                            self.lastColumn.replace(/\{(\w+)\}/g, function (m, $1) {
+                            content = self.lastColumn.replace(/\{(\w+)\}/g, function (m, $1) {
                                 return cell[$1];
                             });
-                        } else {
-                            row.append("<td>" + cell + "</td>");
                         }
+                        row.append("<td>" + content + "</td>");
+
                         self.table.append(row);
                     });
                 });
@@ -54,13 +58,12 @@
         if (total == 0) {
             return;
         }
-        this.pageNav.append('<li class="' + current == 1 ? "disabled" : "" + '"> <a href="javascript:void(0)" data-page="' + current - 1 + '" aria-label="Previous"> <span aria-hidden="true">&laquo;</span> </a> </li>');
+        this.pageNav.append('<li class="' + (current == 1 ? "disabled" : "") + '"> <a href="javascript:void(0)" data-page="' + (current - 1) + '" aria-label="Previous"> <span aria-hidden="true">&laquo;</span> </a> </li>');
         if (total <= 5) {
-            for (var i = 1; i <= 5; i++) {
-                this.pageNav.append('<li class="' + current == i ? "active" : "" + '"><a href="javascript:void(0);" data-page="' + i + '">' + i + '</a></li>');
+            for (var i = 1; i <= total; i++) {
+                this.pageNav.append('<li class="' + (current == i ? "active" : "") + '"><a href="javascript:void(0);" data-page="' + i + '">' + i + '</a></li>');
             }
         } else {
-
             if (current > 2) {
                 this.pageNav.append('<li><a href="javascript:void(0);" data-page="1">1</a></li>');
                 if (current > 3) {
@@ -68,17 +71,21 @@
                 }
             }
             for (var i = current - 1; i < current + 2; i++) {
-                this.pageNav.append('<li class="' + current == i ? "active" : "" + '"><a href="javascript:void(0);" data-page="' + i + '">' + i + '</a></li>');
+                if (i <= 0 || i > total) {
+                    continue;
+                }
+                this.pageNav.append('<li class="' + (current == i ? "active" : "") + '"><a href="javascript:void(0);" data-page="' + i + '">' + i + '</a></li>');
             }
             if (current < total - 1) {
-                this.pageNav.append('<li><a href="javascript:void(0);" data-page="' + current + '">' + current + '</a></li>');
                 if (current < total - 2) {
                     this.pageNav.append('<li class="disabled"><a href="javascript:void(0);" data-page="1">...</a></li>');
                 }
-            }
 
-            this.pageNav.append('<li ' + current == total ? "disabled" : "" + '> <a href="javascript:void(0)" data-page="' + current + 1 + '" aria-label="Next"> <span aria-hidden="true">&raquo;</span> </a> </li>');
+                this.pageNav.append('<li><a href="javascript:void(0);" data-page="' + total + '">' + total + '</a></li>');
+
+            }
         }
+        this.pageNav.append('<li class="' + (current == total ? "disabled" : "") + '"> <a href="javascript:void(0)" data-page="' + (current + 1) + '" aria-label="Next"> <span aria-hidden="true">&raquo;</span> </a> </li>');
     };
 
 

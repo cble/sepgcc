@@ -1,15 +1,21 @@
 (function () {
 
-    new PageList(".J_pagelist", {
+    var list = new PageList(".J_pagelist", {
         url: "/ajax/projectlist",
         parseData: function (res) {
-            var data = {};
-            data.total = res.total;
-            data.list = res.list.map(function (item) {
-                return [item.name, item.endTime, item];
-            });
-            return res;
+            if (res.code == 200 && res.data) {
+                var data = {};
+                data.total = res.data.pageCount;
+                data.list = res.data.list.map(function (item) {
+                    return [item.name, item.endTimeStr, item];
+                });
+                return data;
+            }
+            alert("接口挂了")
+
         },
         lastColumn: '<a href="/notice?projectId={id}">上传资料</a>'
     });
+
+    window.list = list;
 })();
