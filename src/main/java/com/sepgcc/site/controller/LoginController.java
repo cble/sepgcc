@@ -25,21 +25,21 @@ public class LoginController extends BaseController {
 
     @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView login(
-            @ModelAttribute Integer userId,
+            @ModelAttribute User user,
             String username,
             String password,
             String redirect,
             HttpServletRequest request) throws Exception {
-        if (userId != null && userId > 0) {
+        if (user != null) {
             if (StringUtils.isNotBlank(redirect)) {
                 return new ModelAndView("redirect:" + redirect);
             } else {
                 return new ModelAndView(new RedirectView("index"));
             }
         } else if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)) {
-            User user = userService.loadUser(username, password);
+            user = userService.loadUser(username, password);
             if (user != null) {
-                setUser(request, user);
+                setToken(request, user.getToken());
                 return new ModelAndView(new RedirectView("index"));
             } else {
                 return new ModelAndView(new RedirectView("login"), new HashMap<String, Object>());
@@ -50,7 +50,7 @@ public class LoginController extends BaseController {
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public ModelAndView logout(HttpServletRequest request) throws Exception {
-        setUser(request, null);
+        setToken(request, null);
         return new ModelAndView(new RedirectView("login"));
     }
 }

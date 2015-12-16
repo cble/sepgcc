@@ -2,6 +2,7 @@ package com.sepgcc.site.utils;
 
 import com.google.common.collect.Lists;
 import com.sepgcc.site.constants.SecurityConstants;
+import com.sepgcc.site.dto.User;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -26,12 +27,14 @@ public class SecurityUtils {
     /**
      * aes(salt|timestamp|userId)
      */
-    public static String generateToken(int userId) {
+    public static String generateToken(User user) {
         try {
             String plainString = StringUtils.join(Lists.newArrayList(
                     SecurityConstants.TOKEN_SALT,
                     String.valueOf(System.currentTimeMillis() + SecurityConstants.TOKEN_EXPIRE_TIME),
-                    String.valueOf(userId)
+                    String.valueOf(user.getId()),
+                    user.getUsername(),
+                    user.getNickname()
             ), SEP);
             Cipher cipher = Cipher.getInstance(TRANSFORMATION);
             Key k = new SecretKeySpec(SecurityConstants.TOKEN_AES_KEY.getBytes(), ALGORITHM);
@@ -44,22 +47,26 @@ public class SecurityUtils {
         return null;
     }
 
-    public static int parseToken(String token) {
+    public static User parseToken(String token) {
         try {
             Cipher cipher = Cipher.getInstance(TRANSFORMATION);
             Key k = new SecretKeySpec(SecurityConstants.TOKEN_AES_KEY.getBytes(), ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, k);
             byte[] result = cipher.doFinal(Base64.decodeBase64(token));
             String[] tokenItems = (new String(result)).split(SEP);
-            Validate.isTrue(tokenItems.length == 3, "invalid token");
+            Validate.isTrue(tokenItems.length >= 5, "invalid token");
             Validate.isTrue(SecurityConstants.TOKEN_SALT.equals(tokenItems[0]), "invalid token");
             if (NumberUtils.toLong(tokenItems[1]) > System.currentTimeMillis()) {
-                return NumberUtils.toInt(tokenItems[2]);
+                User user = new User();
+                user.setId(NumberUtils.toInt(tokenItems[2]));
+                user.setUsername(tokenItems[3]);
+                user.setNickname(tokenItems[4]);
+                return user;
             }
         } catch (Exception e) {
             log.error("parseToken error", e);
         }
-        return 0;
+        return null;
     }
 
     public static String encryptPassword(String password) {

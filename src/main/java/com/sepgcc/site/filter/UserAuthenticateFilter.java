@@ -1,7 +1,6 @@
 package com.sepgcc.site.filter;
 
 import com.sepgcc.site.constants.SecurityConstants;
-import com.sepgcc.site.constants.SessionConstants;
 import com.sepgcc.site.dto.User;
 import com.sepgcc.site.utils.SecurityUtils;
 import org.apache.log4j.Logger;
@@ -37,12 +36,12 @@ public class UserAuthenticateFilter implements Filter {
             }
         }
 
-        Object object = session.getAttribute(SessionConstants.SESSION_USER);
-        User user = object == null ? null : (User) object;
-        if (user != null) {
-            int userId = SecurityUtils.parseToken(user.getToken());
-            if (userId > 0) {
-                invokeNextFilter(filterChain, servletRequest, servletResponse, userId);
+        Object object = session.getAttribute(SecurityConstants.SESSION_TOKEN);
+        String token = object == null ? null : (String) object;
+        if (token != null) {
+            User user = SecurityUtils.parseToken(token);
+            if (user != null) {
+                invokeNextFilter(filterChain, servletRequest, servletResponse, user);
                 return;
             }
         }
@@ -54,7 +53,7 @@ public class UserAuthenticateFilter implements Filter {
             }
         }
 
-        httpRequest.getSession().removeAttribute(SessionConstants.SESSION_USER);
+        httpRequest.getSession().removeAttribute(SecurityConstants.SESSION_TOKEN);
         boolean isAjaxRequest = isAjaxRequest(httpRequest);
         if (isAjaxRequest) {
             httpResponse.setCharacterEncoding("UTF-8");
@@ -64,12 +63,12 @@ public class UserAuthenticateFilter implements Filter {
         httpResponse.sendRedirect("/login?redirect="+url);
     }
 
-    private void invokeNextFilter(FilterChain filterChain, ServletRequest servletRequest, ServletResponse servletResponse, Integer userId) throws IOException, ServletException {
+    private void invokeNextFilter(FilterChain filterChain, ServletRequest servletRequest, ServletResponse servletResponse, User user) throws IOException, ServletException {
         try {
-            servletRequest.setAttribute(SecurityConstants.REQUEST_USERID, userId);
+            servletRequest.setAttribute(SecurityConstants.REQUEST_USER, user);
             filterChain.doFilter(servletRequest, servletResponse);
         } finally {
-            servletRequest.removeAttribute(SecurityConstants.REQUEST_USERID);
+            servletRequest.removeAttribute(SecurityConstants.REQUEST_USER);
         }
     }
 

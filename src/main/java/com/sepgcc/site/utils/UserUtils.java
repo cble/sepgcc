@@ -14,7 +14,7 @@ public class UserUtils {
         if (userDO != null) {
             result = new User();
             toUserCopier.copy(userDO, result, null);
-            result.setToken(SecurityUtils.generateToken(userDO.getId()));
+            result.setToken(SecurityUtils.generateToken(result));
         }
         return result;
     }

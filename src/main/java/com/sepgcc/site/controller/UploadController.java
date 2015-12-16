@@ -35,7 +35,7 @@ public class UploadController extends BaseController {
     private FileService fileService;
 
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
-    public ModelAndView list(ModelMap modelMap, @ModelAttribute Integer userId) throws Exception {
+    public ModelAndView list(ModelMap modelMap, @ModelAttribute User user) throws Exception {
         List<Project> projectList = projectService.queryAll();
         int projectCount = projectService.countAll();
         modelMap.put("projectList", projectList);
@@ -64,12 +64,12 @@ public class UploadController extends BaseController {
 
     @RequestMapping(value = {"/uploadFile"}, method = RequestMethod.POST)
     public @ResponseBody List<FileMeta> uploadFile(
-            @ModelAttribute Integer userId,
+            @ModelAttribute User user,
             MultipartHttpServletRequest request) throws Exception {
         Map<String, MultipartFile> mpfMap = request.getFileMap();
         List<FileMeta> fileMetaList = new ArrayList<FileMeta>(mpfMap.size());
         for (MultipartFile mpf : mpfMap.values()) {
-            FileMeta fileMeta = FileUtils.toFileMeta(mpf, userId);
+            FileMeta fileMeta = FileUtils.toFileMeta(mpf, user.getId());
             String fileId = fileService.saveFile(fileMeta);
             if (StringUtils.isNotBlank(fileId)) {
                 fileMeta.setFileId(fileId);

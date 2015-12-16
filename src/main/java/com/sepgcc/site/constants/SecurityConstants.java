@@ -2,7 +2,9 @@ package com.sepgcc.site.constants;
 
 public class SecurityConstants {
 
-    public static final String REQUEST_USERID = "userId";
+    public static final String SESSION_TOKEN = "SESSION_TOKEN";
+
+    public static final String REQUEST_USER = "REQUEST_USER";
 
     public static final String PWD_SALT = "";
 
