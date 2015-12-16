@@ -1,5 +1,6 @@
 package com.sepgcc.site.controller;
 
+import com.sepgcc.site.dao.UploadSubmit;
 import com.sepgcc.site.dto.*;
 import com.sepgcc.site.service.FileService;
 import com.sepgcc.site.service.ProjectService;
@@ -8,10 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -86,5 +84,16 @@ public class UploadController extends BaseController {
             }
         }
         return fileMetaList;
+    }
+
+    @RequestMapping(value = {"/submitUpload"}, method = RequestMethod.POST)
+    public @ResponseBody AjaxResponse submitUpload(
+            @ModelAttribute User user,
+            @RequestBody() UploadSubmit data) throws Exception {
+
+        if (data.getFiles() != null) {
+
+        }
+        return new AjaxResponse();
     }
 }
