@@ -1,8 +1,6 @@
 package com.sepgcc.site.controller;
 
-import com.sepgcc.site.dto.FileMeta;
-import com.sepgcc.site.dto.Project;
-import com.sepgcc.site.dto.User;
+import com.sepgcc.site.dto.*;
 import com.sepgcc.site.service.FileService;
 import com.sepgcc.site.service.ProjectService;
 import com.sepgcc.site.utils.FileUtils;
@@ -29,6 +27,8 @@ public class UploadController extends BaseController {
 
     private static final Logger log = Logger.getLogger(UploadController.class);
 
+    private static final int PAGE_SIZE = 10;
+
     @Resource
     private ProjectService projectService;
     @Resource
@@ -41,6 +41,21 @@ public class UploadController extends BaseController {
         modelMap.put("projectList", projectList);
         modelMap.put("projectCount", projectCount);
         return new ModelAndView("list");
+    }
+
+    @RequestMapping(value = {"/ajax/projectlist"}, method = RequestMethod.POST)
+    public @ResponseBody AjaxResponse<Paginate<Project>> list(int page, @ModelAttribute User user) throws Exception {
+        List<Project> projectList = projectService.queryAll();
+        int projectCount = projectService.countAll();
+
+        Paginate<Project> paginate = new Paginate<Project>();
+        paginate.setPageCount(projectCount / PAGE_SIZE + 1);
+        paginate.setList(projectList);
+
+        AjaxResponse<Paginate<Project>> response = new AjaxResponse<Paginate<Project>>();
+        response.setCode(200);
+        response.setData(paginate);
+        return response;
     }
 
     @RequestMapping(value = {"/notice"}, method = RequestMethod.GET)
