@@ -1,6 +1,6 @@
 (function () {
     var fileComponents = [];
-    $('.file_upload_container').each(function (container) {
+    $('.file_upload_container').each(function (i,container) {
 
         fileComponents.push(new FileComponent(container));
     });

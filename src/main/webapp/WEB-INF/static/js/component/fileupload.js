@@ -1,8 +1,11 @@
 (function () {
-
+    var global = 0;
     var FileComponent = window.FileComponent = function (container) {
         container = $(container);
-        var trigger = container.find('.fileupload');
+        var id = 'fileupload' + global++;
+
+        container.html('<label class="btn btn-primary" for="' + id + '"><input id="' + id + '" type="file" name="files[]" data-url="/uploadFile" style="display:none;"> 添加文件 </label><div class="file_list"></div>');
+        var trigger = container.find("#" + id);
         var list = container.find(".file_list");
         var bar = container.find(".progress");
 
@@ -25,8 +28,12 @@
             start: function (e) {
                 bar.css('width', '0%');
                 self.finish = false;
+                console.log(e);
             },
 
+            progress: function () {
+
+            },
             progressall: function (e, data) {
                 var progress = parseInt(data.loaded / data.total * 100, 10);
                 bar.css(
