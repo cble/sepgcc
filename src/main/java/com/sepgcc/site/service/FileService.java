@@ -26,12 +26,15 @@ public class FileService {
             if (isFileExsists(fileId)) {
                 return fileId;
             }
-            String storagePath = FileUtils.generateStoragePath(fileMeta);
+            String storagePath = FileUtils.generateStoragePath(fileId);
+            fileMeta.setFileId(fileId);
+            fileMeta.setStoragePath(FileUtils.joinPath(storagePath, fileMeta.getFileName()));
             FileUtils.saveToDisk(
-                    FileUtils.joinPath(storagePath, fileMeta.getFileName()),
+                    storagePath,
+                    fileMeta.getFileName(),
                     fileMeta.getBytes()
             );
-            FileMetaDO fileMetaDO = FileUtils.toFileMetaDO(fileMeta, fileId);
+            FileMetaDO fileMetaDO = FileUtils.toFileMetaDO(fileMeta);
             fileMetaDAO.insert(fileMetaDO);
             return fileId;
         } catch (IllegalArgumentException e) {
@@ -50,7 +53,7 @@ public class FileService {
             if (fileMetaDO != null && fileMetaDO.getUserId() == userId) {
                 FileMeta fileMeta = FileUtils.toFileMeta(fileMetaDO);
                 if (fillContent) {
-                    fileMeta.setBytes(FileUtils.readFromDisk(FileUtils.joinPath(fileMetaDO.getStoragePath(), fileMetaDO.getFileName())));
+                    fileMeta.setBytes(FileUtils.readFromDisk(fileMetaDO.getStoragePath()));
                 }
                 return fileMeta;
             }

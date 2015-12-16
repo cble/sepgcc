@@ -57,11 +57,11 @@ public class FileUtils {
         return null;
     }
 
-    public static String generateStoragePath(FileMeta fileMeta) {
+    public static String generateStoragePath(String fileId) {
         return joinPath(
-                String.valueOf(fileMeta.getFileId().charAt(0)),
-                String.valueOf(fileMeta.getFileId().charAt(1)),
-                fileMeta.getFileId());
+                String.valueOf(fileId.charAt(0)),
+                String.valueOf(fileId.charAt(1)),
+                fileId);
     }
 
     public static FileMeta toFileMeta(MultipartFile mpf, int userId) throws Exception {
@@ -79,16 +79,16 @@ public class FileUtils {
         return fileMeta;
     }
 
-    public static FileMetaDO toFileMetaDO(FileMeta fileMeta, String fileId) {
+    public static FileMetaDO toFileMetaDO(FileMeta fileMeta) {
         FileMetaDO result = new FileMetaDO();
-        toFileMetaCopier.copy(fileMeta, result, null);
-        result.setFileId(fileId);
+        toFileMetaDOCopier.copy(fileMeta, result, null);
         return result;
     }
 
-    public static void saveToDisk(String storagePath, byte[] bytes) throws IOException {
-        createDir(storagePath);
-        FileCopyUtils.copy(bytes, new FileOutputStream(storagePath));
+    public static void saveToDisk(String storagePath, String fileName, byte[] bytes) throws IOException {
+        String realPath = joinPath(FileConstants.FILE_BASE, storagePath);
+        createDir(realPath);
+        org.apache.commons.io.FileUtils.writeByteArrayToFile(new File(joinPath(realPath, fileName)), bytes);
     }
 
     public static byte[] readFromDisk(String path) throws IOException {

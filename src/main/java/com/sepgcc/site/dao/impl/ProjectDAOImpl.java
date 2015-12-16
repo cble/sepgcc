@@ -25,7 +25,7 @@ public class ProjectDAOImpl extends SqlMapClientDaoSupport implements ProjectDAO
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("index", index);
         param.put("limit", limit);
-        return this.getSqlMapClientTemplate().queryForList("project.queryWithLimit");
+        return this.getSqlMapClientTemplate().queryForList("project.queryWithLimit", param);
     }
 
     @Override
