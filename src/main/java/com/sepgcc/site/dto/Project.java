@@ -1,6 +1,7 @@
 package com.sepgcc.site.dto;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -54,6 +55,14 @@ public class Project implements Serializable {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getBeginTimeStr() {
+        return beginTime != null ? new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(beginTime) : null;
+    }
+
+    public String getEndTimeStr() {
+        return endTime != null ? new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(endTime) : null;
     }
 
     public String getOwner() {
