@@ -72,6 +72,20 @@ public class ProjectService {
         return resultList;
     }
 
+    public List<Project> queryWithLimit(int index, int limit) {
+        List<Project> resultList = new ArrayList<Project>();
+        List<ProjectDO> projectDOs = projectDAO.queryWithLimit(index, limit);
+        for (ProjectDO projectDO : projectDOs) {
+            Project project = ProjectUtils.toProject(projectDO);
+            if (project != null) {
+                project.setProjectItemList(queryProjectItemList(projectDO.getId()));
+                project.setProjectContactList(queryProjectContactList(projectDO.getId()));
+            }
+            resultList.add(project);
+        }
+        return resultList;
+    }
+
     public int countAll() {
         return projectDAO.countAll();
     }

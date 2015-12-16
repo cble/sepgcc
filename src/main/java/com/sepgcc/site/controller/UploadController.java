@@ -35,17 +35,15 @@ public class UploadController extends BaseController {
     private FileService fileService;
 
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
-    public ModelAndView list(ModelMap modelMap, @ModelAttribute User user) throws Exception {
-        List<Project> projectList = projectService.queryAll();
-        int projectCount = projectService.countAll();
-        modelMap.put("projectList", projectList);
-        modelMap.put("projectCount", projectCount);
+    public ModelAndView list(@ModelAttribute User user) throws Exception {
         return new ModelAndView("list");
     }
 
     @RequestMapping(value = {"/ajax/projectlist"}, method = RequestMethod.POST)
-    public @ResponseBody AjaxResponse<Paginate<Project>> list(int page, @ModelAttribute User user) throws Exception {
-        List<Project> projectList = projectService.queryAll();
+    public @ResponseBody AjaxResponse<Paginate<Project>> list(@ModelAttribute User user, int page) throws Exception {
+        int index = (page - 1 )* PAGE_SIZE;
+        int limit = PAGE_SIZE;
+        List<Project> projectList = projectService.queryWithLimit(index, limit);
         int projectCount = projectService.countAll();
 
         Paginate<Project> paginate = new Paginate<Project>();
