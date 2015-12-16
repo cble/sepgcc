@@ -70,11 +70,6 @@ public class UploadController extends BaseController {
         return new ModelAndView("upload");
     }
 
-    @RequestMapping(value = {"/uploadtest"}, method = RequestMethod.GET)
-    public ModelAndView uploadtest() throws Exception {
-        return new ModelAndView("uploadtest");
-    }
-
     @RequestMapping(value = {"/uploadFile"}, method = RequestMethod.POST)
     public @ResponseBody List<FileMeta> uploadFile(
             @ModelAttribute User user,

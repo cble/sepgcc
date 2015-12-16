@@ -87,7 +87,8 @@ public class FileUtils {
     }
 
     public static void saveToDisk(String storagePath, byte[] bytes) throws IOException {
-        createDir(storagePath);
+        String realPath = joinPath(FileConstants.FILE_BASE, storagePath);
+        createDir(realPath);
         FileCopyUtils.copy(bytes, new FileOutputStream(storagePath));
     }
 
