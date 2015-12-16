@@ -1,7 +1,7 @@
 (function () {
 
     new PageList(".J_pagelist", {
-        url: "",
+        url: "/ajax/projectlist",
         parseData: function (res) {
             var data = {};
             data.total = res.total;
@@ -10,6 +10,6 @@
             });
             return res;
         },
-        lastColumn: '<a href="notice?projectId={id}">上传资料</a>'
-    })
+        lastColumn: '<a href="/notice?projectId={id}">上传资料</a>'
+    });
 })();
