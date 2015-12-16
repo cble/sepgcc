@@ -59,6 +59,7 @@ public class UserAuthenticateFilter implements Filter {
             httpResponse.setCharacterEncoding("UTF-8");
             httpResponse.sendError(HttpStatus.UNAUTHORIZED.value(),
                     "您已经太长时间没有操作,请刷新页面");
+            return;
         }
         httpResponse.sendRedirect("/login?redirect="+url);
     }

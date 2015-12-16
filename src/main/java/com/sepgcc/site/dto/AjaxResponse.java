@@ -2,7 +2,7 @@ package com.sepgcc.site.dto;
 
 public class AjaxResponse<T> {
 
-    private int code;
+    private int code = 200;
     private String message;
     private T data;
 

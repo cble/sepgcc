@@ -19,23 +19,20 @@
             //图片没传完
             return alert("请等待图片上传完");
         }
-        var data = {files: {}};
-        $("input").each(function (i, input) {
-            if (input.type == "file") {
-                return;
-            }
-            data[input.name] = input.value;
+        var data = {items: {}, contacts: {}};
+        $(".J_contact-input").each(function (i, input) {
+            var id = $(input).data("id");
+            data.contacts[id] = input.value;
         });
         fileComponents.forEach(function (f) {
-            data.files[f.id] = f.fc.getFiles();
+            data.items[f.id] = f.fc.getFiles();
         });
 
         $.ajax({
+            contentType:"application/json;charset=UTF-8",
             url: "/ajax/submitUpload",
             dataType: "json",
-            data: {
-                data: data
-            },
+            data: JSON.stringify(data),
             type: "post",
             success: function (res) {
                 alert("提交成功")

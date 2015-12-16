@@ -5,8 +5,10 @@ import com.sepgcc.site.dto.*;
 import com.sepgcc.site.service.FileService;
 import com.sepgcc.site.service.ProjectService;
 import com.sepgcc.site.utils.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,13 +89,17 @@ public class UploadController extends BaseController {
         return fileMetaList;
     }
 
-    @RequestMapping(value = {"/submitUpload"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/ajax/submitUpload"}, method = RequestMethod.POST, consumes = "application/json")
     public @ResponseBody AjaxResponse submitUpload(
             @ModelAttribute User user,
-            @RequestBody() UploadSubmit data) throws Exception {
+            HttpServletRequest request,
+            @RequestBody UploadSubmit uploadSubmit) throws Exception {
 
-        if (data.getFiles() != null) {
-
+        if (uploadSubmit.getItems() != null) {
+            for (Map.Entry<String, List<String>> entry : uploadSubmit.getItems().entrySet()) {
+                // create upload
+                // bind files with upload
+            }
         }
         return new AjaxResponse();
     }

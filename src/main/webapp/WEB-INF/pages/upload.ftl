@@ -11,9 +11,10 @@
             <#list project.projectContactList as projectContact>
                 <label for="contact_${projectContact.id}">${projectContact.name}<#if projectContact.required>
                     （*）</#if></label>
-                <input type="text" name="username"
-                       class="form-control"
+                <input type="text"
+                       class="form-control J_contact-input"
                        id="contact_${projectContact.id}"
+                       data-id="${projectContact.id}"
                        <#if projectContact.required>required=""</#if> />
             </#list>
         </div>
