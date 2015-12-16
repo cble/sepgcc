@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface ProjectContactDAO {
 
+    ProjectContactDO loadById(int id);
     List<ProjectContactDO> queryByProjectId(int projectId);
 }

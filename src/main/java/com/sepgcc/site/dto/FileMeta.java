@@ -4,14 +4,23 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.io.Serializable;
 
-@JsonIgnoreProperties({"storagePath", "userId", "bytes"})
+@JsonIgnoreProperties({"id", "storagePath", "userId", "bytes"})
 public class FileMeta implements Serializable {
+    private int id;
     private String fileId;
     private String fileName;
     private String storagePath;
     private int userId;
     private String fileType;
     private byte[] bytes;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getFileId() {
         return fileId;

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="projectContactValue">
+
+    <typeAlias alias="projectContactValueDO" type="com.sepgcc.site.dao.entity.ProjectContactValueDO" />
+
+    <resultMap id="projectContactValueResult" class="projectContactValueDO">
+        <result column="ID" property="id" />
+        <result column="ProjectID" property="projectId" />
+        <result column="ProjectContactID" property="projectContactId" />
+        <result column="UploadID" property="uploadId" />
+        <result column="ContactValue" property="contactValue" />
+    </resultMap>
+
+    <select id="loadById" resultMap="projectContactValueResult" parameterClass="string">
+        SELECT ID,
+            ProjectID,
+            ProjectContactID,
+            UploadID,
+            ContactValue
+        FROM ZL_ProjectContactValue
+        WHERE ID = #id#
+    </select>
+
+    <insert id="insert" parameterClass="projectContactValueDO">
+        INSERT INTO ZL_ProjectContactValue (
+            ProjectID,
+            ProjectContactID,
+            UploadID,
+            ContactValue,
+            AddTime
+        ) VALUES (
+            #projectId#,
+            #projectContactId#,
+            #uploadId#,
+            #contactValue#,
+            NOW()
+        )
+        <selectKey resultClass="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+</sqlMap>

@@ -8,4 +8,7 @@
 	<sqlMap resource="config/sqlmap/ProjectItem.xml" />
 	<sqlMap resource="config/sqlmap/ProjectContact.xml" />
 	<sqlMap resource="config/sqlmap/FileMeta.xml" />
+	<sqlMap resource="config/sqlmap/Upload.xml" />
+	<sqlMap resource="config/sqlmap/ProjectContactValue.xml" />
+	<sqlMap resource="config/sqlmap/ProjectFile.xml" />
 </sqlMapConfig>

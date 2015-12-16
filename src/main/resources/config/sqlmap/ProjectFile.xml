@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="projectFile">
+
+    <typeAlias alias="projectFileDO" type="com.sepgcc.site.dao.entity.ProjectFileDO" />
+
+    <resultMap id="projectFileResult" class="projectFileDO">
+        <result column="ID" property="id" />
+        <result column="ProjectID" property="projectId" />
+        <result column="ProjectItemID" property="projectItemId" />
+        <result column="UploadID" property="uploadId" />
+        <result column="FileID" property="fileId" />
+    </resultMap>
+
+    <select id="loadById" resultMap="projectFileResult" parameterClass="string">
+        SELECT ID,
+            ProjectID,
+            ProjectItemID,
+            UploadID,
+            FileID
+        FROM ZL_ProjectFile
+        WHERE ID = #id#
+    </select>
+
+    <insert id="insert" parameterClass="projectFileDO">
+        INSERT INTO ZL_ProjectFile (
+            ProjectID,
+            ProjectItemID,
+            UploadID,
+            FileID,
+            AddTime
+        ) VALUES (
+            #projectId#,
+            #projectItemId#,
+            #uploadId#,
+            #fileId#,
+            NOW()
+        )
+        <selectKey resultClass="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+</sqlMap>

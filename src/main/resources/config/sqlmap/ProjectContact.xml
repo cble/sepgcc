@@ -12,6 +12,16 @@
         <result column="AddTime" property="addTime" />
     </resultMap>
 
+    <select id="loadById" resultMap="projectContactResult" parameterClass="int">
+        SELECT ID,
+            ProjectID,
+            Name,
+            Required,
+            AddTime
+        FROM ZL_ProjectContact
+        WHERE ID = #id#
+    </select>
+
     <select id="queryByProjectId" resultMap="projectContactResult" parameterClass="int">
         SELECT ID,
             ProjectID,

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="upload">
+
+    <typeAlias alias="uploadDO" type="com.sepgcc.site.dao.entity.UploadDO" />
+
+    <resultMap id="uploadResult" class="uploadDO">
+        <result column="ID" property="id" />
+        <result column="ProjectID" property="projectId" />
+        <result column="UserID" property="userId" />
+    </resultMap>
+
+    <select id="loadById" resultMap="uploadResult" parameterClass="string">
+        SELECT ID,
+            ProjectID,
+            UserID
+        FROM ZL_Upload
+        WHERE ID = #id#
+        AND Status > 0
+    </select>
+
+    <insert id="insert" parameterClass="uploadDO">
+        INSERT INTO ZL_Upload (
+            ProjectID,
+            UserID,
+            Status,
+            AddTime,
+            UpdateTime
+        ) VALUES (
+            #projectId#,
+            #userId#,
+            1,
+            NOW(),
+            NOW()
+        )
+        <selectKey resultClass="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+</sqlMap>

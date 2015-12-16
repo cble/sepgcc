@@ -30,7 +30,7 @@
 
         $.ajax({
             contentType:"application/json;charset=UTF-8",
-            url: "/ajax/submitUpload",
+            url: "/ajax/submitupload",
             dataType: "json",
             data: JSON.stringify(data),
             type: "post",

@@ -9,6 +9,11 @@ import java.util.List;
 public class ProjectContactDAOImpl extends SqlMapClientDaoSupport implements ProjectContactDAO {
 
     @Override
+    public ProjectContactDO loadById(int id) {
+        return (ProjectContactDO) this.getSqlMapClientTemplate().queryForObject("projectContact.loadById", id);
+    }
+
+    @Override
     public List<ProjectContactDO> queryByProjectId(int projectId) {
         return this.getSqlMapClientTemplate().queryForList("projectContact.queryByProjectId", projectId);
     }

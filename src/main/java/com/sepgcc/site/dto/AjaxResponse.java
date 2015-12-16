@@ -6,6 +6,12 @@ public class AjaxResponse<T> {
     private String message;
     private T data;
 
+    public AjaxResponse(int code, String message, T data) {
+        this.code = code;
+        this.message = message;
+        this.data = data;
+    }
+
     public int getCode() {
         return code;
     }
