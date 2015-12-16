@@ -4,10 +4,9 @@
         container = $(container);
         var id = 'fileupload' + global++;
 
-        container.html('<label class="btn btn-primary" for="' + id + '"><input id="' + id + '" type="file" name="files[]" data-url="/uploadFile" style="display:none;"> 添加文件 </label><div class="file_list"></div>');
+        container.html('<label class="btn btn-primary" for="' + id + '"><input id="' + id + '" type="file" name="files[]" data-url="/uploadFile" style="display:none;" multiple> 添加文件 </label><div class="file_list"></div>');
         var trigger = container.find("#" + id);
         var list = container.find(".file_list");
-        var bar = container.find(".progress");
 
         //上传成功的File
         this.files = [];
@@ -30,16 +29,22 @@
                 self.finish = false;
                 console.log(e);
             },
-
-            progress: function () {
+            processstart:function(e){
+                console.log(arguments)
 
             },
+            progress: function (e, data) {
+                var file = data.files[data.index];
+                console.log(file)
+//                var progress = parseInt(data.loaded / data.total * 100, 10);
+//                list.append('<div>' + file.name + ' ' + file.size + ' ' + file.type + '<div class="process"></div></div>');
+//                bar.css(
+//                    'width',
+//                        progress + '%'
+//                );
+            },
             progressall: function (e, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10);
-                bar.css(
-                    'width',
-                        progress + '%'
-                );
+
             }
         });
 

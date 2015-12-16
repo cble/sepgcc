@@ -53,6 +53,7 @@ public class UploadController extends BaseController {
         AjaxResponse<Paginate<Project>> response = new AjaxResponse<Paginate<Project>>();
         response.setCode(200);
         response.setData(paginate);
+
         return response;
     }
 
