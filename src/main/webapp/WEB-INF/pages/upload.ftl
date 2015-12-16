@@ -32,7 +32,7 @@
                        id="item_${projectItem.id}"
                        <#if projectItem.required>required=""</#if> />
 
-                <div class="file_upload_container">
+                <div class="file_upload_container" data-id="${projectItem.id}">
                 </div>
 
 
@@ -43,6 +43,8 @@
     <div>
     ${project.owner}
     </div>
+
+    <a class="btn btn-primary" id="submit" href="javascript:void(0);">提交</a>
 </div>
 
 <script src="/js/component/jquery.ui.widget.js"></script>

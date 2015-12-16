@@ -4,13 +4,13 @@
         container = $(container);
         var id = 'fileupload' + global++;
 
-        container.html('<label class="btn btn-primary" for="' + id + '"><input id="' + id + '" type="file" name="files[]" data-url="/uploadFile" style="display:none;" multiple> 添加文件 </label><div class="file_list"></div>');
+        container.html('<label class="btn btn-primary" for="' + id + '"><input id="' + id + '" type="file" name="files[]" data-url="/uploadFile" style="display:none;" multiple> 添加文件 </label><div class="progress"><div class="progress-bar" style="width: 0%;"></div></div><div class="file_list">');
         var trigger = container.find("#" + id);
         var list = container.find(".file_list");
-
+        var bar = container.find(".progress").hide().find(".progress-bar");
         //上传成功的File
         this.files = [];
-        this.finish = false;
+        this.finish = 0;
 
         var self = this;
 
@@ -19,32 +19,30 @@
 
             done: function (e, data) {
                 $.each(data.result, function (index, file) {
-                    list.append('<div>' + file.fileName + ' ' + file.fileSize + ' ' + file.fileType + '</div>');
+                    list.append('<div>' + file.fileName + ' ' + file.fileType + '</div>');
+                    self.files.push(file.fileId);
+                    self.finish--;
                 });
-                self.finish = true;
+
             },
 
             start: function (e) {
-                bar.css('width', '0%');
-                self.finish = false;
-                console.log(e);
+                bar.css('width', '0').parent().show();
+                console.log('start', e);
+                self.finish++;
             },
-            processstart:function(e){
-                console.log(arguments)
 
-            },
             progress: function (e, data) {
-                var file = data.files[data.index];
-                console.log(file)
-//                var progress = parseInt(data.loaded / data.total * 100, 10);
-//                list.append('<div>' + file.name + ' ' + file.size + ' ' + file.type + '<div class="process"></div></div>');
-//                bar.css(
-//                    'width',
-//                        progress + '%'
-//                );
+
+
             },
             progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
 
+                bar.css(
+                    'width',
+                        progress + '%'
+                );
             }
         });
 
@@ -55,7 +53,7 @@
         return this.files;
     }
     FileComponent.prototype.isFinish = function () {
-        return this.finish;
+        return this.finish == 0;
     }
 
 })();
