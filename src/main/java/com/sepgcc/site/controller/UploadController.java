@@ -35,7 +35,7 @@ public class UploadController extends BaseController {
     private FileService fileService;
 
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
-    public ModelAndView list(ModelMap modelMap) throws Exception {
+    public ModelAndView list(ModelMap modelMap, @ModelAttribute User user) throws Exception {
         List<Project> projectList = projectService.queryAll();
         int projectCount = projectService.countAll();
         modelMap.put("projectList", projectList);

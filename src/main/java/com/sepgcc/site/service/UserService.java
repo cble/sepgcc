@@ -3,6 +3,7 @@ package com.sepgcc.site.service;
 import com.sepgcc.site.dao.UserDAO;
 import com.sepgcc.site.dao.entity.UserDO;
 import com.sepgcc.site.dto.User;
+import com.sepgcc.site.utils.SecurityUtils;
 import com.sepgcc.site.utils.UserUtils;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class UserService {
         User user = null;
         UserDO userDO = userDAO.loadByUsername(username);
         if (userDO != null) {
-            String encryptPassword = UserUtils.encryptPassword(password);
+            String encryptPassword = SecurityUtils.encryptPassword(password);
             if (encryptPassword.equals(userDO.getPassword())) {
                 user = UserUtils.toUser(userDO);
             }

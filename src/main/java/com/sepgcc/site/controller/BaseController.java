@@ -1,6 +1,6 @@
 package com.sepgcc.site.controller;
 
-import com.sepgcc.site.constants.SessionConstants;
+import com.sepgcc.site.constants.SecurityConstants;
 import com.sepgcc.site.dto.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -12,11 +12,11 @@ public class BaseController {
 
     @ModelAttribute
     public User getUser(HttpServletRequest request) {
-        Object object = request.getSession().getAttribute(SessionConstants.SESSION_USER);
+        Object object = request.getAttribute(SecurityConstants.REQUEST_USER);
         return object != null ? (User) object : null;
     }
 
-    public void setUser(HttpServletRequest request, User user) {
-        request.getSession().setAttribute(SessionConstants.SESSION_USER, user);
+    public void setToken(HttpServletRequest request, String token) {
+        request.getSession().setAttribute(SecurityConstants.SESSION_TOKEN, token);
     }
 }

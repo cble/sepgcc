@@ -40,14 +40,14 @@ public class FileUtils {
     }
 
     /**
-     * md5(md5(fileName + userId) + checksum(file))
+     * md5(md5(userId) + checksum(file))
      * @param fileMeta
      * @return
      */
     public static String generateId(FileMeta fileMeta) {
         try {
             if (fileMeta != null) {
-                String header = Md5Utils.md5((fileMeta.getFileName() + fileMeta.getUserId()).getBytes("UTF-8"));
+                String header = Md5Utils.md5(String.valueOf(fileMeta.getUserId()).getBytes("UTF-8"));
                 String body = Md5Utils.md5(fileMeta.getBytes());
                 return Md5Utils.md5((header + body).getBytes());
             }
