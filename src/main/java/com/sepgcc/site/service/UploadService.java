@@ -9,6 +9,9 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -31,39 +34,21 @@ public class UploadService {
     private ProjectFileDAO projectFileDAO;
     @Resource
     private FileService fileService;
+    @Resource
+    private TransactionTemplate transactionTemplate;
 
-    public int upload(UploadSubmit submit, int userId) throws IllegalArgumentException {
+    public int upload(final UploadSubmit submit, final int userId) throws IllegalArgumentException {
         try {
-            int projectId = validateAndGetProjectId(submit);
-
-            // TODO transacation
-            UploadDO uploadDO = new UploadDO(projectId, userId);
-            int uploadId = uploadDAO.insert(uploadDO);
-            Validate.isTrue(uploadId > 0, "系统异常，请重试");
-
-            for (Map.Entry<String, String> entry : submit.getContacts().entrySet()) {
-                if (StringUtils.isBlank(entry.getValue())) {
-                    continue;
+            return transactionTemplate.execute(new TransactionCallback<Integer>() {
+                @Override
+                public Integer doInTransaction(TransactionStatus transactionStatus) {
+                    int projectId = validateAndGetProjectId(submit);
+                    int uploadId = createUpload(projectId, userId);
+                    bindContact(projectId, uploadId, submit);
+                    bindFile(projectId, uploadId, submit, userId);
+                    return uploadId;
                 }
-
-                int projectContactId = NumberUtils.toInt(entry.getKey());
-                ProjectContactValueDO o = new ProjectContactValueDO(projectId, projectContactId, uploadId, entry.getValue());
-                int insertId = projectContactValueDAO.insert(o);
-                Validate.isTrue(insertId > 0, "系统异常，请重试");
-            }
-
-            for (Map.Entry<String, List<String>> entry : submit.getItems().entrySet()) {
-                int projectItemId = NumberUtils.toInt(entry.getKey());
-                for (String fileId : entry.getValue()) {
-                    FileMeta file = fileService.getFile(fileId, userId, false);
-                    Validate.notNull("文件上传失败，请退出后重试");
-                    ProjectFileDO o = new ProjectFileDO(projectId, projectItemId, uploadId, file.getId());
-                    int insertId = projectFileDAO.insert(o);
-                    Validate.isTrue(insertId > 0, "系统异常，请重试");
-                }
-            }
-
-            return uploadId;
+            });
         } catch (IllegalArgumentException e) {
             log.warn(String.format("upload fail: %s", e.getMessage()));
             throw e;
@@ -103,5 +88,38 @@ public class UploadService {
             projectId = projectItemDO.getProjectId();
         }
         return projectId;
+    }
+
+    private int createUpload(int projectId, int userId) {
+        UploadDO uploadDO = new UploadDO(projectId, userId);
+        int uploadId = uploadDAO.insert(uploadDO);
+        Validate.isTrue(uploadId > 0, "系统异常，请重试");
+        return uploadId;
+    }
+
+    private void bindContact(int projectId, int uploadId, UploadSubmit submit) {
+        for (Map.Entry<String, String> entry : submit.getContacts().entrySet()) {
+            if (StringUtils.isBlank(entry.getValue())) {
+                continue;
+            }
+
+            int projectContactId = NumberUtils.toInt(entry.getKey());
+            ProjectContactValueDO o = new ProjectContactValueDO(projectId, projectContactId, uploadId, entry.getValue());
+            int insertId = projectContactValueDAO.insert(o);
+            Validate.isTrue(insertId > 0, "系统异常，请重试");
+        }
+    }
+
+    private void bindFile(int projectId, int uploadId, UploadSubmit submit, int userId) {
+        for (Map.Entry<String, List<String>> entry : submit.getItems().entrySet()) {
+            int projectItemId = NumberUtils.toInt(entry.getKey());
+            for (String fileId : entry.getValue()) {
+                FileMeta file = fileService.getFile(fileId, userId, false);
+                Validate.notNull("文件上传失败，请退出后重试");
+                ProjectFileDO o = new ProjectFileDO(projectId, projectItemId, uploadId, file.getId());
+                int insertId = projectFileDAO.insert(o);
+                Validate.isTrue(insertId > 0, "系统异常，请重试");
+            }
+        }
     }
 }
