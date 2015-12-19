@@ -4,7 +4,7 @@
         container = $(container);
         var id = 'fileupload' + global++;
 
-        container.html('<label class="btn btn-primary" for="' + id + '"><input id="' + id + '" type="file" name="files[]" data-url="/uploadfile" style="display:none;" multiple> 添加文件 </label><div class="progress"><div class="progress-bar" style="width: 0%;"></div></div><div class="file_list">');
+        container.html('<label class="btn btn-success" for="' + id + '"><input id="' + id + '" type="file" name="files[]" data-url="/uploadfile" style="display:none;" multiple> 添加文件 </label><div class="progress"><div class="progress-bar" style="width: 0%;"></div></div><div class="file_list">');
         var trigger = container.find("#" + id);
         var list = container.find(".file_list");
         var bar = container.find(".progress").hide().find(".progress-bar");

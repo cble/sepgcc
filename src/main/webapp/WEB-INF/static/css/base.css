@@ -1,3 +1,6 @@
+body{
+    padding-bottom: 20px;
+}
 /**登录*/
 .form-signin {
     max-width: 330px;
@@ -32,4 +35,10 @@
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+}
+.file_upload_container{
+    margin-top:5px;
+}
+form{
+    padding:10px;
 }
