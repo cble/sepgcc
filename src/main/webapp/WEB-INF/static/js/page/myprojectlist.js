@@ -1,7 +1,7 @@
 (function () {
 
     new PageList(".J_pagelist", {
-        url: "/ajax/projectlist",
+        url: "/ajax/myprojectlist",
         parseData: function (res) {
             if (res.code == 200 && res.data) {
                 var data = {};
@@ -14,6 +14,6 @@
             alert("接口挂了")
 
         },
-        lastColumn: '<a href="/upload?projectId={id}">修改</a>'
+        lastColumn: '<a href="/modify?uploadId={id}">修改</a>'
     });
 })();

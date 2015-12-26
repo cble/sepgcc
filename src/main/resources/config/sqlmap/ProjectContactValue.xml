@@ -12,7 +12,7 @@
         <result column="ContactValue" property="contactValue" />
     </resultMap>
 
-    <select id="loadById" resultMap="projectContactValueResult" parameterClass="string">
+    <select id="loadById" resultMap="projectContactValueResult">
         SELECT ID,
             ProjectID,
             ProjectContactID,
@@ -20,6 +20,16 @@
             ContactValue
         FROM ZL_ProjectContactValue
         WHERE ID = #id#
+    </select>
+
+    <select id="queryByUploadId" resultMap="projectContactValueResult">
+        SELECT ID,
+            ProjectID,
+            ProjectContactID,
+            UploadID,
+            ContactValue
+        FROM ZL_ProjectContactValue
+        WHERE UploadID = #uploadId#
     </select>
 
     <insert id="insert" parameterClass="projectContactValueDO">

@@ -1,7 +1,6 @@
 package com.sepgcc.site.service;
 
 import com.sepgcc.site.dto.Project;
-import com.sepgcc.site.dto.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -21,7 +20,7 @@ public class ProjectServiceTest {
 
     @Test
     public void testLoadProjectById() throws Exception {
-        Project project = projectService.loadProjectById(1);
+        Project project = projectService.loadById(1);
         Assert.notNull(project, "oops...");
     }
 }

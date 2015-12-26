@@ -30,14 +30,8 @@
                 <#if projectItem.descriptionImage??>
                     <p><img src="${projectItem.descriptionImage}" alt="示例图片"/></p>
                 </#if>
-                <input type="text" name="username"
-                       class="form-control"
-                       id="item_${projectItem.id}"
-                       <#if projectItem.required>required=""</#if> />
-
                 <div class="file_upload_container" data-id="${projectItem.id}">
                 </div>
-
             </div>
         </#list>
 

@@ -12,7 +12,7 @@
         <result column="FileID" property="fileId" />
     </resultMap>
 
-    <select id="loadById" resultMap="projectFileResult" parameterClass="string">
+    <select id="loadById" resultMap="projectFileResult">
         SELECT ID,
             ProjectID,
             ProjectItemID,
@@ -20,6 +20,16 @@
             FileID
         FROM ZL_ProjectFile
         WHERE ID = #id#
+    </select>
+
+    <select id="queryByUploadId" resultMap="projectFileResult">
+        SELECT ID,
+            ProjectID,
+            ProjectItemID,
+            UploadID,
+            FileID
+        FROM ZL_ProjectFile
+        WHERE UploadID = #uploadId#
     </select>
 
     <insert id="insert" parameterClass="projectFileDO">

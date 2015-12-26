@@ -10,13 +10,30 @@
         <result column="UserID" property="userId" />
     </resultMap>
 
-    <select id="loadById" resultMap="uploadResult" parameterClass="string">
+    <select id="loadById" resultMap="uploadResult">
         SELECT ID,
             ProjectID,
             UserID
         FROM ZL_Upload
         WHERE ID = #id#
         AND Status > 0
+    </select>
+
+    <select id="queryByUserIdWithLimit" resultMap="uploadResult">
+        SELECT ID,
+            ProjectID,
+            UserID
+        FROM ZL_Upload
+        WHERE UserID = #userId#
+        AND Status > 0
+        LIMIT #index#, #limit#
+    </select>
+
+    <select id="countByUser" resultClass="int">
+        SELECT IFNULL(COUNT(ID), 0)
+        FROM ZL_Upload
+        WHERE Status > 0
+        AND UserID = #userId#
     </select>
 
     <insert id="insert" parameterClass="uploadDO">

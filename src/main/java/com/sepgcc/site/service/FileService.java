@@ -9,6 +9,9 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class FileService {
@@ -63,6 +66,25 @@ public class FileService {
             log.error(e);
         }
         return null;
+    }
+
+    public Map<String, FileMeta> mGetFile(List<String> fileIdList, int userId) {
+        Map<String, FileMeta> resultMap = new HashMap<String, FileMeta>();
+        try {
+            Validate.notEmpty(fileIdList, "invalid fileIdList");
+
+            for (String fileId : fileIdList) {
+                FileMeta fileMeta = getFile(fileId, userId, false);
+                if (fileMeta != null) {
+                    resultMap.put(fileId, fileMeta);
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            log.warn(e);
+        } catch (Exception e) {
+            log.error(e);
+        }
+        return resultMap;
     }
 
     private boolean isFileExsists(String fileId) {

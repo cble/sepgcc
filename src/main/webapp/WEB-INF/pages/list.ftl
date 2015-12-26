@@ -4,8 +4,8 @@
 <div class="container">
 
     <ul class="nav nav-pills" style="padding: 15px 0;">
-        <li role="presentation" class="active"><a href="#">项目列表</a></li>
-        <li role="presentation"><a href="#">我的上传</a></li>
+        <li role="presentation" class="active"><a href="index">项目列表</a></li>
+        <li role="presentation"><a href="mylist">我的上传</a></li>
     </ul>
 
     <div class="J_pagelist">

@@ -6,12 +6,12 @@ public class ProjectFileDO {
     private int projectId;
     private int projectItemId;
     private int uploadId;
-    private int fileId;
+    private String fileId;
 
     public ProjectFileDO() {
     }
 
-    public ProjectFileDO(int projectId, int projectItemId, int uploadId, int fileId) {
+    public ProjectFileDO(int projectId, int projectItemId, int uploadId, String fileId) {
         this.projectId = projectId;
         this.projectItemId = projectItemId;
         this.uploadId = uploadId;
@@ -50,11 +50,11 @@ public class ProjectFileDO {
         this.uploadId = uploadId;
     }
 
-    public int getFileId() {
+    public String getFileId() {
         return fileId;
     }
 
-    public void setFileId(int fileId) {
+    public void setFileId(String fileId) {
         this.fileId = fileId;
     }
 }

@@ -14,6 +14,13 @@ public class FileMeta implements Serializable {
     private String fileType;
     private byte[] bytes;
 
+    public FileMeta() {
+    }
+
+    public FileMeta(String fileId) {
+        this.fileId = fileId;
+    }
+
     public int getId() {
         return id;
     }

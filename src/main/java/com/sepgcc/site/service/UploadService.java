@@ -1,8 +1,15 @@
 package com.sepgcc.site.service;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import com.sepgcc.site.dao.*;
 import com.sepgcc.site.dao.entity.*;
 import com.sepgcc.site.dto.FileMeta;
+import com.sepgcc.site.dto.ProjectItemValue;
+import com.sepgcc.site.dto.Upload;
+import com.sepgcc.site.dto.UploadSubmit;
+import com.sepgcc.site.utils.ProjectUtils;
+import com.sepgcc.site.utils.UploadUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -36,6 +43,43 @@ public class UploadService {
     private FileService fileService;
     @Resource
     private TransactionTemplate transactionTemplate;
+
+    public Upload loadById(int uploadId, int userId) {
+        Upload upload = UploadUtils.toUpload(uploadDAO.loadById(uploadId));
+        if (upload != null) {
+            upload.setContactValueList(ProjectUtils.toProjectContactValueList(
+                    projectContactDAO.queryByProjectId(upload.getProjectId()),
+                    projectContactValueDAO.queryByUploadId(uploadId)
+            ));
+
+            List<ProjectFileDO> projectFileList = projectFileDAO.queryByUploadId(uploadId);
+            upload.setItemValueList(ProjectUtils.toProjectItemValueList(
+                    projectItemDAO.queryByProjectId(upload.getProjectId()),
+                    projectFileList,
+                    fileService.mGetFile(Lists.transform(projectFileList, new Function<ProjectFileDO, String>() {
+                        @Override
+                        public String apply(ProjectFileDO projectFileDO) {
+                            return projectFileDO.getFileId();
+                        }
+                    }), userId)
+            ));
+        }
+        return upload;
+    }
+
+    public List<Upload> queryByUserIdWithLimit(int userId, int index, int limit) {
+        List<UploadDO> uploadDOList = uploadDAO.queryByUserIdWithLimit(userId, index, limit);
+        return Lists.transform(uploadDOList, new Function<UploadDO, Upload>() {
+            @Override
+            public Upload apply(UploadDO uploadDO) {
+                return UploadUtils.toUpload(uploadDO);
+            }
+        });
+    }
+
+    public int countByUserId(int userId) {
+        return uploadDAO.countByUser(userId);
+    }
 
     public int upload(final UploadSubmit submit, final int userId) throws IllegalArgumentException {
         try {
@@ -116,7 +160,7 @@ public class UploadService {
             for (String fileId : entry.getValue()) {
                 FileMeta file = fileService.getFile(fileId, userId, false);
                 Validate.notNull("文件上传失败，请退出后重试");
-                ProjectFileDO o = new ProjectFileDO(projectId, projectItemId, uploadId, file.getId());
+                ProjectFileDO o = new ProjectFileDO(projectId, projectItemId, uploadId, file.getFileId());
                 int insertId = projectFileDAO.insert(o);
                 Validate.isTrue(insertId > 0, "系统异常，请重试");
             }

@@ -1,4 +1,4 @@
-package com.sepgcc.site.dao;
+package com.sepgcc.site.dto;
 
 import java.io.Serializable;
 import java.util.List;

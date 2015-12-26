@@ -28,7 +28,7 @@ public class ProjectService {
     @Resource
     private ProjectContactDAO projectContactDAO;
 
-    public Project loadProjectById(int projectId) {
+    public Project loadById(int projectId) {
         ProjectDO projectDO = projectDAO.loadById(projectId);
         Project project = ProjectUtils.toProject(projectDO);
         if (project != null) {
