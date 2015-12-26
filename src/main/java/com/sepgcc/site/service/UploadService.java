@@ -5,7 +5,6 @@ import com.google.common.collect.Lists;
 import com.sepgcc.site.dao.*;
 import com.sepgcc.site.dao.entity.*;
 import com.sepgcc.site.dto.FileMeta;
-import com.sepgcc.site.dto.ProjectItemValue;
 import com.sepgcc.site.dto.Upload;
 import com.sepgcc.site.dto.UploadSubmit;
 import com.sepgcc.site.utils.ProjectUtils;
@@ -65,7 +64,7 @@ public class UploadService {
     }
 
     public int countByUserId(int userId) {
-        return uploadDAO.countByUser(userId);
+        return uploadDAO.countByUserId(userId);
     }
 
     public int upload(final UploadSubmit submit, final int userId) throws IllegalArgumentException {
@@ -89,8 +88,8 @@ public class UploadService {
         }
     }
 
-    public List<Upload> getUploadByProject(int projectId) {
-        List<UploadDO> uploadDOList = uploadDAO.queryByProject(projectId);
+    public List<Upload> getUploadByProjectId(int projectId) {
+        List<UploadDO> uploadDOList = uploadDAO.queryByProjectId(projectId);
         return Lists.transform(uploadDOList, new Function<UploadDO, Upload>() {
             @Override
             public Upload apply(UploadDO uploadDO) {
@@ -99,6 +98,10 @@ public class UploadService {
                 return upload;
             }
         });
+    }
+
+    public int countByProjectId(int projectId) {
+        return uploadDAO.countByProjectId(projectId);
     }
 
     private int validateAndGetProjectId(UploadSubmit submit) throws IllegalArgumentException {

@@ -2,6 +2,7 @@ package com.sepgcc.site.controller;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import com.sepgcc.site.constants.SiteConstants;
 import com.sepgcc.site.dto.UploadSubmit;
 import com.sepgcc.site.dto.*;
 import com.sepgcc.site.service.FileService;
@@ -29,8 +30,6 @@ public class UploadController extends BaseController {
 
     private static final Logger log = Logger.getLogger(UploadController.class);
 
-    private static final int PAGE_SIZE = 10;
-
     @Resource
     private ProjectService projectService;
     @Resource
@@ -45,13 +44,13 @@ public class UploadController extends BaseController {
 
     @RequestMapping(value = {"/ajax/projectlist"}, method = RequestMethod.POST)
     public @ResponseBody AjaxResponse<Paginate<Project>> projectList(@ModelAttribute User user, int page) throws Exception {
-        int index = (page - 1) * PAGE_SIZE;
-        int limit = PAGE_SIZE;
+        int index = (page - 1) * SiteConstants.PAGE_SIZE;
+        int limit = SiteConstants.PAGE_SIZE;
         List<Project> projectList = projectService.queryWithLimit(index, limit);
         int projectCount = projectService.countAll();
 
         Paginate<Project> paginate = new Paginate<Project>();
-        paginate.setPageCount(projectCount / PAGE_SIZE + 1);
+        paginate.setPageCount(projectCount / SiteConstants.PAGE_SIZE + 1);
         paginate.setList(projectList);
 
         return new AjaxResponse<Paginate<Project>>(HttpStatus.OK.value(), null, paginate);
@@ -64,13 +63,13 @@ public class UploadController extends BaseController {
 
     @RequestMapping(value = {"/ajax/myprojectlist"}, method = RequestMethod.POST)
     public @ResponseBody AjaxResponse<Paginate<Project>> myProjectList(@ModelAttribute User user, int page) throws Exception {
-        int index = (page - 1) * PAGE_SIZE;
-        int limit = PAGE_SIZE;
+        int index = (page - 1) * SiteConstants.PAGE_SIZE;
+        int limit = SiteConstants.PAGE_SIZE;
         int uploadCount = uploadService.countByUserId(user.getId());
         List<Upload> uploadList = uploadService.queryByUserIdWithLimit(user.getId(), index, limit);
 
         Paginate<Project> paginate = new Paginate<Project>();
-        paginate.setPageCount(uploadCount / PAGE_SIZE + 1);
+        paginate.setPageCount(uploadCount / SiteConstants.PAGE_SIZE + 1);
         paginate.setList(Lists.transform(uploadList, new Function<Upload, Project>() {
             @Override
             public Project apply(Upload upload) {

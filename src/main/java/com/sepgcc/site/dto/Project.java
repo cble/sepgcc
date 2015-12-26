@@ -12,6 +12,7 @@ public class Project implements Serializable {
     private String description;
     private Date beginTime;
     private Date endTime;
+    private int successNumber;
     private String owner;
     private int status;
     private List<ProjectItem> projectItemList;
@@ -63,6 +64,14 @@ public class Project implements Serializable {
 
     public String getEndTimeStr() {
         return endTime != null ? new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(endTime) : null;
+    }
+
+    public int getSuccessNumber() {
+        return successNumber;
+    }
+
+    public void setSuccessNumber(int successNumber) {
+        this.successNumber = successNumber;
     }
 
     public String getOwner() {

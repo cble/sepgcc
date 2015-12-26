@@ -6,6 +6,7 @@ public class UserDO {
     private String username;
     private String password;
     private String nickname;
+    private int status;
 
     public int getId() {
         return id;
@@ -37,5 +38,13 @@ public class UserDO {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

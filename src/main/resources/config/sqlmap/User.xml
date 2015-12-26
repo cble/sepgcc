@@ -9,13 +9,15 @@
         <result column="Username" property="username" />
         <result column="Password" property="password" />
         <result column="Nickname" property="nickname" />
+        <result column="Status" property="status" />
     </resultMap>
 
     <select id="loadByUsername" resultMap="userResult">
         SELECT ID,
             Username,
             Password,
-            Nickname
+            Nickname,
+            Status
         FROM ZL_User
         WHERE Username = #username#
     </select>
@@ -24,9 +26,25 @@
         SELECT ID,
             Username,
             Password,
-            Nickname
+            Nickname,
+            Status
         FROM ZL_User
         WHERE ID = #id#
+    </select>
+
+    <select id="queryWithLimit" resultMap="userResult">
+        SELECT ID,
+            Username,
+            Password,
+            Nickname,
+            Status
+        FROM ZL_User
+        LIMIT #index#, #limit#
+    </select>
+
+    <select id="countAll" resultClass="int">
+        SELECT IFNULL(COUNT(ID), 0)
+        FROM ZL_User
     </select>
 
 </sqlMap>

@@ -31,12 +31,17 @@ public class UploadDAOImpl extends SqlMapClientDaoSupport implements UploadDAO {
     }
 
     @Override
-    public int countByUser(int userId) {
-        return (Integer) this.getSqlMapClientTemplate().queryForObject("upload.countByUser", userId);
+    public int countByUserId(int userId) {
+        return (Integer) this.getSqlMapClientTemplate().queryForObject("upload.countByUserId", userId);
     }
 
     @Override
-    public List<UploadDO> queryByProject(int projectId) {
+    public List<UploadDO> queryByProjectId(int projectId) {
         return this.getSqlMapClientTemplate().queryForList("upload.queryByProjectId", projectId);
+    }
+
+    @Override
+    public int countByProjectId(int projectId) {
+        return (Integer) this.getSqlMapClientTemplate().queryForObject("upload.countByProjectId", projectId);
     }
 }

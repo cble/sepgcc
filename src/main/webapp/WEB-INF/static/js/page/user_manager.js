@@ -1,15 +1,18 @@
 (function () {
 
     new PageList(".J_pagelist", {
-        url: "",
+        url: "/ajax/usermanagerlist",
         parseData: function (res) {
-            var data = {};
-            data.total = res.total;
-            data.list = res.list.map(function (item) {
-                return [item.name, item.endTime, item];
-            });
-            return res;
+            if (res.code == 200 && res.data) {
+                var data = {};
+                data.total = res.data.pageCount;
+                data.list = res.data.list.map(function (item) {
+                    return [item.username, item.nickname, item.statusStr, item];
+                });
+                return data;
+            }
+            alert("接口挂了")
         },
-        lastColumn: '<a href="notice?projectId={id}">修改</a><a href="notice?projectId={id}">停用</a><a href="notice?projectId={id}">重置密码</a>'
-    })
+        lastColumn: '<a href="notice?projectId={id}">修改</a> <a href="notice?projectId={id}">发布</a> <a href="notice?projectId={id}">删除</a>'
+    });
 })();

@@ -9,12 +9,14 @@ public class UserUtils {
     private static final BeanCopier toUserCopier = BeanCopier.create(UserDO.class, User.class, false);
     private static final BeanCopier toUserDOCopier = BeanCopier.create(User.class, UserDO.class, false);
 
-    public static User toUser(UserDO userDO) {
+    public static User toUser(UserDO userDO, boolean fillToken) {
         User result = null;
         if (userDO != null) {
             result = new User();
             toUserCopier.copy(userDO, result, null);
-            result.setToken(SecurityUtils.generateToken(result));
+            if (fillToken) {
+                result.setToken(SecurityUtils.generateToken(result));
+            }
         }
         return result;
     }

@@ -8,7 +8,7 @@
         ${project.description}
     </div>
     <div>
-        <a href="upload?projectId=${project.id}">开始上传</a>
+        <a href="/upload?projectId=${project.id}">开始上传</a>
     </div>
     <hr />
     <div>

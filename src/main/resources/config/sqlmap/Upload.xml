@@ -29,7 +29,7 @@
         LIMIT #index#, #limit#
     </select>
 
-    <select id="countByUser" resultClass="int">
+    <select id="countByUserId" resultClass="int">
         SELECT IFNULL(COUNT(ID), 0)
         FROM ZL_Upload
         WHERE Status > 0
@@ -43,6 +43,13 @@
         FROM ZL_Upload
         WHERE ProjectId = #projectId#
         AND Status > 0
+    </select>
+
+    <select id="countByProjectId" resultClass="int">
+        SELECT IFNULL(COUNT(ID), 0)
+        FROM ZL_Upload
+        WHERE Status > 0
+        AND ProjectId = #projectId#
     </select>
 
     <insert id="insert" parameterClass="uploadDO">

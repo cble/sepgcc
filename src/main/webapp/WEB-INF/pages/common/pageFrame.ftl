@@ -22,20 +22,21 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index">上海教育报刊总社资料收集平台</a>
+            <a class="navbar-brand" href="/index">上海教育报刊总社资料收集平台</a>
         </div>
 
         <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
-            <#--<ul class="nav navbar-nav">-->
-                <#--<li class="active"><a href="#">Home</a></li>-->
-                <#--<li><a href="#about">About</a></li>-->
-                <#--<li><a href="#contact">Contact</a></li>-->
-            <#--</ul>-->
+            <#if user?? && user.id == 1> <!-- TODO usertype -->
+            <ul class="nav navbar-nav">
+                <li><a href="/index">普通用户入口</a></li>
+                <li><a href="/admin">管理员入口</a></li>
+            </ul>
+            </#if>
 
-            <#if !loginPage>
+            <#if !loginPage && user??>
             <ul class="nav navbar-nav navbar-right">
                 <li><a style="color: white;">您好，${user.nickname}</a></li>
-                <li><a href="logout">退出登录</a></li>
+                <li><a href="/logout">退出登录</a></li>
             </ul>
             </#if>
         </div>

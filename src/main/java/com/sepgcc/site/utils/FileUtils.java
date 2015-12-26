@@ -1,22 +1,23 @@
 package com.sepgcc.site.utils;
 
-import com.sepgcc.site.constants.FileConstants;
+import com.sepgcc.site.constants.SiteConstants;
 import com.sepgcc.site.dao.entity.FileMetaDO;
 import com.sepgcc.site.dto.FileMeta;
 import net.sf.cglib.beans.BeanCopier;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.FileCopyUtils;
+import org.apache.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileUtils {
+
+    private static final Logger log = Logger.getLogger(FileUtils.class);
 
     private static final BeanCopier toFileMetaDOCopier = BeanCopier.create(FileMeta.class, FileMetaDO.class, false);
     private static final BeanCopier toFileMetaCopier = BeanCopier.create(FileMetaDO.class, FileMeta.class, false);
@@ -52,7 +53,7 @@ public class FileUtils {
                 return Md5Utils.md5((header + body).getBytes());
             }
         } catch (Exception e) {
-            // TODO log
+            log.error("generateId error", e);
         }
         return null;
     }
@@ -86,13 +87,13 @@ public class FileUtils {
     }
 
     public static void saveToDisk(String storagePath, String fileName, byte[] bytes) throws IOException {
-        String realPath = joinPath(FileConstants.FILE_BASE, storagePath);
+        String realPath = joinPath(SiteConstants.FILE_BASE, storagePath);
         createDir(realPath);
         org.apache.commons.io.FileUtils.writeByteArrayToFile(new File(joinPath(realPath, fileName)), bytes);
     }
 
     public static byte[] readFromDisk(String path) throws IOException {
-        String realPath = joinPath(FileConstants.FILE_BASE, path);
+        String realPath = joinPath(SiteConstants.FILE_BASE, path);
         return IOUtils.toByteArray(new FileInputStream(realPath));
     }
 

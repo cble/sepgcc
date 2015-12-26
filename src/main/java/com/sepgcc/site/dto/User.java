@@ -7,6 +7,7 @@ public class User implements Serializable {
     private int id;
     private String username;
     private String nickname;
+    private int status;
     private String token;
 
     public int getId() {
@@ -31,6 +32,18 @@ public class User implements Serializable {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getStatusStr() {
+        return status > 0 ? "正常" : "停用";
     }
 
     public String getToken() {
