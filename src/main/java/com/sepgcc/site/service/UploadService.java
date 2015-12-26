@@ -46,25 +46,12 @@ public class UploadService {
 
     public Upload loadById(int uploadId, int userId) {
         Upload upload = UploadUtils.toUpload(uploadDAO.loadById(uploadId));
-        if (upload != null) {
-            upload.setContactValueList(ProjectUtils.toProjectContactValueList(
-                    projectContactDAO.queryByProjectId(upload.getProjectId()),
-                    projectContactValueDAO.queryByUploadId(uploadId)
-            ));
-
-            List<ProjectFileDO> projectFileList = projectFileDAO.queryByUploadId(uploadId);
-            upload.setItemValueList(ProjectUtils.toProjectItemValueList(
-                    projectItemDAO.queryByProjectId(upload.getProjectId()),
-                    projectFileList,
-                    fileService.mGetFile(Lists.transform(projectFileList, new Function<ProjectFileDO, String>() {
-                        @Override
-                        public String apply(ProjectFileDO projectFileDO) {
-                            return projectFileDO.getFileId();
-                        }
-                    }), userId)
-            ));
+        if (upload != null && upload.getUserId() == userId) {
+            fillUploadDetail(upload);
+            return upload;
+        } else {
+            return null;
         }
-        return upload;
     }
 
     public List<Upload> queryByUserIdWithLimit(int userId, int index, int limit) {
@@ -100,6 +87,18 @@ public class UploadService {
             log.error("upload error", e);
             throw new IllegalArgumentException("未知错误");
         }
+    }
+
+    public List<Upload> getUploadByProject(int projectId) {
+        List<UploadDO> uploadDOList = uploadDAO.queryByProject(projectId);
+        return Lists.transform(uploadDOList, new Function<UploadDO, Upload>() {
+            @Override
+            public Upload apply(UploadDO uploadDO) {
+                Upload upload = UploadUtils.toUpload(uploadDO);
+                fillUploadDetail(upload);
+                return upload;
+            }
+        });
     }
 
     private int validateAndGetProjectId(UploadSubmit submit) throws IllegalArgumentException {
@@ -165,5 +164,24 @@ public class UploadService {
                 Validate.isTrue(insertId > 0, "系统异常，请重试");
             }
         }
+    }
+
+    private void fillUploadDetail(Upload upload) {
+        upload.setContactValueList(ProjectUtils.toProjectContactValueList(
+                projectContactDAO.queryByProjectId(upload.getProjectId()),
+                projectContactValueDAO.queryByUploadId(upload.getId())
+        ));
+
+        List<ProjectFileDO> projectFileList = projectFileDAO.queryByUploadId(upload.getId());
+        upload.setItemValueList(ProjectUtils.toProjectItemValueList(
+                projectItemDAO.queryByProjectId(upload.getProjectId()),
+                projectFileList,
+                fileService.mGetFile(Lists.transform(projectFileList, new Function<ProjectFileDO, String>() {
+                    @Override
+                    public String apply(ProjectFileDO projectFileDO) {
+                        return projectFileDO.getFileId();
+                    }
+                }))
+        ));
     }
 }

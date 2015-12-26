@@ -33,11 +33,9 @@
                 </#if>
                 <div class="file_upload_container" data-id="${uploadItem.id}">
                 </div>
-                <#if uploadItem.fileMetaList??> <!-- TODO: 上传文件控件支持插入已有文件 -->
-                    <#list uploadItem.fileMetaList as fileMeta>
-                        <div data-fileId="${fileMeta.fileId}">${fileMeta.fileName} ${fileMeta.fileType}</div>
-                    </#list>
-                </#if>
+                <#list uploadItem.fileMetaList as fileMeta>
+                    <div data-fileId="${fileMeta.fileId}">${fileMeta.fileName} ${fileMeta.fileType}</div>
+                </#list>
             </div>
         </#list>
 

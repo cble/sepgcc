@@ -5,4 +5,5 @@ import com.sepgcc.site.dao.entity.UserDO;
 public interface UserDAO {
 
     UserDO loadByUsername(String username);
+    UserDO loadById(int id);
 }

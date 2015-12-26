@@ -26,4 +26,13 @@ public class UserService {
         }
         return user;
     }
+
+    public User loadById(int id) {
+        User user = null;
+        UserDO userDO = userDAO.loadById(id);
+        if (userDO != null) {
+            user = UserUtils.toUser(userDO);
+        }
+        return user;
+    }
 }

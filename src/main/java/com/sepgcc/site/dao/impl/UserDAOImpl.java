@@ -13,4 +13,9 @@ public class UserDAOImpl extends SqlMapClientDaoSupport implements UserDAO {
     public UserDO loadByUsername(String username) {
         return (UserDO) this.getSqlMapClientTemplate().queryForObject("user.loadByUsername", username);
     }
+
+    @Override
+    public UserDO loadById(int id) {
+        return (UserDO) this.getSqlMapClientTemplate().queryForObject("user.loadById", id);
+    }
 }

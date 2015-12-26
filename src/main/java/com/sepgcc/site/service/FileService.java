@@ -53,7 +53,7 @@ public class FileService {
             Validate.notEmpty(fileId, "invalid fileId");
 
             FileMetaDO fileMetaDO = fileMetaDAO.loadById(fileId);
-            if (fileMetaDO != null && fileMetaDO.getUserId() == userId) {
+            if (fileMetaDO != null && (fileMetaDO.getUserId() == userId || userId == 0)) {
                 FileMeta fileMeta = FileUtils.toFileMeta(fileMetaDO);
                 if (fillContent) {
                     fileMeta.setBytes(FileUtils.readFromDisk(fileMetaDO.getStoragePath()));
@@ -68,13 +68,13 @@ public class FileService {
         return null;
     }
 
-    public Map<String, FileMeta> mGetFile(List<String> fileIdList, int userId) {
+    public Map<String, FileMeta> mGetFile(List<String> fileIdList) {
         Map<String, FileMeta> resultMap = new HashMap<String, FileMeta>();
         try {
             Validate.notEmpty(fileIdList, "invalid fileIdList");
 
             for (String fileId : fileIdList) {
-                FileMeta fileMeta = getFile(fileId, userId, false);
+                FileMeta fileMeta = getFile(fileId, 0, false);
                 if (fileMeta != null) {
                     resultMap.put(fileId, fileMeta);
                 }

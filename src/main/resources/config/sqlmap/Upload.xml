@@ -36,6 +36,15 @@
         AND UserID = #userId#
     </select>
 
+    <select id="queryByProjectId" resultMap="uploadResult">
+        SELECT ID,
+        ProjectID,
+        UserID
+        FROM ZL_Upload
+        WHERE ProjectId = #projectId#
+        AND Status > 0
+    </select>
+
     <insert id="insert" parameterClass="uploadDO">
         INSERT INTO ZL_Upload (
             ProjectID,

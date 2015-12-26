@@ -9,4 +9,5 @@ public interface UploadDAO {
     UploadDO loadById(int id);
     List<UploadDO> queryByUserIdWithLimit(int userId, int index, int limit);
     int countByUser(int userId);
+    List<UploadDO> queryByProject(int projectId);
 }

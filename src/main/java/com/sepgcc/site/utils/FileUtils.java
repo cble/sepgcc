@@ -28,15 +28,15 @@ public class FileUtils {
         List<String> pathList = new ArrayList<String>();
         for (String path : paths) {
             String s = path.trim();
-            if (s.startsWith(FileConstants.SEP)) {
+            if (s.startsWith(File.separator)) {
                 s = s.substring(1, s.length());
             }
-            if (s.endsWith(FileConstants.SEP)) {
+            if (s.endsWith(File.separator)) {
                 s = s.substring(0, s.length() - 1);
             }
             pathList.add(path);
         }
-        return StringUtils.join(pathList, FileConstants.SEP);
+        return StringUtils.join(pathList, File.separator);
     }
 
     /**
@@ -92,7 +92,8 @@ public class FileUtils {
     }
 
     public static byte[] readFromDisk(String path) throws IOException {
-        return IOUtils.toByteArray(new FileInputStream(path));
+        String realPath = joinPath(FileConstants.FILE_BASE, path);
+        return IOUtils.toByteArray(new FileInputStream(realPath));
     }
 
     public static void createDir(String path) throws IOException {

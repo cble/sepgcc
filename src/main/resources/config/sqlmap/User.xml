@@ -11,13 +11,22 @@
         <result column="Nickname" property="nickname" />
     </resultMap>
 
-    <select id="loadByUsername" resultMap="userResult" parameterClass="string">
+    <select id="loadByUsername" resultMap="userResult">
         SELECT ID,
             Username,
             Password,
             Nickname
         FROM ZL_User
         WHERE Username = #username#
+    </select>
+
+    <select id="loadById" resultMap="userResult">
+        SELECT ID,
+            Username,
+            Password,
+            Nickname
+        FROM ZL_User
+        WHERE ID = #id#
     </select>
 
 </sqlMap>

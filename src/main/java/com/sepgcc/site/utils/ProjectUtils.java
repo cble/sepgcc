@@ -4,6 +4,7 @@ import com.sepgcc.site.dao.entity.*;
 import com.sepgcc.site.dto.*;
 import net.sf.cglib.beans.BeanCopier;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -121,7 +122,7 @@ public class ProjectUtils {
 
         List<ProjectItemValue> projectItemValueList = new ArrayList<ProjectItemValue>();
         for (ProjectItemDO itemDO : itemList) {
-            projectItemValueList.add(toProjectItemValue(itemDO, fileMap.get(itemDO.getId())));
+            projectItemValueList.add(toProjectItemValue(itemDO, fileMap.containsKey(itemDO.getId()) ? fileMap.get(itemDO.getId()) : new ArrayList<FileMeta>()));
         }
         return projectItemValueList;
     }
