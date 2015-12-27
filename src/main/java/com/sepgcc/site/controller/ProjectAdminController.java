@@ -8,11 +8,9 @@ import com.sepgcc.site.service.UploadService;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -37,7 +35,7 @@ public class ProjectAdminController extends BaseController {
     }
 
     @RequestMapping(value = {"/ajax/admin/projectmanagerlist"}, method = RequestMethod.POST)
-    public @ResponseBody AjaxResponse<Paginate<Project>> projectList(@ModelAttribute User user, int page) throws Exception {
+    public @ResponseBody AjaxResponse<Paginate<Project>> projectList(int page) throws Exception {
         int index = (page - 1) * SiteConstants.PAGE_SIZE;
         int limit = SiteConstants.PAGE_SIZE;
         List<Project> projectList = projectService.queryWithLimit(index, limit);
@@ -59,15 +57,37 @@ public class ProjectAdminController extends BaseController {
         return new ModelAndView("newproject");
     }
 
-    @RequestMapping(value = "/admin/download", method = RequestMethod.GET)
-    public void download(int projectId, HttpServletResponse response) {
+    @RequestMapping(value = "/admin/projectstatistics", method = RequestMethod.GET)
+    public ModelAndView projectStatistics(@RequestParam int projectId, ModelMap modelMap) {
+        Project project = projectService.loadById(projectId);
+        modelMap.put("project", project);
+        return new ModelAndView("project_statistics");
+    }
+
+    @RequestMapping(value = "/ajax/admin/projectstatistics", method = RequestMethod.GET)
+    public @ResponseBody AjaxResponse<Paginate<Project>> projectStatistics(@RequestParam int projectId, int page) {
+        return new AjaxResponse<Paginate<Project>>(HttpStatus.OK.value(), null, null);
+    }
+
+    @RequestMapping(value = "/admin/downloadstatistics")
+    public void downloadStatistics(@RequestParam int projectId, HttpServletResponse response) {
+        try {
+
+        } catch (Exception e) {
+            log.error("download error", e);
+        }
+    }
+
+
+    @RequestMapping(value = "/admin/downloadproject", method = RequestMethod.GET)
+    public void downloadProject(@RequestParam int projectId, HttpServletResponse response) {
         try {
             FileMeta out = fileDownloadService.compressProjectFile(projectId);
             response.setContentType(out.getFileType());
-            response.setHeader("Content-disposition", "attachment; filename=download.zip"); // TODO use out.filename
+            response.setHeader("Content-disposition", "attachment; filename=project.zip"); // TODO use out.filename
             FileCopyUtils.copy(out.getBytes(), response.getOutputStream());
-        }catch (Exception e) {
-            log.error("download error", e);
+        } catch (Exception e) {
+            log.error("downloadProject error", e);
         }
     }
 }

@@ -34,7 +34,7 @@ public class UserAdminController extends BaseController {
     }
 
     @RequestMapping(value = {"/ajax/admin/usermanagerlist"}, method = RequestMethod.POST)
-    public @ResponseBody AjaxResponse<Paginate<User>> userList(@ModelAttribute User user, int page) throws Exception {
+    public @ResponseBody AjaxResponse<Paginate<User>> userList(int page) throws Exception {
         int index = (page - 1) * SiteConstants.PAGE_SIZE;
         int limit = SiteConstants.PAGE_SIZE;
         List<User> users = userService.queryWithLimit(index, limit);

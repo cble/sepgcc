@@ -7,7 +7,7 @@
                 var data = {};
                 data.total = res.data.pageCount;
                 data.list = res.data.list.map(function (item) {
-                    return [item.username, item.nickname, item.statusStr, item];
+                    return [item.username, item.nickname, item.groupStr, item];
                 });
                 return data;
             }

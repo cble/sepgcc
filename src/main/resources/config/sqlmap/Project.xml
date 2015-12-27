@@ -31,20 +31,6 @@
         AND Status > 0
     </select>
 
-    <select id="queryAll" resultMap="projectResult">
-        SELECT ID,
-            Name,
-            Description,
-            BeginTime,
-            EndTime,
-            Owner,
-            Status,
-            AddTime,
-            UpdateTime
-        FROM ZL_Project
-        WHERE Status > 0
-    </select>
-
     <select id="queryWithLimit" resultMap="projectResult">
         SELECT ID,
             Name,
