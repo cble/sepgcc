@@ -49,6 +49,7 @@ public class FileDownloadService {
                 }
 
                 zip.close();
+                out.close();
                 FileMeta zipFileMeta = new FileMeta();
                 zipFileMeta.setFileName(project.getName() + ".zip");
                 zipFileMeta.setFileType("application/zip, application/octet-stream");

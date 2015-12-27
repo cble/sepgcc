@@ -4,6 +4,7 @@ import com.sepgcc.site.constants.SiteConstants;
 import com.sepgcc.site.dto.*;
 import com.sepgcc.site.service.FileDownloadService;
 import com.sepgcc.site.service.ProjectService;
+import com.sepgcc.site.service.ProjectStatisticsService;
 import com.sepgcc.site.service.UploadService;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,8 @@ public class ProjectAdminController extends BaseController {
 
     @Resource
     private FileDownloadService fileDownloadService;
+    @Resource
+    private ProjectStatisticsService projectStatisticsService;
     @Resource
     private ProjectService projectService;
     @Resource
@@ -72,12 +75,13 @@ public class ProjectAdminController extends BaseController {
     @RequestMapping(value = "/admin/downloadstatistics")
     public void downloadStatistics(@RequestParam int projectId, HttpServletResponse response) {
         try {
-
+            FileMeta out = projectStatisticsService.generateStatisticsFile(projectId);
+            response.setContentType(out.getFileType());
+            response.setHeader("Content-disposition", "attachment; filename=report.xls"); // TODO use out.filename
         } catch (Exception e) {
             log.error("download error", e);
         }
     }
-
 
     @RequestMapping(value = "/admin/downloadproject", method = RequestMethod.GET)
     public void downloadProject(@RequestParam int projectId, HttpServletResponse response) {
