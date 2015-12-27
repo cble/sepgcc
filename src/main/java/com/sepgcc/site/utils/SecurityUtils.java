@@ -34,7 +34,8 @@ public class SecurityUtils {
                     String.valueOf(System.currentTimeMillis() + SecurityConstants.TOKEN_EXPIRE_TIME),
                     String.valueOf(user.getId()),
                     user.getUsername(),
-                    user.getNickname()
+                    user.getNickname(),
+                    user.getUserGroup()
             ), SEP);
             Cipher cipher = Cipher.getInstance(TRANSFORMATION);
             Key k = new SecretKeySpec(SecurityConstants.TOKEN_AES_KEY.getBytes(), ALGORITHM);
@@ -54,13 +55,14 @@ public class SecurityUtils {
             cipher.init(Cipher.DECRYPT_MODE, k);
             byte[] result = cipher.doFinal(Base64.decodeBase64(token));
             String[] tokenItems = (new String(result)).split(SEP);
-            Validate.isTrue(tokenItems.length >= 5, "invalid token");
+            Validate.isTrue(tokenItems.length >= 6, "invalid token");
             Validate.isTrue(SecurityConstants.TOKEN_SALT.equals(tokenItems[0]), "invalid token");
             if (NumberUtils.toLong(tokenItems[1]) > System.currentTimeMillis()) {
                 User user = new User();
                 user.setId(NumberUtils.toInt(tokenItems[2]));
                 user.setUsername(tokenItems[3]);
                 user.setNickname(tokenItems[4]);
+                user.setUserGroup(NumberUtils.toInt(tokenItems[5]));
                 return user;
             }
         } catch (Exception e) {

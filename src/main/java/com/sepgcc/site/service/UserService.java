@@ -21,7 +21,7 @@ public class UserService {
     public User loadUser(String username, String password) {
         User user = null;
         UserDO userDO = userDAO.loadByUsername(username);
-        if (userDO != null && userDO.getStatus() > 0) {
+        if (userDO != null) {
             String encryptPassword = SecurityUtils.encryptPassword(password);
             if (encryptPassword.equals(userDO.getPassword())) {
                 user = UserUtils.toUser(userDO, true);

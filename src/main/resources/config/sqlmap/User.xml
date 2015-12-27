@@ -9,7 +9,7 @@
         <result column="Username" property="username" />
         <result column="Password" property="password" />
         <result column="Nickname" property="nickname" />
-        <result column="Status" property="status" />
+        <result column="UserGroup" property="userGroup" />
     </resultMap>
 
     <select id="loadByUsername" resultMap="userResult">
@@ -17,7 +17,7 @@
             Username,
             Password,
             Nickname,
-            Status
+            UserGroup
         FROM ZL_User
         WHERE Username = #username#
     </select>
@@ -27,7 +27,7 @@
             Username,
             Password,
             Nickname,
-            Status
+            UserGroup
         FROM ZL_User
         WHERE ID = #id#
     </select>
@@ -37,7 +37,7 @@
             Username,
             Password,
             Nickname,
-            Status
+            UserGroup
         FROM ZL_User
         LIMIT #index#, #limit#
     </select>

@@ -26,7 +26,7 @@
         </div>
 
         <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
-            <#if user?? && user.id == 1> <!-- TODO usertype -->
+            <#if user?? && user.isAdmin()>
             <ul class="nav navbar-nav">
                 <li><a href="/index">普通用户入口</a></li>
                 <li><a href="/admin">管理员入口</a></li>

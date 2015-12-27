@@ -7,7 +7,7 @@ public class User implements Serializable {
     private int id;
     private String username;
     private String nickname;
-    private int status;
+    private int userGroup; // 0-普通用户 99-管理员
     private String token;
 
     public int getId() {
@@ -34,16 +34,12 @@ public class User implements Serializable {
         this.nickname = nickname;
     }
 
-    public int getStatus() {
-        return status;
+    public int getUserGroup() {
+        return userGroup;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public String getStatusStr() {
-        return status > 0 ? "正常" : "停用";
+    public void setUserGroup(int userGroup) {
+        this.userGroup = userGroup;
     }
 
     public String getToken() {
@@ -52,5 +48,22 @@ public class User implements Serializable {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public boolean isAdmin() {
+        return userGroup == 99;
+    }
+
+    public boolean isEnable() {
+        return userGroup > 0;
+    }
+
+    public String getGroupStr() {
+        switch (userGroup) {
+            case 1: return "学校用户";
+            case 2: return "会展用户";
+            case 99: return "管理员";
+            default: return "停用用户";
+        }
     }
 }

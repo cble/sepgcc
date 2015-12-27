@@ -6,7 +6,7 @@ public class UserDO {
     private String username;
     private String password;
     private String nickname;
-    private int status;
+    private int userGroup;
 
     public int getId() {
         return id;
@@ -40,11 +40,11 @@ public class UserDO {
         this.nickname = nickname;
     }
 
-    public int getStatus() {
-        return status;
+    public int getUserGroup() {
+        return userGroup;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setUserGroup(int userGroup) {
+        this.userGroup = userGroup;
     }
 }

@@ -38,7 +38,7 @@ public class LoginController extends BaseController {
             }
         } else if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)) {
             user = userService.loadUser(username, password);
-            if (user != null) {
+            if (user != null && user.isEnable()) {
                 setToken(request, user.getToken());
                 return new ModelAndView(new RedirectView("index"));
             } else {
