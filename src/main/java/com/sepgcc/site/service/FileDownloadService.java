@@ -27,7 +27,7 @@ public class FileDownloadService {
     public FileMeta compressProjectFile(int projectId) {
         try {
             Project project = projectService.loadById(projectId);
-            List<Upload> uploadList = uploadService.getUploadByProjectId(projectId);
+            List<Upload> uploadList = uploadService.queryByProjectId(projectId);
             if (CollectionUtils.isNotEmpty(uploadList)) {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 ZipOutputStream zip = new ZipOutputStream(out);

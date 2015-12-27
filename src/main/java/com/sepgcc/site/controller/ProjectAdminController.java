@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ProjectAdminController extends BaseController {
@@ -38,7 +39,7 @@ public class ProjectAdminController extends BaseController {
     }
 
     @RequestMapping(value = {"/ajax/admin/projectmanagerlist"}, method = RequestMethod.POST)
-    public @ResponseBody AjaxResponse<Paginate<Project>> projectList(int page) throws Exception {
+    public @ResponseBody AjaxResponse<Paginate<Project>> projectList(@RequestParam int page) throws Exception {
         int index = (page - 1) * SiteConstants.PAGE_SIZE;
         int limit = SiteConstants.PAGE_SIZE;
         List<Project> projectList = projectService.queryWithLimit(index, limit);
@@ -67,9 +68,19 @@ public class ProjectAdminController extends BaseController {
         return new ModelAndView("project_statistics");
     }
 
-    @RequestMapping(value = "/ajax/admin/projectstatistics", method = RequestMethod.GET)
-    public @ResponseBody AjaxResponse<Paginate<Project>> projectStatistics(@RequestParam int projectId, int page) {
-        return new AjaxResponse<Paginate<Project>>(HttpStatus.OK.value(), null, null);
+    @RequestMapping(value = "/ajax/admin/projectstatistics", method = RequestMethod.POST)
+    public @ResponseBody AjaxResponse<Paginate<Map<String, String>>> projectStatistics(@RequestParam int projectId, @RequestParam int page) {
+        int index = (page - 1) * SiteConstants.PAGE_SIZE;
+        int limit = SiteConstants.PAGE_SIZE;
+        List<Upload> uploadList = uploadService.queryByProjectIdWithLimit(projectId, index, limit);
+        int uploadCount = uploadService.countByProjectId(projectId);
+        Project project = projectService.loadById(projectId);
+
+        Paginate<Map<String, String>> paginate = new Paginate<Map<String, String>>();
+        paginate.setPageCount(uploadCount);
+        paginate.setList(projectStatisticsService.getRowList(uploadList));
+        paginate.setColumns(projectStatisticsService.getColumnAttriubteNames(project));
+        return new AjaxResponse<Paginate<Map<String, String>>>(HttpStatus.OK.value(), null, paginate);
     }
 
     @RequestMapping(value = "/admin/downloadstatistics")
@@ -78,6 +89,7 @@ public class ProjectAdminController extends BaseController {
             FileMeta out = projectStatisticsService.generateStatisticsFile(projectId);
             response.setContentType(out.getFileType());
             response.setHeader("Content-disposition", "attachment; filename=report.xls"); // TODO use out.filename
+            FileCopyUtils.copy(out.getBytes(), response.getOutputStream());
         } catch (Exception e) {
             log.error("download error", e);
         }

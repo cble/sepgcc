@@ -7,7 +7,7 @@
                 var data = {};
                 data.total = res.data.pageCount;
                 data.list = res.data.list.map(function (item) {
-                    var operation = "";
+                    var operation;
                     if (item.status == 1) {
                         operation = '<a href="/admin/projectstatistics?projectId={id}">查看上传情况</a> <a href="/admin/unpublishproject?projectId={id}">停用</a>';
                     } else {

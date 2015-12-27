@@ -3,6 +3,7 @@
         this.parseData = options.parseData;
         this.url = options.url;
         this.lastColumn = options.lastColumn;
+        this.queryData = options.queryData;
 
         this.table = $(container).find("table tbody");
         this.pageNav = $('<nav><ul class="pagination"></ul></nav>').appendTo(container).find('ul');
@@ -27,6 +28,7 @@
         this.currentPage = page;
         $.ajax({
             url: this.url + "?page=" + page,
+            data: self.queryData,
             dataType: "json",
             type: "post",
             success: function (res) {

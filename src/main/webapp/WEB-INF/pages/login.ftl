@@ -1,5 +1,5 @@
 <#include "common/pageFrame.ftl" />
-<@pageFrame loginPage=true>
+<@pageFrame>
 
 <div class="container">
 

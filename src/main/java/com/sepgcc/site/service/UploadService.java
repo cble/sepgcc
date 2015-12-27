@@ -88,8 +88,20 @@ public class UploadService {
         }
     }
 
-    public List<Upload> getUploadByProjectId(int projectId) {
-        List<UploadDO> uploadDOList = uploadDAO.queryByProjectId(projectId);
+    public List<Upload> queryByProjectId(int projectId) {
+        List<UploadDO> uploadDOList = uploadDAO.queryByProjectId(projectId, 0, 0);
+        return Lists.transform(uploadDOList, new Function<UploadDO, Upload>() {
+            @Override
+            public Upload apply(UploadDO uploadDO) {
+                Upload upload = UploadUtils.toUpload(uploadDO);
+                fillUploadDetail(upload);
+                return upload;
+            }
+        });
+    }
+
+    public List<Upload> queryByProjectIdWithLimit(int projectId, int index, int limit) {
+        List<UploadDO> uploadDOList = uploadDAO.queryByProjectId(projectId, index, limit);
         return Lists.transform(uploadDOList, new Function<UploadDO, Upload>() {
             @Override
             public Upload apply(UploadDO uploadDO) {

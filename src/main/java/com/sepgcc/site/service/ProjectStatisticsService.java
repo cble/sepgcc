@@ -29,26 +29,10 @@ public class ProjectStatisticsService {
     public FileMeta generateStatisticsFile(int projectId) {
         try {
             Project project = projectService.loadById(projectId);
-            List<Upload> uploadList = uploadService.getUploadByProjectId(projectId);
+            List<Upload> uploadList = uploadService.queryByProjectId(projectId);
             if (CollectionUtils.isNotEmpty(uploadList)) {
                 ExcelUtils excelUtils = initExcelUtils(project);
-                List<Map<String, String>> rowList = new ArrayList<Map<String, String>>();
-                for (Upload upload : uploadList) {
-                    User user = userService.loadById(upload.getUserId());
-                    if (user == null) {
-                        continue;
-                    }
-
-                    Map<String, String> row = new HashMap<String, String>();
-                    row.put(firstColumnAttributeName, user.getNickname());
-                    for (ProjectContactValue projectContactValue : upload.getContactValueList()) {
-                        row.put("contact" + projectContactValue.getId(), projectContactValue.getContactValue());
-                    }
-                    for (ProjectItemValue projectItemValue : upload.getItemValueList()) {
-                        row.put("item" + projectItemValue.getId(), String.valueOf(projectItemValue.getFileMetaList().size()));
-                    }
-                    rowList.add(row);
-                }
+                List<Map<String, String>> rowList = getRowList(uploadList);
                 FileMeta reportFile = new FileMeta();
                 reportFile.setFileName(project.getName() + ".xls");
                 reportFile.setFileType("application/x-download");
@@ -61,24 +45,54 @@ public class ProjectStatisticsService {
         return null;
     }
 
+    public List<Map<String, String>> getRowList(List<Upload> uploadList) {
+        List<Map<String, String>> rowList = new ArrayList<Map<String, String>>();
+        for (Upload upload : uploadList) {
+            User user = userService.loadById(upload.getUserId());
+            if (user == null) {
+                continue;
+            }
+
+            Map<String, String> row = new HashMap<String, String>();
+            row.put(firstColumnAttributeName, user.getNickname());
+            for (ProjectContactValue projectContactValue : upload.getContactValueList()) {
+                row.put("contact" + projectContactValue.getId(), projectContactValue.getContactValue());
+            }
+            for (ProjectItemValue projectItemValue : upload.getItemValueList()) {
+                row.put("item" + projectItemValue.getId(), String.valueOf(projectItemValue.getFileMetaList().size()));
+            }
+            rowList.add(row);
+        }
+        return rowList;
+    }
+
+    public List<String> getColumnAttriubteNames(Project project) {
+        List<String> columnAttriubteNames = Lists.newArrayList(firstColumnAttributeName);
+        for (ProjectContact projectContact : project.getProjectContactList()) {
+            columnAttriubteNames.add("contact" + projectContact.getId());
+        }
+        for (ProjectItem projectItem : project.getProjectItemList()) {
+            columnAttriubteNames.add("item" + projectItem.getId());
+        }
+        return columnAttriubteNames;
+    }
+
     private ExcelUtils initExcelUtils(Project project) {
         List<String> columnTitles = Lists.newArrayList("单位名");
-        List<String> columnAttriubteNames = Lists.newArrayList(firstColumnAttributeName);
         List<DisplayFormat> formats = Lists.newArrayList(NumberFormats.TEXT);
         for (ProjectContact projectContact : project.getProjectContactList()) {
             columnTitles.add(projectContact.getName());
-            columnAttriubteNames.add("contact" + projectContact.getId());
             formats.add(NumberFormats.TEXT);
         }
         for (ProjectItem projectItem : project.getProjectItemList()) {
             columnTitles.add(projectItem.getName());
-            columnAttriubteNames.add("item" + projectItem.getId());
             formats.add(NumberFormats.TEXT);
         }
+        List<String> columnAttriubteNames = getColumnAttriubteNames(project);
         return new ExcelUtils(
-                (String[]) columnTitles.toArray(),
-                (String[]) columnAttriubteNames.toArray(),
-                (DisplayFormat[]) formats.toArray(),
+                columnTitles.toArray(new String[columnTitles.size()]),
+                columnAttriubteNames.toArray(new String[columnAttriubteNames.size()]),
+                formats.toArray(new DisplayFormat[formats.size()]),
                 new Hashtable()
         );
     }

@@ -36,8 +36,12 @@ public class UploadDAOImpl extends SqlMapClientDaoSupport implements UploadDAO {
     }
 
     @Override
-    public List<UploadDO> queryByProjectId(int projectId) {
-        return this.getSqlMapClientTemplate().queryForList("upload.queryByProjectId", projectId);
+    public List<UploadDO> queryByProjectId(int projectId, int index, int limit) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("projectId", projectId);
+        param.put("index", index);
+        param.put("limit", limit);
+        return this.getSqlMapClientTemplate().queryForList("upload.queryByProjectId", param);
     }
 
     @Override

@@ -7,6 +7,7 @@ public class Paginate<T> implements Serializable {
 
     private int pageCount;
     private List<T> list;
+    private List<String> columns;
 
     public int getPageCount() {
         return pageCount;
@@ -22,5 +23,13 @@ public class Paginate<T> implements Serializable {
 
     public void setList(List<T> list) {
         this.list = list;
+    }
+
+    public List<String> getColumns() {
+        return columns;
+    }
+
+    public void setColumns(List<String> columns) {
+        this.columns = columns;
     }
 }

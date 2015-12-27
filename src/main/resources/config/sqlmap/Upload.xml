@@ -43,6 +43,9 @@
         FROM ZL_Upload
         WHERE ProjectId = #projectId#
         AND Status > 0
+        <isGreaterThan property="limit" compareValue="0">
+            LIMIT #index#, #limit#
+        </isGreaterThan>
     </select>
 
     <select id="countByProjectId" resultClass="int">

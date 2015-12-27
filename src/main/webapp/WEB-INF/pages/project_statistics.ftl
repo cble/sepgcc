@@ -13,7 +13,28 @@
         <a class="btn btn-primary" href="/admin/downloadproject?projectId=${project.id}">打包下载文件</a>
     </div>
     <div class="J_pagelist">
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+            <tr>
+                <td>单位名</td>
+                <#list project.projectContactList as projectContact>
+                    <td>${projectContact.name}</td>
+                </#list>
+                <#list project.projectItemList as projectItem>
+                    <td>${projectItem.name}</td>
+                </#list>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
 </div>
+<script>
+    var pageData = {
+        projectId: ${project.id}
+    };
+</script>
 <script src="/js/component/pagelist.js"></script>
+<script src="/js/page/project_statistics.js"></script>
 </@pageFrame>
