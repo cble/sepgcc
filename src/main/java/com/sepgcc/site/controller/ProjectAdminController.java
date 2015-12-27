@@ -36,7 +36,7 @@ public class ProjectAdminController extends BaseController {
         return new ModelAndView("project_manager");
     }
 
-    @RequestMapping(value = {"/ajax/projectmanagerlist"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/ajax/admin/projectmanagerlist"}, method = RequestMethod.POST)
     public @ResponseBody AjaxResponse<Paginate<Project>> projectList(@ModelAttribute User user, int page) throws Exception {
         int index = (page - 1) * SiteConstants.PAGE_SIZE;
         int limit = SiteConstants.PAGE_SIZE;

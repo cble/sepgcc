@@ -2,6 +2,7 @@ package com.sepgcc.site.filter;
 
 import com.sepgcc.site.constants.SecurityConstants;
 import com.sepgcc.site.dto.User;
+import com.sepgcc.site.exceptions.AuthenticateFailException;
 import com.sepgcc.site.utils.SecurityUtils;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -28,40 +29,37 @@ public class UserAuthenticateFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
         HttpSession session = httpRequest.getSession(true);
 
-        StringBuffer url = httpRequest.getRequestURL();
-        for (String s : staticPaths) {
-            if (url.indexOf(s) >= 0) {
-                invokeNextFilter(filterChain, servletRequest, servletResponse, null);
-                return;
-            }
-        }
-
         Object object = session.getAttribute(SecurityConstants.SESSION_TOKEN);
         String token = object == null ? null : (String) object;
-        if (token != null) {
-            User user = SecurityUtils.parseToken(token);
-            if (user != null) {
-                invokeNextFilter(filterChain, servletRequest, servletResponse, user);
-                return;
+        User user = null;
+        try {
+            if (token == null) {
+                if (isNeedLogin(httpRequest)) {
+                    throw new AuthenticateFailException(1);
+                }
+            } else {
+                user = SecurityUtils.parseToken(token);
+                if (user == null) {
+                    throw new AuthenticateFailException(1);
+                }
+                if (isAdminRequest(httpRequest) && !user.isAdmin()) {
+                    throw new AuthenticateFailException(0);
+                }
+            }
+            invokeNextFilter(filterChain, servletRequest, servletResponse, user);
+        } catch (AuthenticateFailException e) {
+            if (e.redirectToLogin()) {
+                httpRequest.getSession().removeAttribute(SecurityConstants.SESSION_TOKEN);
+                if (isAjaxRequest(httpRequest)) {
+                    httpResponse.setCharacterEncoding("UTF-8");
+                    httpResponse.sendError(HttpStatus.UNAUTHORIZED.value(), "您已经太长时间没有操作,请刷新页面");
+                } else {
+                    httpResponse.sendRedirect("/login?redirect=" + httpRequest.getRequestURL());
+                }
+            } else {
+                httpResponse.sendError(HttpStatus.NOT_FOUND.value());
             }
         }
-
-        for (String s : noLoginPaths) {
-            if (url.indexOf(s) >= 0) {
-                invokeNextFilter(filterChain, servletRequest, servletResponse, null);
-                return;
-            }
-        }
-
-        httpRequest.getSession().removeAttribute(SecurityConstants.SESSION_TOKEN);
-        boolean isAjaxRequest = isAjaxRequest(httpRequest);
-        if (isAjaxRequest) {
-            httpResponse.setCharacterEncoding("UTF-8");
-            httpResponse.sendError(HttpStatus.UNAUTHORIZED.value(),
-                    "您已经太长时间没有操作,请刷新页面");
-            return;
-        }
-        httpResponse.sendRedirect("/login?redirect="+url);
     }
 
     private void invokeNextFilter(FilterChain filterChain, ServletRequest servletRequest, ServletResponse servletResponse, User user) throws IOException, ServletException {
@@ -73,14 +71,27 @@ public class UserAuthenticateFilter implements Filter {
         }
     }
 
-    /**
-     * 判断是否为Ajax请求
-     *
-     * @param request HttpServletRequest
-     * @return 是true, 否false
-     */
-    public static boolean isAjaxRequest(HttpServletRequest request) {
+    private static boolean isAjaxRequest(HttpServletRequest request) {
         return request.getRequestURI().startsWith("/ajax");
+    }
+
+    private static boolean isAdminRequest(HttpServletRequest request) {
+        return request.getRequestURI().contains("/admin/");
+    }
+
+    private static boolean isNeedLogin(HttpServletRequest request) {
+        String url = request.getRequestURI();
+        for (String s : staticPaths) {
+            if (url.contains(s)) {
+                return false;
+            }
+        }
+        for (String s : noLoginPaths) {
+            if (url.contains(s)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

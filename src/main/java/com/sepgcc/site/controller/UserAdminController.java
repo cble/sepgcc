@@ -33,7 +33,7 @@ public class UserAdminController extends BaseController {
         return new ModelAndView("user_manager");
     }
 
-    @RequestMapping(value = {"/ajax/usermanagerlist"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/ajax/admin/usermanagerlist"}, method = RequestMethod.POST)
     public @ResponseBody AjaxResponse<Paginate<User>> userList(@ModelAttribute User user, int page) throws Exception {
         int index = (page - 1) * SiteConstants.PAGE_SIZE;
         int limit = SiteConstants.PAGE_SIZE;

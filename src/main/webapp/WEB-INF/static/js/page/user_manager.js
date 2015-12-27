@@ -1,7 +1,7 @@
 (function () {
 
     new PageList(".J_pagelist", {
-        url: "/ajax/usermanagerlist",
+        url: "/ajax/admin/usermanagerlist",
         parseData: function (res) {
             if (res.code == 200 && res.data) {
                 var data = {};
