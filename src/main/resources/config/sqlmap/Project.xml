@@ -52,4 +52,29 @@
         WHERE Status > 0
     </select>
 
+    <insert id="insert" parameterClass="projectDO">
+        INSERT INTO ZL_Project (
+            Name,
+            Description,
+            BeginTime,
+            EndTime,
+            Owner,
+            Status,
+            AddTime,
+            UpdateTime
+        ) VALUES (
+            #name#,
+            #description#,
+            #beginTime#,
+            #endTime#,
+            #owner#,
+            0,
+            NOW(),
+            NOW()
+        )
+        <selectKey resultClass="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
 </sqlMap>

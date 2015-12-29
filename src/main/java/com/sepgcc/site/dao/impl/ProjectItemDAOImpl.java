@@ -17,4 +17,11 @@ public class ProjectItemDAOImpl extends SqlMapClientDaoSupport implements Projec
     public List<ProjectItemDO> queryByProjectId(int projectId) {
         return this.getSqlMapClientTemplate().queryForList("projectItem.queryByProjectId", projectId);
     }
+
+    @Override
+    public int insert(ProjectItemDO projectItemDO) {
+        Object insert = this.getSqlMapClientTemplate().insert("projectItem.insert", projectItemDO);
+        return insert != null ? (Integer) insert : 0;
+    }
+
 }

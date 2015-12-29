@@ -32,4 +32,21 @@
         WHERE ProjectID = #projectId#
     </select>
 
+    <insert id="insert" parameterClass="projectContactDO">
+        INSERT INTO ZL_ProjectContact (
+            ProjectID,
+            Name,
+            Required,
+            AddTime
+        ) VALUES (
+            #projectId#,
+            #name#,
+            #required#,
+            NOW()
+        )
+        <selectKey resultClass="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
 </sqlMap>

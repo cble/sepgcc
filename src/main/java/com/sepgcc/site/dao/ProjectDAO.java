@@ -9,4 +9,5 @@ public interface ProjectDAO {
     ProjectDO loadById(int id);
     List<ProjectDO> queryWithLimit(int index, int limit);
     int countAll();
+    int insert(ProjectDO projectDO);
 }
