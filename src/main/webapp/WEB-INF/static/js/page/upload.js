@@ -1,10 +1,11 @@
 (function () {
+    var pageData = window.PAGE_DATA || {};
     var fileComponents = [];
     $('.file_upload_container').each(function (i, container) {
         container = $(container);
         var itemId = container.data("id");
 
-        var pageData = window.PAGE_DATA || {};
+
         var loadedFiles = (pageData.uploaded || {})[itemId];
 
         fileComponents.push({
@@ -23,7 +24,12 @@
             //图片没传完
             return alert("请等待图片上传完");
         }
-        var data = {items: {}, contacts: {}};
+        var data = {
+            items: {},
+            contacts: {},
+            uploadId: pageData.uploadId || ""
+        };
+
         $(".J_contact-input").each(function (i, input) {
             var id = $(input).data("id");
             data.contacts[id] = input.value;

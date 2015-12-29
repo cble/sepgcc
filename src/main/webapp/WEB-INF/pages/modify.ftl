@@ -17,7 +17,7 @@
                        id="contact_${uploadContact.id}"
                        <#if uploadContact.contactValue??>value="${uploadContact.contactValue}"</#if>
                        data-id="${uploadContact.id}"
-                       <#if uploadContact.required>required=""</#if> />
+                       <#if uploadContact.required>required=""</#if>/>
             </div>
         </#list>
 
@@ -46,20 +46,19 @@
     <div><a class="btn btn-primary btn-lg" style="float: right" id="submit" href="javascript:void(0);">提交</a></div>
 </div>
 <script>
-    window.PAGE_DATA ={
-        uploaded :{
+    window.PAGE_DATA = {
+        uploaded: {
             <#list upload.itemValueList as uploadItem>
-                "${uploadItem.id}":[
+                "${uploadItem.id}": [
                     <#list uploadItem.fileMetaList as fileMeta>
                         {
-                            fileId:"${fileMeta.fileId}",
-                            fileType:"${fileMeta.fileName}",
-                            fileName:"${fileMeta.fileType}"
+                            fileId: "${fileMeta.fileId}",
+                            fileType: "${fileMeta.fileName}",
+                            fileName: "${fileMeta.fileType}"
                         }
-                    </#list>
-                                ],
-            </#list>
-        }
+                    </#list>],
+            </#list>},
+        uploadId: 'upload.id'
 
     }
 </script>
