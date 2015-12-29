@@ -19,6 +19,8 @@ public class ProjectUtils {
     private static final BeanCopier toProjectItemDOCopier = BeanCopier.create(ProjectItem.class, ProjectItemDO.class, false);
     private static final BeanCopier toProjectContactCopier = BeanCopier.create(ProjectContactDO.class, ProjectContact.class, false);
     private static final BeanCopier toProjectContactDOCopier = BeanCopier.create(ProjectContact.class, ProjectContactDO.class, false);
+    private static final BeanCopier toProjectAttachmentCopier = BeanCopier.create(ProjectAttachmentDO.class, ProjectAttachment.class, false);
+    private static final BeanCopier toProjectAttachmentDOCopier = BeanCopier.create(ProjectAttachment.class, ProjectAttachmentDO.class, false);
 
     public static Project toProject(ProjectDO projectDO) {
         Project result = null;
@@ -125,5 +127,24 @@ public class ProjectUtils {
             projectItemValueList.add(toProjectItemValue(itemDO, fileMap.containsKey(itemDO.getId()) ? fileMap.get(itemDO.getId()) : new ArrayList<FileMeta>()));
         }
         return projectItemValueList;
+    }
+
+    public static ProjectAttachment toProjectAttachment(ProjectAttachmentDO projectAttachmentDO) {
+        ProjectAttachment result = null;
+        if (projectAttachmentDO != null) {
+            result = new ProjectAttachment();
+            toProjectAttachmentCopier.copy(projectAttachmentDO, result, null);
+        }
+        return result;
+    }
+
+    public static ProjectAttachmentDO toProjectAttachmentDO(ProjectAttachment projectAttachment, int projectId) {
+        ProjectAttachmentDO result = null;
+        if (projectAttachment != null) {
+            result = new ProjectAttachmentDO();
+            toProjectAttachmentDOCopier.copy(projectAttachment, result, null);
+            result.setProjectId(projectId);
+        }
+        return result;
     }
 }

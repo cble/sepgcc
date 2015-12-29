@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="projectAttachment">
+
+    <typeAlias alias="projectAttachmentDO" type="com.sepgcc.site.dao.entity.ProjectAttachmentDO" />
+
+    <resultMap id="projectAttachmentResult" class="projectAttachmentDO">
+        <result column="ID" property="id" />
+        <result column="ProjectID" property="projectId" />
+        <result column="FileID" property="fileId" />
+    </resultMap>
+
+    <select id="queryByProjectId" resultMap="projectAttachmentResult">
+        SELECT ID,
+            ProjectID,
+            FileID
+        FROM ZL_ProjectAttachment
+        WHERE ProjectID = #projectId#
+    </select>
+
+    <insert id="insert" parameterClass="projectAttachmentDO">
+        INSERT INTO ZL_ProjectAttachment (
+            ProjectID,
+            FileID,
+            AddTime
+        ) VALUES (
+            #projectId#,
+            #fileId#,
+            NOW()
+        )
+        <selectKey resultClass="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <delete id="deleteByProjectId">
+        DELETE FROM ZL_ProjectAttachment
+        WHERE ProjectID = #projectId#
+    </delete>
+
+</sqlMap>

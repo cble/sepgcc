@@ -11,4 +11,5 @@
 	<sqlMap resource="config/sqlmap/Upload.xml" />
 	<sqlMap resource="config/sqlmap/ProjectContactValue.xml" />
 	<sqlMap resource="config/sqlmap/ProjectFile.xml" />
+	<sqlMap resource="config/sqlmap/ProjectAttachment.xml" />
 </sqlMapConfig>

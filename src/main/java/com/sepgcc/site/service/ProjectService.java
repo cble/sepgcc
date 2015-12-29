@@ -2,13 +2,16 @@ package com.sepgcc.site.service;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import com.sepgcc.site.dao.ProjectAttachmentDAO;
 import com.sepgcc.site.dao.ProjectContactDAO;
 import com.sepgcc.site.dao.ProjectDAO;
 import com.sepgcc.site.dao.ProjectItemDAO;
+import com.sepgcc.site.dao.entity.ProjectAttachmentDO;
 import com.sepgcc.site.dao.entity.ProjectContactDO;
 import com.sepgcc.site.dao.entity.ProjectDO;
 import com.sepgcc.site.dao.entity.ProjectItemDO;
 import com.sepgcc.site.dto.Project;
+import com.sepgcc.site.dto.ProjectAttachment;
 import com.sepgcc.site.dto.ProjectContact;
 import com.sepgcc.site.dto.ProjectItem;
 import com.sepgcc.site.utils.ProjectUtils;
@@ -33,6 +36,8 @@ public class ProjectService {
     private ProjectItemDAO projectItemDAO;
     @Resource
     private ProjectContactDAO projectContactDAO;
+    @Resource
+    private ProjectAttachmentDAO projectAttachmentDAO;
     @Resource
     private TransactionTemplate transactionTemplate;
 
@@ -92,6 +97,7 @@ public class ProjectService {
                     int projectId = projectDAO.insert(ProjectUtils.toProjectDO(project));
                     bindContact(projectId, project.getProjectContactList());
                     bindItem(projectId, project.getProjectItemList());
+                    bindAttachment(projectId, project.getProjectAttachmentList());
                     return projectId;
                 }
             });
@@ -105,6 +111,9 @@ public class ProjectService {
     }
 
     private void bindContact(int projectId, List<ProjectContact> projectContactList) {
+        if (projectContactList == null) {
+            return;
+        }
         for (ProjectContact projectContact : projectContactList) {
             ProjectContactDO projectContactDO = ProjectUtils.toProjectContactDO(projectContact, projectId);
             projectContactDAO.insert(projectContactDO);
@@ -112,9 +121,22 @@ public class ProjectService {
     }
 
     private void bindItem(int projectId, List<ProjectItem> projectItemList) {
+        if (projectItemList == null) {
+            return;
+        }
         for (ProjectItem projectItem : projectItemList) {
             ProjectItemDO itemDO = ProjectUtils.toProjectItemDO(projectItem, projectId);
             projectItemDAO.insert(itemDO);
+        }
+    }
+
+    private void bindAttachment(int projectId, List<ProjectAttachment> attachmentList) {
+        if (attachmentList == null) {
+            return;
+        }
+        for (ProjectAttachment attachment : attachmentList) {
+            ProjectAttachmentDO projectAttachmentDO = ProjectUtils.toProjectAttachmentDO(attachment, projectId);
+            projectAttachmentDAO.insert(projectAttachmentDO);
         }
     }
 }

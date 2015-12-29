@@ -12,5 +12,6 @@
     <bean id="uploadDAO" class="com.sepgcc.site.dao.impl.UploadDAOImpl" parent="sepgccAbstractDAO" />
     <bean id="projectContactValueDAO" class="com.sepgcc.site.dao.impl.ProjectContactValueDAOImpl" parent="sepgccAbstractDAO" />
     <bean id="projectFileDAO" class="com.sepgcc.site.dao.impl.ProjectFileDAOImpl" parent="sepgccAbstractDAO" />
+    <bean id="projectAttachmentDAO" class="com.sepgcc.site.dao.impl.ProjectAttachmentDAOImpl" parent="sepgccAbstractDAO" />
 
 </beans>
