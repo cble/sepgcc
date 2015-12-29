@@ -14,8 +14,8 @@
     //提交
     $("#submit").on("click", function () {
         if (fileComponents.some(function (f) {
-            return (f.required && !f.fc.files.length )|| !f.fc.isFinish();
-        })) {
+                return (f.required && !f.fc.files.length ) || !f.fc.isFinish();
+            })) {
             //图片没传完
             return alert("请等待图片上传完");
         }
@@ -29,16 +29,22 @@
         });
 
         $.ajax({
-            contentType:"application/json;charset=UTF-8",
+            contentType: "application/json;charset=UTF-8",
             url: "/ajax/submitupload",
             dataType: "json",
             data: JSON.stringify(data),
             type: "post",
             success: function (res) {
-                alert("提交成功")
+                if (res && res.code == 200) {
+                    alert("提交成功");
+                    location.href = res.data;
+                }else{
+                    alert("服务出错,请稍后再试");
+                }
+
             },
             error: function () {
-
+                alert("服务出错,请稍后再试");
             }
         });
     });

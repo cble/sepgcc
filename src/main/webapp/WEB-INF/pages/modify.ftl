@@ -31,7 +31,7 @@
                 <#if uploadItem.descriptionImage??>
                     <p><img src="${uploadItem.descriptionImage}" alt="示例图片"/></p>
                 </#if>
-                <div class="file_upload_container" data-id="${uploadItem.id}">
+                <div class="file_upload_container" data-id="${uploadItem.id}" data-list="">
                 </div>
                 <#list uploadItem.fileMetaList as fileMeta>
                     <div data-fileId="${fileMeta.fileId}">${fileMeta.fileName} ${fileMeta.fileType}</div>
@@ -47,7 +47,14 @@
 
     <div><a class="btn btn-primary btn-lg" style="float: right" id="submit" href="javascript:void(0);">提交</a></div>
 </div>
+<script>
+    window.PAGE_DATA ={
+        uploaded :{
 
+        }
+
+    }
+</script>
 <script src="/js/component/jquery.ui.widget.js"></script>
 <script src="/js/component/jquery.fileupload.js"></script>
 <script src="/js/component/jquery.iframe-transport.js"></script>
