@@ -16,7 +16,7 @@
         <result column="UpdateTime" property="updateTime" />
     </resultMap>
 
-    <select id="loadById" resultMap="projectResult" parameterClass="int">
+    <select id="loadById" resultMap="projectResult">
         SELECT ID,
             Name,
             Description,

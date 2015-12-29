@@ -12,7 +12,7 @@
         <result column="AddTime" property="addTime" />
     </resultMap>
 
-    <select id="loadById" resultMap="projectContactResult" parameterClass="int">
+    <select id="loadById" resultMap="projectContactResult">
         SELECT ID,
             ProjectID,
             Name,
@@ -22,7 +22,7 @@
         WHERE ID = #id#
     </select>
 
-    <select id="queryByProjectId" resultMap="projectContactResult" parameterClass="int">
+    <select id="queryByProjectId" resultMap="projectContactResult">
         SELECT ID,
             ProjectID,
             Name,

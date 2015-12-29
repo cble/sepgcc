@@ -7,6 +7,7 @@ import com.sepgcc.site.service.FileDownloadService;
 import com.sepgcc.site.service.ProjectService;
 import com.sepgcc.site.service.ProjectStatisticsService;
 import com.sepgcc.site.service.UploadService;
+import com.sepgcc.site.utils.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -84,7 +85,7 @@ public class ProjectAdminController extends BaseController {
         try {
             FileMeta out = projectStatisticsService.generateStatisticsFile(projectId);
             response.setContentType(out.getFileType());
-            response.setHeader("Content-disposition", "attachment; filename=report.xls"); // TODO use out.filename
+            response.setHeader("Content-disposition", "attachment; filename=" + FileUtils.encodeDownloadName(out.getFileName()));
             FileCopyUtils.copy(out.getBytes(), response.getOutputStream());
         } catch (Exception e) {
             log.error("download error", e);
@@ -96,7 +97,7 @@ public class ProjectAdminController extends BaseController {
         try {
             FileMeta out = fileDownloadService.compressProjectFile(projectId);
             response.setContentType(out.getFileType());
-            response.setHeader("Content-disposition", "attachment; filename=project.zip"); // TODO use out.filename
+            response.setHeader("Content-disposition", "attachment; filename=" + FileUtils.encodeDownloadName(out.getFileName()));
             FileCopyUtils.copy(out.getBytes(), response.getOutputStream());
         } catch (Exception e) {
             log.error("downloadProject error", e);

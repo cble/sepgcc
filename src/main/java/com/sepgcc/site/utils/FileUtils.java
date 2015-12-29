@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,6 +102,21 @@ public class FileUtils {
         File dir = new File(path);
         if (!dir.exists()) {
             dir.mkdirs();
+        }
+    }
+
+    public static String encodeDownloadName(String fileName) {
+        try {
+            int dotPostion = fileName.lastIndexOf(".");
+            if (dotPostion > 0) {
+                String name = fileName.substring(0, dotPostion);
+                String extension = fileName.substring(dotPostion, fileName.length());
+                return new String(name.getBytes(System.getProperty("file.encoding")), "ISO-8859-1") + extension;
+            } else {
+                return new String(fileName.getBytes(System.getProperty("file.encoding")), "ISO-8859-1");
+            }
+        } catch (Exception e) {
+            return "file";
         }
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -26,12 +27,13 @@ public class FileDownloadService {
     private UserService userService;
 
     public FileMeta compressProjectFile(int projectId) {
+        ZipOutputStream zip = null;
         try {
             Project project = projectService.loadById(projectId, Lists.newArrayList(0, 1));
             List<Upload> uploadList = uploadService.queryByProjectId(projectId);
             if (CollectionUtils.isNotEmpty(uploadList)) {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
-                ZipOutputStream zip = new ZipOutputStream(out);
+                zip = new ZipOutputStream(out);
 
                 for (Upload upload : uploadList) {
                     User user = userService.loadById(upload.getUserId());
@@ -50,7 +52,6 @@ public class FileDownloadService {
                 }
 
                 zip.close();
-                out.close();
                 FileMeta zipFileMeta = new FileMeta();
                 zipFileMeta.setFileName(project.getName() + ".zip");
                 zipFileMeta.setFileType("application/zip, application/octet-stream");
@@ -59,6 +60,14 @@ public class FileDownloadService {
             }
         } catch (Exception e) {
             log.error("compressProjectFile error", e);
+        } finally {
+            try {
+                if (zip != null) {
+                    zip.close();
+                }
+            } catch(IOException e) {
+                log.error("compressProjectFile error", e);
+            }
         }
         return null;
     }

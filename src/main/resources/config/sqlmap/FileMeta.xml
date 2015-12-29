@@ -16,7 +16,7 @@
         <result column="UpdateTime" property="updateTime" />
     </resultMap>
 
-    <select id="loadById" resultMap="fileMetaResult" parameterClass="string">
+    <select id="loadById" resultMap="fileMetaResult">
         SELECT ID,
             FileID,
             FileName,

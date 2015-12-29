@@ -50,9 +50,9 @@ public class ExcelUtils {
             e.printStackTrace();
         } finally {
             try {
-                if (book != null)
+                if (book != null) {
                     book.close();
-                os.close();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
