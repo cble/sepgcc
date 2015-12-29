@@ -56,11 +56,6 @@ public class ProjectAdminController extends BaseController {
         return new AjaxResponse<Paginate<Project>>(HttpStatus.OK.value(), null, paginate);
     }
 
-    @RequestMapping(value = "/admin/newproject", method = RequestMethod.GET)
-    public ModelAndView newProject() {
-        return new ModelAndView("newproject");
-    }
-
     @RequestMapping(value = "/admin/projectstatistics", method = RequestMethod.GET)
     public ModelAndView projectStatistics(@RequestParam int projectId, ModelMap modelMap) {
         Project project = projectService.loadById(projectId);
@@ -104,6 +99,21 @@ public class ProjectAdminController extends BaseController {
             FileCopyUtils.copy(out.getBytes(), response.getOutputStream());
         } catch (Exception e) {
             log.error("downloadProject error", e);
+        }
+    }
+
+    @RequestMapping(value = "/admin/newproject", method = RequestMethod.GET)
+    public ModelAndView newProject() {
+        return new ModelAndView("newproject");
+    }
+
+    @RequestMapping(value = {"/ajax/admin/createnewproject"}, method = RequestMethod.POST)
+    public @ResponseBody AjaxResponse<String> createNewProject(@RequestBody Project project) {
+        try {
+            projectService.createProject(project);
+            return new AjaxResponse<String>(HttpStatus.OK.value(), null, "/mylist");
+        } catch (IllegalArgumentException e) {
+            return new AjaxResponse<String>(HttpStatus.BAD_REQUEST.value(), e.getMessage(), null);
         }
     }
 }

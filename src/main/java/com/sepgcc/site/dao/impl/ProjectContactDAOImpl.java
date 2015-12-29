@@ -17,4 +17,10 @@ public class ProjectContactDAOImpl extends SqlMapClientDaoSupport implements Pro
     public List<ProjectContactDO> queryByProjectId(int projectId) {
         return this.getSqlMapClientTemplate().queryForList("projectContact.queryByProjectId", projectId);
     }
+
+    @Override
+    public int insert(ProjectContactDO projectContactDO) {
+        Object insert = this.getSqlMapClientTemplate().insert("projectContact.insert", projectContactDO);
+        return insert != null ? (Integer) insert : 0;
+    }
 }

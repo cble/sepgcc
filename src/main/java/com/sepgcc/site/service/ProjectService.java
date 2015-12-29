@@ -12,7 +12,11 @@ import com.sepgcc.site.dto.Project;
 import com.sepgcc.site.dto.ProjectContact;
 import com.sepgcc.site.dto.ProjectItem;
 import com.sepgcc.site.utils.ProjectUtils;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -21,12 +25,16 @@ import java.util.List;
 @Service
 public class ProjectService {
 
+    private static final Logger log = Logger.getLogger(ProjectService.class);
+
     @Resource
     private ProjectDAO projectDAO;
     @Resource
     private ProjectItemDAO projectItemDAO;
     @Resource
     private ProjectContactDAO projectContactDAO;
+    @Resource
+    private TransactionTemplate transactionTemplate;
 
     public Project loadById(int projectId) {
         ProjectDO projectDO = projectDAO.loadById(projectId);
@@ -74,5 +82,39 @@ public class ProjectService {
 
     public int countAll() {
         return projectDAO.countAll();
+    }
+
+    public int createProject(final Project project) {
+        try {
+            return transactionTemplate.execute(new TransactionCallback<Integer>() {
+                @Override
+                public Integer doInTransaction(TransactionStatus transactionStatus) {
+                    int projectId = projectDAO.insert(ProjectUtils.toProjectDO(project));
+                    bindContact(projectId, project.getProjectContactList());
+                    bindItem(projectId, project.getProjectItemList());
+                    return projectId;
+                }
+            });
+        } catch (IllegalArgumentException e) {
+            log.warn(String.format("upload fail: %s", e.getMessage()));
+            throw e;
+        } catch (Exception e) {
+            log.error("upload error", e);
+            throw new IllegalArgumentException("未知错误");
+        }
+    }
+
+    private void bindContact(int projectId, List<ProjectContact> projectContactList) {
+        for (ProjectContact projectContact : projectContactList) {
+            ProjectContactDO projectContactDO = ProjectUtils.toProjectContactDO(projectContact, projectId);
+            projectContactDAO.insert(projectContactDO);
+        }
+    }
+
+    private void bindItem(int projectId, List<ProjectItem> projectItemList) {
+        for (ProjectItem projectItem : projectItemList) {
+            ProjectItemDO itemDO = ProjectUtils.toProjectItemDO(projectItem, projectId);
+            projectItemDAO.insert(itemDO);
+        }
     }
 }

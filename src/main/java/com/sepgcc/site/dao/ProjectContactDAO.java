@@ -8,4 +8,5 @@ public interface ProjectContactDAO {
 
     ProjectContactDO loadById(int id);
     List<ProjectContactDO> queryByProjectId(int projectId);
+    int insert(ProjectContactDO projectContactDO);
 }

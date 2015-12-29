@@ -27,4 +27,10 @@ public class ProjectDAOImpl extends SqlMapClientDaoSupport implements ProjectDAO
     public int countAll() {
         return (Integer) this.getSqlMapClientTemplate().queryForObject("project.countAll");
     }
+
+    @Override
+    public int insert(ProjectDO projectDO) {
+        Object insert = this.getSqlMapClientTemplate().insert("project.insert", projectDO);
+        return insert != null ? (Integer) insert : 0;
+    }
 }

@@ -103,6 +103,7 @@ public class UploadService {
                     UploadDO uploadDO = uploadDAO.loadById(uploadId);
                     Validate.isTrue(uploadDO != null && uploadDO.getUserId() == userId, "操作失败");
                     projectContactValueDAO.deleteByUploadId(uploadId);
+                    projectFileDAO.deleteByUploadId(uploadId);
                     bindContact(projectId, uploadId, submit);
                     bindFile(projectId, uploadId, submit, userId);
                     return uploadId;

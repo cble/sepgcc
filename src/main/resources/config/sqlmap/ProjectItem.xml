@@ -41,4 +41,27 @@
         WHERE ProjectID = #projectId#
     </select>
 
+    <insert id="insert" parameterClass="projectItemDO">
+        INSERT INTO ZL_ProjectItem (
+            ProjectID,
+            Name,
+            Description,
+            DescriptionImage,
+            Required,
+            FileType,
+            AddTime
+        ) VALUES (
+            #projectId#,
+            #name#,
+            #description#,
+            #descriptionImage#,
+            #required#,
+            #fileType#,
+            NOW()
+        )
+        <selectKey resultClass="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
 </sqlMap>
