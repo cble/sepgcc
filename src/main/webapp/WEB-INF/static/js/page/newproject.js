@@ -60,6 +60,13 @@
                 data.projectContactList.push(item);
             });
 
+            var attachment = $(".J_attachment .file_upload_container")[0].FileComponent;
+            data.projectAttachmentList = attachment.files.map(function (fileId) {
+                return {
+                    fileId: fileId
+                }
+            });
+
             $.ajax({
                 url: "/ajax/admin/createnewproject",
                 data: data,

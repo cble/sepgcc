@@ -13,6 +13,14 @@
         <h2>填写通知</h2>
         <script id="container" name="content" type="text/plain" style="width:1000px;height:440px;"></script>
 
+        <h2>添加附件</h2>
+        <div>
+            <div class="J_attachment">
+            <div class="file_upload_container">
+            </div>
+            </div>
+        </div>
+        <hr />
         <h2>联系人资料</h2>
         <div>
             <div class="J_contact">
@@ -36,7 +44,7 @@
             </div>
         </div>
         <a class="btn btn-success btn-sm J_add" data-for=".J_contact" href="javascript:void(0);">添加一个字段</a>
-
+        <hr />
         <h2>项目资料</h2>
         <div>
             <div class="J_meta">
@@ -73,7 +81,7 @@
             </div>
         </div>
         <a class="btn btn-success btn-sm J_add" data-for=".J_meta" href="javascript:void(0);">添加一个字段</a>
-
+        <hr />
         <h2>项目信息</h2>
         <div>
             <div class="J_info">
@@ -102,7 +110,7 @@
             </div>
         </div>
     </form>
-
+    <hr />
     <div style="text-align: right">
         <a class="btn btn-primary btn-lg" id="submit">提交</a>
     </div>
