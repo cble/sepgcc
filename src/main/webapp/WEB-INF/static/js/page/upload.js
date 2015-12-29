@@ -3,9 +3,13 @@
     $('.file_upload_container').each(function (i, container) {
         container = $(container);
         var itemId = container.data("id");
+
+        var pageData = window.PAGE_DATA || {};
+        var loadedFiles = (pageData.uploaded || {})[itemId];
+
         fileComponents.push({
             id: itemId,
-            fc: new FileComponent(container),
+            fc: new FileComponent(container, loadedFiles),
             required: container.attr("required") === "required"
         });
     });
@@ -38,7 +42,7 @@
                 if (res && res.code == 200) {
                     alert("提交成功");
                     location.href = res.data;
-                }else{
+                } else {
                     alert("服务出错,请稍后再试");
                 }
 

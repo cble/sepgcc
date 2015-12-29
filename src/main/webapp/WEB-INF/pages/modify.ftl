@@ -33,9 +33,7 @@
                 </#if>
                 <div class="file_upload_container" data-id="${uploadItem.id}" data-list="">
                 </div>
-                <#list uploadItem.fileMetaList as fileMeta>
-                    <div data-fileId="${fileMeta.fileId}">${fileMeta.fileName} ${fileMeta.fileType}</div>
-                </#list>
+
             </div>
         </#list>
 
@@ -50,7 +48,17 @@
 <script>
     window.PAGE_DATA ={
         uploaded :{
-
+            <#list upload.itemValueList as uploadItem>
+                "${uploadItem.id}":[
+                    <#list uploadItem.fileMetaList as fileMeta>
+                        {
+                            fileId:"${fileMeta.fileId}",
+                            fileType:"${fileMeta.fileName}",
+                            fileName:"${fileMeta.fileType}"
+                        }
+                    </#list>
+                                ],
+            </#list>
         }
 
     }

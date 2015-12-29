@@ -1,6 +1,6 @@
 (function () {
     var global = 0;
-    var FileComponent = window.FileComponent = function (container) {
+    var FileComponent = window.FileComponent = function (container, loadedFiles) {
         container = $(container);
         var id = 'fileupload' + global++;
 
@@ -11,19 +11,35 @@
         //上传成功的File
         this.files = [];
         this.finish = 0;
-
         var self = this;
+
+        var addFile = function(file) {
+            var fileItem = $('<div>' + file.fileName + ' ' + file.fileType + ' <a href="javascript:void(0);" title="删除">删除</a></div>');
+            list.append(fileItem);
+            this.files.push(file.fileId);
+            this.finish--;
+            fileItem.find("a").on('click', function () {
+                fileItem.remove();
+                var index = self.files.indexOf(file.fileId);
+                self.files.splice(index, 1);
+            });
+        }.bind(this);
+
+        if (loadedFiles) {
+            this.finish = loadedFiles.length;
+            loadedFiles.forEach(addFile);
+
+        }
+
+
 
         trigger.fileupload({
             dataType: 'json',
 
             done: function (e, data) {
                 $.each(data.result, function (index, file) {
-                    list.append('<div>' + file.fileName + ' ' + file.fileType + '</div>');
-                    self.files.push(file.fileId);
-                    self.finish--;
+                    addFile(file);
                 });
-
             },
 
             start: function (e) {
@@ -41,7 +57,7 @@
 
                 bar.css(
                     'width',
-                        progress + '%'
+                    progress + '%'
                 );
             }
         });
