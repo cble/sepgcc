@@ -8,6 +8,7 @@ public class UploadSubmit implements Serializable {
 
     private Map<String, String> contacts;
     private Map<String, List<String>> items;
+    private int uploadId;
 
     public Map<String, String> getContacts() {
         return contacts;
@@ -23,5 +24,13 @@ public class UploadSubmit implements Serializable {
 
     public void setItems(Map<String, List<String>> items) {
         this.items = items;
+    }
+
+    public int getUploadId() {
+        return uploadId;
+    }
+
+    public void setUploadId(int uploadId) {
+        this.uploadId = uploadId;
     }
 }

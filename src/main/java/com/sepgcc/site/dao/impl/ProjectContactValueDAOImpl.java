@@ -19,4 +19,9 @@ public class ProjectContactValueDAOImpl extends SqlMapClientDaoSupport implement
     public List<ProjectContactValueDO> queryByUploadId(int uploadId) {
         return this.getSqlMapClientTemplate().queryForList("projectContactValue.queryByUploadId", uploadId);
     }
+
+    @Override
+    public boolean deleteByUploadId(int uploadId) {
+        return this.getSqlMapClientTemplate().delete("projectContactValue.deleteByUploadId", uploadId) > 0;
+    }
 }

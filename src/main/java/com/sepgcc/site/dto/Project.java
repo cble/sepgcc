@@ -1,10 +1,13 @@
 package com.sepgcc.site.dto;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+@JsonIgnoreProperties({"description", "projectItemList", "projectContactList"})
 public class Project implements Serializable {
 
     private int id;

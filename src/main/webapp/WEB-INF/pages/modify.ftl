@@ -55,11 +55,11 @@
                             fileId: "${fileMeta.fileId}",
                             fileType: "${fileMeta.fileName}",
                             fileName: "${fileMeta.fileType}"
-                        }
+                        },
                     </#list>],
-            </#list>},
-        uploadId: 'upload.id'
-
+            </#list>
+        },
+        uploadId: '${upload.id}'
     }
 </script>
 <script src="/js/component/jquery.ui.widget.js"></script>

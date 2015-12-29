@@ -51,4 +51,9 @@
         </selectKey>
     </insert>
 
+    <delete id="deleteByUploadId">
+        DELETE FROM ZL_ProjectContactValue
+        WHERE UploadID = #uploadId#
+    </delete>
+
 </sqlMap>
