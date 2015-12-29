@@ -11,21 +11,27 @@ import java.util.Map;
 public class ProjectDAOImpl extends SqlMapClientDaoSupport implements ProjectDAO {
 
     @Override
-    public ProjectDO loadById(int id) {
-        return (ProjectDO) this.getSqlMapClientTemplate().queryForObject("project.loadById", id);
+    public ProjectDO loadById(int id, List<Integer> status) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("id", id);
+        param.put("status", status);
+        return (ProjectDO) this.getSqlMapClientTemplate().queryForObject("project.loadById", param);
     }
 
     @Override
-    public List<ProjectDO> queryWithLimit(int index, int limit) {
+    public List<ProjectDO> queryWithLimit(List<Integer> status, int index, int limit) {
         Map<String, Object> param = new HashMap<String, Object>();
+        param.put("status", status);
         param.put("index", index);
         param.put("limit", limit);
         return this.getSqlMapClientTemplate().queryForList("project.queryWithLimit", param);
     }
 
     @Override
-    public int countAll() {
-        return (Integer) this.getSqlMapClientTemplate().queryForObject("project.countAll");
+    public int countAll(List<Integer> status) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("status", status);
+        return (Integer) this.getSqlMapClientTemplate().queryForObject("project.countAll", param);
     }
 
     @Override

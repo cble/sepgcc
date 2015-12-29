@@ -36,8 +36,8 @@ public class ProjectService {
     @Resource
     private TransactionTemplate transactionTemplate;
 
-    public Project loadById(int projectId) {
-        ProjectDO projectDO = projectDAO.loadById(projectId);
+    public Project loadById(int projectId, List<Integer> status) {
+        ProjectDO projectDO = projectDAO.loadById(projectId, status);
         Project project = ProjectUtils.toProject(projectDO);
         if (project != null) {
             project.setProjectItemList(queryProjectItemList(projectId));
@@ -66,9 +66,9 @@ public class ProjectService {
         });
     }
 
-    public List<Project> queryWithLimit(int index, int limit) {
+    public List<Project> queryWithLimit(int index, int limit, List<Integer> status) {
         List<Project> resultList = new ArrayList<Project>();
-        List<ProjectDO> projectDOs = projectDAO.queryWithLimit(index, limit);
+        List<ProjectDO> projectDOs = projectDAO.queryWithLimit(status, index, limit);
         for (ProjectDO projectDO : projectDOs) {
             Project project = ProjectUtils.toProject(projectDO);
             if (project != null) {
@@ -80,8 +80,8 @@ public class ProjectService {
         return resultList;
     }
 
-    public int countAll() {
-        return projectDAO.countAll();
+    public int countAll(List<Integer> status) {
+        return projectDAO.countAll(status);
     }
 
     public int createProject(final Project project) {

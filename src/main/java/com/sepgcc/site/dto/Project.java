@@ -1,25 +1,31 @@
 package com.sepgcc.site.dto;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-@JsonIgnoreProperties({"description", "projectItemList", "projectContactList"})
 public class Project implements Serializable {
 
     private int id;
     private String name;
+    @JsonProperty
     private String description;
     private Date beginTime;
     private Date endTime;
     private int successNumber;
     private String owner;
     private int status;
+    @JsonProperty
     private List<ProjectItem> projectItemList;
+    @JsonProperty
     private List<ProjectContact> projectContactList;
+    @JsonProperty
+    private List<ProjectAttachment> projectAttachmentList;
 
     public int getId() {
         return id;
@@ -37,6 +43,7 @@ public class Project implements Serializable {
         this.name = name;
     }
 
+    @JsonIgnore
     public String getDescription() {
         return description;
     }
@@ -93,6 +100,7 @@ public class Project implements Serializable {
         this.status = status;
     }
 
+    @JsonIgnore
     public List<ProjectItem> getProjectItemList() {
         return projectItemList;
     }
@@ -101,11 +109,21 @@ public class Project implements Serializable {
         this.projectItemList = projectItemList;
     }
 
+    @JsonIgnore
     public List<ProjectContact> getProjectContactList() {
         return projectContactList;
     }
 
     public void setProjectContactList(List<ProjectContact> projectContactList) {
         this.projectContactList = projectContactList;
+    }
+
+    public List<ProjectAttachment> getProjectAttachmentList() {
+        return projectAttachmentList;
+    }
+
+    @JsonIgnore
+    public void setProjectAttachmentList(List<ProjectAttachment> projectAttachmentList) {
+        this.projectAttachmentList = projectAttachmentList;
     }
 }

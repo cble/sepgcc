@@ -1,5 +1,6 @@
 package com.sepgcc.site.service;
 
+import com.google.common.collect.Lists;
 import com.sepgcc.site.dto.Project;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +21,7 @@ public class ProjectServiceTest {
 
     @Test
     public void testLoadProjectById() throws Exception {
-        Project project = projectService.loadById(1);
+        Project project = projectService.loadById(1, Lists.newArrayList(0, 1));
         Assert.notNull(project, "oops...");
     }
 }

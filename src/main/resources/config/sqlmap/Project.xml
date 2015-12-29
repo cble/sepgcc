@@ -28,7 +28,10 @@
             UpdateTime
         FROM ZL_Project
         WHERE ID = #id#
-        AND Status > 0
+        AND Status IN
+        <iterate property="status" open="(" close=")" conjunction="," >
+            #status[]#
+        </iterate>
     </select>
 
     <select id="queryWithLimit" resultMap="projectResult">
@@ -42,14 +45,20 @@
             AddTime,
             UpdateTime
         FROM ZL_Project
-        WHERE Status > 0
+        WHERE Status IN
+        <iterate property="status" open="(" close=")" conjunction="," >
+            #status[]#
+        </iterate>
         LIMIT #index#, #limit#
     </select>
 
     <select id="countAll" resultClass="int">
         SELECT IFNULL(COUNT(ID), 0)
         FROM ZL_Project
-        WHERE Status > 0
+        WHERE Status IN
+        <iterate property="status" open="(" close=")" conjunction="," >
+            #status[]#
+        </iterate>
     </select>
 
     <insert id="insert" parameterClass="projectDO">

@@ -1,5 +1,6 @@
 package com.sepgcc.site.controller;
 
+import com.google.common.collect.Lists;
 import com.sepgcc.site.constants.SiteConstants;
 import com.sepgcc.site.dto.*;
 import com.sepgcc.site.service.FileDownloadService;
@@ -42,8 +43,8 @@ public class ProjectAdminController extends BaseController {
     public @ResponseBody AjaxResponse<Paginate<Project>> projectList(@RequestParam int page) throws Exception {
         int index = (page - 1) * SiteConstants.PAGE_SIZE;
         int limit = SiteConstants.PAGE_SIZE;
-        List<Project> projectList = projectService.queryWithLimit(index, limit);
-        int projectCount = projectService.countAll();
+        List<Project> projectList = projectService.queryWithLimit(index, limit, Lists.newArrayList(0, 1));
+        int projectCount = projectService.countAll(Lists.newArrayList(0, 1));
 
         for (Project project : projectList) {
             project.setSuccessNumber(uploadService.countByProjectId(project.getId()));
@@ -58,7 +59,7 @@ public class ProjectAdminController extends BaseController {
 
     @RequestMapping(value = "/admin/projectstatistics", method = RequestMethod.GET)
     public ModelAndView projectStatistics(@RequestParam int projectId, ModelMap modelMap) {
-        Project project = projectService.loadById(projectId);
+        Project project = projectService.loadById(projectId, Lists.newArrayList(0, 1));
         modelMap.put("project", project);
         return new ModelAndView("project_statistics");
     }
@@ -69,10 +70,10 @@ public class ProjectAdminController extends BaseController {
         int limit = SiteConstants.PAGE_SIZE;
         List<Upload> uploadList = uploadService.queryByProjectIdWithLimit(projectId, index, limit);
         int uploadCount = uploadService.countByProjectId(projectId);
-        Project project = projectService.loadById(projectId);
+        Project project = projectService.loadById(projectId, Lists.newArrayList(0, 1));
 
         Paginate<Map<String, String>> paginate = new Paginate<Map<String, String>>();
-        paginate.setPageCount(uploadCount);
+        paginate.setPageCount(uploadCount / SiteConstants.PAGE_SIZE + 1);
         paginate.setList(projectStatisticsService.getRowList(uploadList));
         paginate.setColumns(projectStatisticsService.getColumnAttriubteNames(project));
         return new AjaxResponse<Paginate<Map<String, String>>>(HttpStatus.OK.value(), null, paginate);

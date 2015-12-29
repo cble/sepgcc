@@ -1,9 +1,7 @@
 package com.sepgcc.site.controller;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.sepgcc.site.constants.SiteConstants;
-import com.sepgcc.site.dto.UploadSubmit;
 import com.sepgcc.site.dto.*;
 import com.sepgcc.site.service.FileService;
 import com.sepgcc.site.service.ProjectService;
@@ -22,6 +20,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,8 +45,8 @@ public class UploadController extends BaseController {
     public @ResponseBody AjaxResponse<Paginate<Project>> projectList(@ModelAttribute User user, int page) throws Exception {
         int index = (page - 1) * SiteConstants.PAGE_SIZE;
         int limit = SiteConstants.PAGE_SIZE;
-        List<Project> projectList = projectService.queryWithLimit(index, limit);
-        int projectCount = projectService.countAll();
+        List<Project> projectList = projectService.queryWithLimit(index, limit, Lists.newArrayList(1));
+        int projectCount = projectService.countAll(Lists.newArrayList(1));
 
         Paginate<Project> paginate = new Paginate<Project>();
         paginate.setPageCount(projectCount / SiteConstants.PAGE_SIZE + 1);
@@ -77,14 +76,14 @@ public class UploadController extends BaseController {
 
     @RequestMapping(value = {"/notice"}, method = RequestMethod.GET)
     public ModelAndView notice(int projectId, ModelMap modelMap) throws Exception {
-        Project project = projectService.loadById(projectId);
+        Project project = projectService.loadById(projectId, Lists.newArrayList(1));
         modelMap.put("project", project);
         return new ModelAndView("notice");
     }
 
     @RequestMapping(value = {"/upload"}, method = RequestMethod.GET)
     public ModelAndView upload(int projectId, ModelMap modelMap) throws Exception {
-        Project project = projectService.loadById(projectId);
+        Project project = projectService.loadById(projectId, Lists.newArrayList(1));
         modelMap.put("project", project);
         return new ModelAndView("upload");
     }
@@ -93,7 +92,7 @@ public class UploadController extends BaseController {
     public ModelAndView modify(int uploadId, @ModelAttribute User user, ModelMap modelMap) throws Exception {
         Upload upload = uploadService.loadById(uploadId, user.getId());
         if (upload != null) {
-            modelMap.put("project", projectService.loadById(upload.getProjectId()));
+            modelMap.put("project", projectService.loadById(upload.getProjectId(), Lists.newArrayList(1)));
             modelMap.put("upload", upload);
             return new ModelAndView("modify");
         } else {
@@ -116,6 +115,26 @@ public class UploadController extends BaseController {
             }
         }
         return fileMetaList;
+    }
+
+    @RequestMapping(value = {"/uploadfile2"}, method = RequestMethod.POST)
+    public @ResponseBody Map<String, String> uploadFile2(
+            @ModelAttribute User user,
+            MultipartHttpServletRequest request) throws Exception {
+        Map<String, String> fileUrl = new HashMap<String, String>();
+        Map<String, MultipartFile> mpfMap = request.getFileMap();
+        for (MultipartFile mpf : mpfMap.values()) {
+            FileMeta fileMeta = FileUtils.toFileMeta(mpf, user.getId());
+            fileMeta.setUserId(0);
+            // fileMeta.setType()
+            String fileId = fileService.saveFile(fileMeta);
+            if (StringUtils.isNotBlank(fileId)) {
+                fileMeta.setFileId(fileId);
+                fileUrl.put("url", fileId);
+                break;
+            }
+        }
+        return fileUrl;
     }
 
     @RequestMapping(value = {"/ajax/submitupload"}, method = RequestMethod.POST, consumes = "application/json")

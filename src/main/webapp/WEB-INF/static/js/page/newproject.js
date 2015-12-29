@@ -68,8 +68,9 @@
             });
 
             $.ajax({
+                contentType: "application/json;charset=UTF-8",
                 url: "/ajax/admin/createnewproject",
-                data: data,
+                data: JSON.stringify(data),
                 dataType: "json",
                 type: "post",
                 success: function (res) {

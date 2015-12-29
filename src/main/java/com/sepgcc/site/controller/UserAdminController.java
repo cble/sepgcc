@@ -4,12 +4,10 @@ import com.sepgcc.site.constants.SiteConstants;
 import com.sepgcc.site.dto.AjaxResponse;
 import com.sepgcc.site.dto.Paginate;
 import com.sepgcc.site.dto.User;
-import com.sepgcc.site.service.ProjectService;
 import com.sepgcc.site.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,8 +22,6 @@ public class UserAdminController extends BaseController {
     private static final Logger log = Logger.getLogger(UserAdminController.class);
 
     @Resource
-    private ProjectService projectService;
-    @Resource
     private UserService userService;
 
     @RequestMapping(value = "/admin/userlist", method = RequestMethod.GET)
@@ -38,7 +34,7 @@ public class UserAdminController extends BaseController {
         int index = (page - 1) * SiteConstants.PAGE_SIZE;
         int limit = SiteConstants.PAGE_SIZE;
         List<User> users = userService.queryWithLimit(index, limit);
-        int userCount = projectService.countAll();
+        int userCount = userService.countAll();
 
         Paginate<User> paginate = new Paginate<User>();
         paginate.setPageCount(userCount / SiteConstants.PAGE_SIZE + 1);

@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface ProjectDAO {
 
-    ProjectDO loadById(int id);
-    List<ProjectDO> queryWithLimit(int index, int limit);
-    int countAll();
+    ProjectDO loadById(int id, List<Integer> status);
+    List<ProjectDO> queryWithLimit(List<Integer> status, int index, int limit);
+    int countAll(List<Integer> status);
     int insert(ProjectDO projectDO);
 }

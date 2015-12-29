@@ -28,7 +28,7 @@ public class ProjectStatisticsService {
 
     public FileMeta generateStatisticsFile(int projectId) {
         try {
-            Project project = projectService.loadById(projectId);
+            Project project = projectService.loadById(projectId, Lists.newArrayList(0, 1));
             List<Upload> uploadList = uploadService.queryByProjectId(projectId);
             if (CollectionUtils.isNotEmpty(uploadList)) {
                 ExcelUtils excelUtils = initExcelUtils(project);
