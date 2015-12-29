@@ -63,6 +63,12 @@
                         </label>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">样例图片</label>
+                    <div class="file_upload_container">
+                    </div>
+                </div>
+
 
             </div>
         </div>
@@ -89,7 +95,8 @@
                         <input class="form-control" type="text" placeholder="例2015-01-01"
                                style="width:200px;display: inline-block" name="beginTime"/>
                         ~
-                        <input class="form-control" type="text" style="width:200px;display: inline-block" name="endTime"/>
+                        <input class="form-control" type="text" style="width:200px;display: inline-block"
+                               name="endTime"/>
                     </div>
                 </div>
             </div>
@@ -102,6 +109,10 @@
 
     <script type="text/javascript" src="/js/component/umeditor.config.js"></script>
     <script type="text/javascript" src="/js/component/umeditor.min.js"></script>
+    <script src="/js/component/jquery.ui.widget.js"></script>
+    <script src="/js/component/jquery.fileupload.js"></script>
+    <script src="/js/component/jquery.iframe-transport.js"></script>
+    <script type="text/javascript" src="/js/component/fileupload.js"></script>
     <script type="text/javascript" src="/js/page/newproject.js"></script>
 
 

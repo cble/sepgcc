@@ -3,6 +3,10 @@
         autoHeight: false
     });
 
+    $(".file_upload_container").each(function () {
+        this.FileComponent = new FileComponent(this);
+    });
+
     //添加
     $('.J_add').each(function (i, btn) {
         btn = $(btn);
@@ -12,6 +16,9 @@
             var row = tpl.clone();
             row.find("input[type=radio]").each(function () {
                 $(this).attr("name", radioName);
+            });
+            row.find(".file_upload_container").each(function () {
+                $(this).attr("FileComponent", new FileComponent(this));
             });
             tpl.parent().append(row);
         });
@@ -37,6 +44,10 @@
                     item[$(input).attr("name")] = input.value;
                 });
                 item.required = $(meta).find('input:checked').val() == '1';
+                var fileUpload = $(meta).find(".file_upload_container")[0].FileComponent;
+                if (fileUpload && fileUpload.files && fileUpload.files.length) {
+                    item.descriptionImage = fileUpload.files[0];
+                }
                 data.projectItemList.push(item);
             });
 
