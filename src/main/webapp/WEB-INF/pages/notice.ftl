@@ -8,20 +8,25 @@
         ${project.description}
     </div>
     <div>
-        <#if project.projectAttachment?? && project.projectAttachment?size gt 0>
+        <#if project.projectAttachmentList?? && project.projectAttachmentList?size gt 0>
             <span>下载附件：</span>
-            <#list project.projectAttachment as attachment>
-                <a href="/download?fileId=${attachment.fileId}">${attachment.name}</a>
-            </#list>
+            <ul>
+                <#list project.projectAttachmentList as attachment>
+                    <li>
+                        <a href="/download?fileId=${attachment.fileId}">${attachment.name}</a>
+                    </li>
+                </#list>
+            </ul>
         </#if>
     </div>
+    <hr />
     <div style="text-align: center;">
-        <a class="btn btn-primary" href="/upload?projectId=${project.id}">开始上传</a>
+        <a class="btn btn-primary btn-lg" href="/upload?projectId=${project.id}">开始上传</a>
     </div>
     <hr />
-    <div>
-        ${project.owner}
-    </div>
+    <h4 style="text-align: right;">
+    ${project.owner}
+    </h4>
 </div>
 
 </@pageFrame>

@@ -10,10 +10,7 @@ import com.sepgcc.site.dao.entity.ProjectAttachmentDO;
 import com.sepgcc.site.dao.entity.ProjectContactDO;
 import com.sepgcc.site.dao.entity.ProjectDO;
 import com.sepgcc.site.dao.entity.ProjectItemDO;
-import com.sepgcc.site.dto.Project;
-import com.sepgcc.site.dto.ProjectAttachment;
-import com.sepgcc.site.dto.ProjectContact;
-import com.sepgcc.site.dto.ProjectItem;
+import com.sepgcc.site.dto.*;
 import com.sepgcc.site.utils.ProjectUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -40,6 +37,8 @@ public class ProjectService {
     private ProjectAttachmentDAO projectAttachmentDAO;
     @Resource
     private TransactionTemplate transactionTemplate;
+    @Resource
+    private FileService fileService;
 
     public Project loadById(int projectId, List<Integer> status) {
         ProjectDO projectDO = projectDAO.loadById(projectId, status);
@@ -47,6 +46,7 @@ public class ProjectService {
         if (project != null) {
             project.setProjectItemList(queryProjectItemList(projectId));
             project.setProjectContactList(queryProjectContactList(projectId));
+            project.setProjectAttachmentList(queryProjectAttachmentList(projectId));
         }
         return project;
     }
@@ -67,6 +67,21 @@ public class ProjectService {
             @Override
             public ProjectContact apply(ProjectContactDO projectContactDO) {
                 return ProjectUtils.toProjectContact(projectContactDO);
+            }
+        });
+    }
+
+    public List<ProjectAttachment> queryProjectAttachmentList(int projectId) {
+        List<ProjectAttachmentDO> projectAttachmentDOs = projectAttachmentDAO.queryByProjectId(projectId);
+        return Lists.transform(projectAttachmentDOs, new Function<ProjectAttachmentDO, ProjectAttachment>() {
+            @Override
+            public ProjectAttachment apply(ProjectAttachmentDO projectAttachmentDO) {
+                ProjectAttachment projectAttachment = ProjectUtils.toProjectAttachment(projectAttachmentDO);
+                if (projectAttachment != null) {
+                    FileMeta file = fileService.getFile(projectAttachment.getFileId(), 0, false);
+                    projectAttachment.setName(file.getFileName());
+                }
+                return projectAttachment;
             }
         });
     }

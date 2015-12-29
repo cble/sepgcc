@@ -39,11 +39,13 @@
 
     </form>
     <hr/>
-    <div>
-    ${project.owner}
+    <div style="text-align: center;">
+        <a class="btn btn-primary btn-lg" id="submit" href="javascript:void(0);">提交</a>
     </div>
-
-    <div><a class="btn btn-primary btn-lg" style="float: right" id="submit" href="javascript:void(0);">提交</a></div>
+    <hr/>
+    <h4 style="text-align: right;">
+    ${project.owner}
+    </h4>
 </div>
 <script>
     window.PAGE_DATA = {
