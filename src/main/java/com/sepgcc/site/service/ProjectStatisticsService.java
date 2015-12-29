@@ -56,7 +56,7 @@ public class ProjectStatisticsService {
             Map<String, String> row = new HashMap<String, String>();
             row.put(firstColumnAttributeName, user.getNickname());
             for (ProjectContactValue projectContactValue : upload.getContactValueList()) {
-                row.put("contact" + projectContactValue.getId(), projectContactValue.getContactValue());
+                row.put("contact" + projectContactValue.getId(), projectContactValue.getContactValue() != null ? projectContactValue.getContactValue() : "");
             }
             for (ProjectItemValue projectItemValue : upload.getItemValueList()) {
                 row.put("item" + projectItemValue.getId(), String.valueOf(projectItemValue.getFileMetaList().size()));
