@@ -6,7 +6,7 @@
         this.queryData = options.queryData;
 
         this.table = $(container).find("table tbody");
-        this.pageNav = $('<nav><ul class="pagination"></ul></nav>').appendTo(container).find('ul');
+        this.pageNav = $('<nav><ul class="pagination navbar-right"></ul></nav>').appendTo(container).find('ul');
         this.getList(1);
         var self = this;
         this.pageNav.on("click", "a", function (e) {

@@ -42,3 +42,9 @@ body{
 form{
     padding:10px;
 }
+.J_pagelist {
+    margin-top: 10px;
+}
+.J_pagelist table {
+    margin-bottom: 0;
+}
