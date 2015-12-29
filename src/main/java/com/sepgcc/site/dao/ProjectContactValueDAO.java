@@ -7,4 +7,5 @@ import java.util.List;
 public interface ProjectContactValueDAO {
     int insert(ProjectContactValueDO projectContactValueDO);
     List<ProjectContactValueDO> queryByUploadId(int uploadId);
+    boolean deleteByUploadId(int uploadId);
 }

@@ -42,6 +42,8 @@ public class UploadService {
     private FileService fileService;
     @Resource
     private TransactionTemplate transactionTemplate;
+    @Resource
+    private ProjectService projectService;
 
     public Upload loadById(int uploadId, int userId) {
         Upload upload = UploadUtils.toUpload(uploadDAO.loadById(uploadId));
@@ -58,7 +60,11 @@ public class UploadService {
         return Lists.transform(uploadDOList, new Function<UploadDO, Upload>() {
             @Override
             public Upload apply(UploadDO uploadDO) {
-                return UploadUtils.toUpload(uploadDO);
+                Upload upload = UploadUtils.toUpload(uploadDO);
+                if (upload != null) {
+                    upload.setProject(projectService.loadById(upload.getProjectId()));
+                }
+                return upload;
             }
         });
     }
@@ -67,13 +73,36 @@ public class UploadService {
         return uploadDAO.countByUserId(userId);
     }
 
-    public int upload(final UploadSubmit submit, final int userId) throws IllegalArgumentException {
+    public int createUpload(final UploadSubmit submit, final int userId) throws IllegalArgumentException {
         try {
             return transactionTemplate.execute(new TransactionCallback<Integer>() {
                 @Override
                 public Integer doInTransaction(TransactionStatus transactionStatus) {
                     int projectId = validateAndGetProjectId(submit);
                     int uploadId = createUpload(projectId, userId);
+                    bindContact(projectId, uploadId, submit);
+                    bindFile(projectId, uploadId, submit, userId);
+                    return uploadId;
+                }
+            });
+        } catch (IllegalArgumentException e) {
+            log.warn(String.format("upload fail: %s", e.getMessage()));
+            throw e;
+        } catch (Exception e) {
+            log.error("upload error", e);
+            throw new IllegalArgumentException("未知错误");
+        }
+    }
+
+    public int modifyUpload(final UploadSubmit submit, final int userId, final int uploadId) {
+        try {
+            return transactionTemplate.execute(new TransactionCallback<Integer>() {
+                @Override
+                public Integer doInTransaction(TransactionStatus transactionStatus) {
+                    int projectId = validateAndGetProjectId(submit);
+                    UploadDO uploadDO = uploadDAO.loadById(uploadId);
+                    Validate.isTrue(uploadDO != null && uploadDO.getUserId() == userId, "操作失败");
+                    projectContactValueDAO.deleteByUploadId(uploadId);
                     bindContact(projectId, uploadId, submit);
                     bindFile(projectId, uploadId, submit, userId);
                     return uploadId;

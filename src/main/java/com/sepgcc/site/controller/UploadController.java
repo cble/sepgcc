@@ -62,22 +62,17 @@ public class UploadController extends BaseController {
     }
 
     @RequestMapping(value = {"/ajax/myprojectlist"}, method = RequestMethod.POST)
-    public @ResponseBody AjaxResponse<Paginate<Project>> myProjectList(@ModelAttribute User user, int page) throws Exception {
+    public @ResponseBody AjaxResponse<Paginate<Upload>> myProjectList(@ModelAttribute User user, int page) throws Exception {
         int index = (page - 1) * SiteConstants.PAGE_SIZE;
         int limit = SiteConstants.PAGE_SIZE;
         int uploadCount = uploadService.countByUserId(user.getId());
         List<Upload> uploadList = uploadService.queryByUserIdWithLimit(user.getId(), index, limit);
 
-        Paginate<Project> paginate = new Paginate<Project>();
+        Paginate<Upload> paginate = new Paginate<Upload>();
         paginate.setPageCount(uploadCount / SiteConstants.PAGE_SIZE + 1);
-        paginate.setList(Lists.transform(uploadList, new Function<Upload, Project>() {
-            @Override
-            public Project apply(Upload upload) {
-                return projectService.loadById(upload.getProjectId());
-            }
-        }));
+        paginate.setList(uploadList);
 
-        return new AjaxResponse<Paginate<Project>>(HttpStatus.OK.value(), null, paginate);
+        return new AjaxResponse<Paginate<Upload>>(HttpStatus.OK.value(), null, paginate);
     }
 
     @RequestMapping(value = {"/notice"}, method = RequestMethod.GET)
@@ -128,7 +123,11 @@ public class UploadController extends BaseController {
             @ModelAttribute User user,
             @RequestBody UploadSubmit submit) throws Exception {
         try {
-            uploadService.upload(submit, user.getId());
+            if (submit.getUploadId() > 0) {
+                uploadService.modifyUpload(submit, user.getId(), submit.getUploadId());
+            } else {
+                uploadService.createUpload(submit, user.getId());
+            }
             return new AjaxResponse<String>(HttpStatus.OK.value(), null, "/mylist");
         } catch (IllegalArgumentException e) {
             return new AjaxResponse<String>(HttpStatus.BAD_REQUEST.value(), e.getMessage(), null);

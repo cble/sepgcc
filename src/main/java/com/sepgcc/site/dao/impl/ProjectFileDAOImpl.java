@@ -19,4 +19,9 @@ public class ProjectFileDAOImpl extends SqlMapClientDaoSupport implements Projec
     public List<ProjectFileDO> queryByUploadId(int uploadId) {
         return this.getSqlMapClientTemplate().queryForList("projectFile.queryByUploadId", uploadId);
     }
+
+    @Override
+    public boolean deleteByUploadId(int uploadId) {
+        return this.getSqlMapClientTemplate().delete("projectFile.deleteByUploadId", uploadId) > 0;
+    }
 }

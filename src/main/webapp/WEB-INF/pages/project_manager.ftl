@@ -8,7 +8,7 @@
         <li role="presentation"><a href="/admin/userlist">用户管理</a></li>
     </ul>
     <h2>项目列表</h2>
-    <div>
+    <div style="text-align: right;">
         <a class="btn btn-primary" href="/admin/newproject">创建新项目</a>
     </div>
     <div class="J_pagelist">
