@@ -26,6 +26,7 @@
         FROM ZL_Upload
         WHERE UserID = #userId#
         AND Status > 0
+        ORDER BY ID DESC
         LIMIT #index#, #limit#
     </select>
 
@@ -43,6 +44,7 @@
         FROM ZL_Upload
         WHERE ProjectId = #projectId#
         AND Status > 0
+        ORDER BY ID DESC
         <isGreaterThan property="limit" compareValue="0">
             LIMIT #index#, #limit#
         </isGreaterThan>

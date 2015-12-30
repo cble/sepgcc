@@ -7,9 +7,11 @@ public class ProjectItem implements Serializable {
     private int id;
     private String name;
     private String description;
-    private String descriptionImage;
+    private String fileId;
     private boolean required;
     private int fileType;
+    private String fileName;
+    private String descriptionImage;
 
     public int getId() {
         return id;
@@ -35,12 +37,12 @@ public class ProjectItem implements Serializable {
         this.description = description;
     }
 
-    public String getDescriptionImage() {
-        return descriptionImage;
+    public String getFileId() {
+        return fileId;
     }
 
-    public void setDescriptionImage(String descriptionImage) {
-        this.descriptionImage = descriptionImage;
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
     }
 
     public boolean isRequired() {
@@ -57,5 +59,21 @@ public class ProjectItem implements Serializable {
 
     public void setFileType(int fileType) {
         this.fileType = fileType;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getDescriptionImage() {
+        return descriptionImage;
+    }
+
+    public void setDescriptionImage(String descriptionImage) {
+        this.descriptionImage = descriptionImage;
     }
 }

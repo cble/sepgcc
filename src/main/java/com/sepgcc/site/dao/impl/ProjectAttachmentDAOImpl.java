@@ -18,4 +18,9 @@ public class ProjectAttachmentDAOImpl extends SqlMapClientDaoSupport implements 
         Object insert = this.getSqlMapClientTemplate().insert("projectAttachment.insert", projectAttachmentDO);
         return insert != null ? (Integer) insert : 0;
     }
+
+    @Override
+    public boolean deleteByProjectId(int projectId) {
+        return this.getSqlMapClientTemplate().delete("projectAttachment.deleteByProjectId", projectId) > 0;
+    }
 }

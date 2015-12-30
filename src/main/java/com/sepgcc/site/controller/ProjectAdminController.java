@@ -1,8 +1,8 @@
 package com.sepgcc.site.controller;
 
-import com.google.common.collect.Lists;
 import com.sepgcc.site.constants.SiteConstants;
 import com.sepgcc.site.dto.*;
+import com.sepgcc.site.exceptions.ResourceNotFoundException;
 import com.sepgcc.site.service.FileDownloadService;
 import com.sepgcc.site.service.ProjectService;
 import com.sepgcc.site.service.ProjectStatisticsService;
@@ -44,15 +44,15 @@ public class ProjectAdminController extends BaseController {
     public @ResponseBody AjaxResponse<Paginate<Project>> projectList(@RequestParam int page) throws Exception {
         int index = (page - 1) * SiteConstants.PAGE_SIZE;
         int limit = SiteConstants.PAGE_SIZE;
-        List<Project> projectList = projectService.queryWithLimit(index, limit, Lists.newArrayList(0, 1));
-        int projectCount = projectService.countAll(Lists.newArrayList(0, 1));
+        List<Project> projectList = projectService.queryWithLimit(index, limit, SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
+        int projectCount = projectService.countAll(SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
 
         for (Project project : projectList) {
             project.setSuccessNumber(uploadService.countByProjectId(project.getId()));
         }
 
         Paginate<Project> paginate = new Paginate<Project>();
-        paginate.setPageCount(projectCount / SiteConstants.PAGE_SIZE + 1);
+        paginate.setPageCount(projectCount / (SiteConstants.PAGE_SIZE + 1) + 1);
         paginate.setList(projectList);
 
         return new AjaxResponse<Paginate<Project>>(HttpStatus.OK.value(), null, paginate);
@@ -60,9 +60,13 @@ public class ProjectAdminController extends BaseController {
 
     @RequestMapping(value = "/admin/projectstatistics", method = RequestMethod.GET)
     public ModelAndView projectStatistics(@RequestParam int projectId, ModelMap modelMap) {
-        Project project = projectService.loadById(projectId, Lists.newArrayList(0, 1));
-        modelMap.put("project", project);
-        return new ModelAndView("project_statistics");
+        Project project = projectService.loadById(projectId, SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
+        if (project != null) {
+            modelMap.put("project", project);
+            return new ModelAndView("project_statistics");
+        } else {
+            throw new ResourceNotFoundException();
+        }
     }
 
     @RequestMapping(value = "/ajax/admin/projectstatistics", method = RequestMethod.POST)
@@ -71,10 +75,10 @@ public class ProjectAdminController extends BaseController {
         int limit = SiteConstants.PAGE_SIZE;
         List<Upload> uploadList = uploadService.queryByProjectIdWithLimit(projectId, index, limit);
         int uploadCount = uploadService.countByProjectId(projectId);
-        Project project = projectService.loadById(projectId, Lists.newArrayList(0, 1));
+        Project project = projectService.loadById(projectId, SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
 
         Paginate<Map<String, String>> paginate = new Paginate<Map<String, String>>();
-        paginate.setPageCount(uploadCount / SiteConstants.PAGE_SIZE + 1);
+        paginate.setPageCount(uploadCount / (SiteConstants.PAGE_SIZE + 1) + 1);
         paginate.setList(projectStatisticsService.getRowList(uploadList));
         paginate.setColumns(projectStatisticsService.getColumnAttriubteNames(project));
         return new AjaxResponse<Paginate<Map<String, String>>>(HttpStatus.OK.value(), null, paginate);
@@ -112,10 +116,45 @@ public class ProjectAdminController extends BaseController {
     @RequestMapping(value = {"/ajax/admin/createnewproject"}, method = RequestMethod.POST)
     public @ResponseBody AjaxResponse<String> createNewProject(@RequestBody Project project) {
         try {
-            projectService.createProject(project);
-            return new AjaxResponse<String>(HttpStatus.OK.value(), null, "/mylist");
+            if (project.getId() > 0) {
+                projectService.modifyProject(project);
+            } else {
+                projectService.createProject(project);
+            }
+            return new AjaxResponse<String>(HttpStatus.OK.value(), null, "/admin");
         } catch (IllegalArgumentException e) {
             return new AjaxResponse<String>(HttpStatus.BAD_REQUEST.value(), e.getMessage(), null);
         }
     }
+
+    @RequestMapping(value = "/admin/modifyproject", method = RequestMethod.GET)
+    public ModelAndView modifyProject(@RequestParam int projectId, ModelMap modelMap) {
+        Project project = projectService.loadById(projectId, SiteConstants.EDITABLE_PROJECT_STATUS);
+        if (project != null) {
+            modelMap.put("project", project);
+            return new ModelAndView("modifyproject");
+        } else {
+            throw new ResourceNotFoundException();
+        }
+    }
+
+    @RequestMapping(value = {"/ajax/admin/publishproject"}, method = RequestMethod.GET)
+    public @ResponseBody AjaxResponse<Boolean> publishProject(@RequestParam int projectId) {
+        boolean result = projectService.updateStatus(projectId, 1);
+        return new AjaxResponse<Boolean>(HttpStatus.OK.value(), null, result);
+    }
+
+    @RequestMapping(value = {"/ajax/admin/unpublishproject"}, method = RequestMethod.GET)
+    public @ResponseBody AjaxResponse<Boolean> unpublishProject(@RequestParam int projectId) {
+        boolean result = projectService.updateStatus(projectId, 2);
+        return new AjaxResponse<Boolean>(HttpStatus.OK.value(), null, result);
+    }
+
+    @RequestMapping(value = {"/ajax/admin/deleteproject"}, method = RequestMethod.GET)
+    public @ResponseBody AjaxResponse<Boolean> deleteProject(@RequestParam int projectId) {
+        boolean result = projectService.updateStatus(projectId, -1);
+        return new AjaxResponse<Boolean>(HttpStatus.OK.value(), null, result);
+    }
+
+
 }

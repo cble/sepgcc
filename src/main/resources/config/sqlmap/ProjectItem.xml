@@ -9,7 +9,7 @@
         <result column="ProjectID" property="projectId" />
         <result column="Name" property="name" />
         <result column="Description" property="description" />
-        <result column="DescriptionImage" property="descriptionImage" />
+        <result column="FileID" property="fileId" />
         <result column="Required" property="required" />
         <result column="FileType" property="fileType" />
         <result column="AddTime" property="addTime" />
@@ -20,7 +20,7 @@
             ProjectID,
             Name,
             Description,
-            DescriptionImage,
+            FileID,
             Required,
             FileType,
             AddTime
@@ -33,7 +33,7 @@
             ProjectID,
             Name,
             Description,
-            DescriptionImage,
+            FileID,
             Required,
             FileType,
             AddTime
@@ -46,7 +46,7 @@
             ProjectID,
             Name,
             Description,
-            DescriptionImage,
+            FileID,
             Required,
             FileType,
             AddTime
@@ -54,7 +54,7 @@
             #projectId#,
             #name#,
             #description#,
-            #descriptionImage#,
+            #fileId#,
             #required#,
             #fileType#,
             NOW()
@@ -63,5 +63,10 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
     </insert>
+
+    <delete id="deleteByProjectId">
+        DELETE FROM ZL_ProjectItem
+        WHERE ProjectID = #projectId#
+    </delete>
 
 </sqlMap>

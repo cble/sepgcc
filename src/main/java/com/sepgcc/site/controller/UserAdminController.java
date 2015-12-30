@@ -37,7 +37,7 @@ public class UserAdminController extends BaseController {
         int userCount = userService.countAll();
 
         Paginate<User> paginate = new Paginate<User>();
-        paginate.setPageCount(userCount / SiteConstants.PAGE_SIZE + 1);
+        paginate.setPageCount(userCount / (SiteConstants.PAGE_SIZE + 1) + 1);
         paginate.setList(users);
 
         return new AjaxResponse<Paginate<User>>(HttpStatus.OK.value(), null, paginate);

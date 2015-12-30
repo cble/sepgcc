@@ -23,4 +23,9 @@ public class ProjectContactDAOImpl extends SqlMapClientDaoSupport implements Pro
         Object insert = this.getSqlMapClientTemplate().insert("projectContact.insert", projectContactDO);
         return insert != null ? (Integer) insert : 0;
     }
+
+    @Override
+    public boolean deleteByProjectId(int projectId) {
+        return this.getSqlMapClientTemplate().delete("projectContact.deleteByProjectId", projectId) > 0;
+    }
 }

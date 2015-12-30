@@ -49,4 +49,9 @@
         </selectKey>
     </insert>
 
+    <delete id="deleteByProjectId">
+        DELETE FROM ZL_ProjectContact
+        WHERE ProjectID = #projectId#
+    </delete>
+
 </sqlMap>

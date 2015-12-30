@@ -1,8 +1,9 @@
 package com.sepgcc.site.dto;
 
+import com.sepgcc.site.utils.CustomJsonDateDeserializer;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -56,6 +57,7 @@ public class Project implements Serializable {
         return beginTime;
     }
 
+    @JsonDeserialize(using = CustomJsonDateDeserializer.class)
     public void setBeginTime(Date beginTime) {
         this.beginTime = beginTime;
     }
@@ -64,6 +66,7 @@ public class Project implements Serializable {
         return endTime;
     }
 
+    @JsonDeserialize(using = CustomJsonDateDeserializer.class)
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
@@ -118,11 +121,11 @@ public class Project implements Serializable {
         this.projectContactList = projectContactList;
     }
 
+    @JsonIgnore
     public List<ProjectAttachment> getProjectAttachmentList() {
         return projectAttachmentList;
     }
 
-    @JsonIgnore
     public void setProjectAttachmentList(List<ProjectAttachment> projectAttachmentList) {
         this.projectAttachmentList = projectAttachmentList;
     }

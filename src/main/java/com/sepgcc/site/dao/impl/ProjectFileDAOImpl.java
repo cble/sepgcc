@@ -2,7 +2,6 @@ package com.sepgcc.site.dao.impl;
 
 import com.sepgcc.site.dao.ProjectFileDAO;
 import com.sepgcc.site.dao.entity.ProjectFileDO;
-import com.sepgcc.site.dto.Upload;
 import org.springframework.orm.ibatis.support.SqlMapClientDaoSupport;
 
 import java.util.List;

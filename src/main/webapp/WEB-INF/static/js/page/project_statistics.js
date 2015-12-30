@@ -1,5 +1,5 @@
 (function () {
-
+    var pageData = window.PAGE_DATA || {};
     new PageList(".J_pagelist", {
         url: "/ajax/admin/projectstatistics",
         parseData: function (res) {

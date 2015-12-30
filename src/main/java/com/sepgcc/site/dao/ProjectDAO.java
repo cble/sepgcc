@@ -10,4 +10,6 @@ public interface ProjectDAO {
     List<ProjectDO> queryWithLimit(List<Integer> status, int index, int limit);
     int countAll(List<Integer> status);
     int insert(ProjectDO projectDO);
+    boolean updateStatusById(int id, int status);
+    boolean update(ProjectDO projectDO);
 }

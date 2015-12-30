@@ -1,6 +1,7 @@
 package com.sepgcc.site.service;
 
 import com.google.common.collect.Lists;
+import com.sepgcc.site.constants.SiteConstants;
 import com.sepgcc.site.dto.*;
 import com.sepgcc.site.utils.ExcelUtils;
 import jxl.biff.DisplayFormat;
@@ -28,7 +29,7 @@ public class ProjectStatisticsService {
 
     public FileMeta generateStatisticsFile(int projectId) {
         try {
-            Project project = projectService.loadById(projectId, Lists.newArrayList(0, 1));
+            Project project = projectService.loadById(projectId, SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
             List<Upload> uploadList = uploadService.queryByProjectId(projectId);
             if (CollectionUtils.isNotEmpty(uploadList)) {
                 ExcelUtils excelUtils = initExcelUtils(project);

@@ -39,4 +39,17 @@ public class ProjectDAOImpl extends SqlMapClientDaoSupport implements ProjectDAO
         Object insert = this.getSqlMapClientTemplate().insert("project.insert", projectDO);
         return insert != null ? (Integer) insert : 0;
     }
+
+    @Override
+    public boolean updateStatusById(int id, int status) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("id", id);
+        param.put("status", status);
+        return this.getSqlMapClientTemplate().update("project.updateStatusById", param) > 0;
+    }
+
+    @Override
+    public boolean update(ProjectDO projectDO) {
+        return this.getSqlMapClientTemplate().update("project.update", projectDO) > 0;
+    }
 }

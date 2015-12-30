@@ -55,10 +55,10 @@
                     <#list uploadItem.fileMetaList as fileMeta>
                         {
                             fileId: "${fileMeta.fileId}",
-                            fileType: "${fileMeta.fileName}",
-                            fileName: "${fileMeta.fileType}"
+                            fileName: "${fileMeta.fileName}"
                         },
-                    </#list>],
+                    </#list>
+                ],
             </#list>
         },
         uploadId: '${upload.id}'

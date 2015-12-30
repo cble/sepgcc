@@ -24,4 +24,9 @@ public class ProjectItemDAOImpl extends SqlMapClientDaoSupport implements Projec
         return insert != null ? (Integer) insert : 0;
     }
 
+    @Override
+    public boolean deleteByProjectId(int projectId) {
+        return this.getSqlMapClientTemplate().delete("projectItem.deleteByProjectId", projectId) > 0;
+    }
+
 }

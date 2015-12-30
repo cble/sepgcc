@@ -2,6 +2,7 @@ package com.sepgcc.site.service;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import com.sepgcc.site.constants.SiteConstants;
 import com.sepgcc.site.dao.*;
 import com.sepgcc.site.dao.entity.*;
 import com.sepgcc.site.dto.FileMeta;
@@ -62,7 +63,7 @@ public class UploadService {
             public Upload apply(UploadDO uploadDO) {
                 Upload upload = UploadUtils.toUpload(uploadDO);
                 if (upload != null) {
-                    upload.setProject(projectService.loadById(upload.getProjectId(), Lists.newArrayList(0, 1)));
+                    upload.setProject(projectService.loadById(upload.getProjectId(), SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS));
                 }
                 return upload;
             }

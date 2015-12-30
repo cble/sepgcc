@@ -49,6 +49,7 @@
         <iterate property="status" open="(" close=")" conjunction="," >
             #status[]#
         </iterate>
+        ORDER BY ID DESC
         LIMIT #index#, #limit#
     </select>
 
@@ -85,5 +86,21 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
     </insert>
+
+    <update id="updateStatusById">
+        UPDATE ZL_Project
+        SET Status = #status#
+        WHERE ID = #id#
+    </update>
+
+    <update id="update">
+        UPDATE ZL_Project
+        SET Name = #name#,
+            Description = #description#,
+            BeginTime = #beginTime#,
+            EndTime = #endTime#,
+            Owner = #owner#
+        WHERE ID = #id#
+    </update>
 
 </sqlMap>

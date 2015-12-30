@@ -8,7 +8,7 @@ public class ProjectItemDO {
     private int projectId;
     private String name;
     private String description;
-    private String descriptionImage;
+    private String fileId;
     private boolean required;
     private int fileType;
     private Date addTime;
@@ -45,12 +45,12 @@ public class ProjectItemDO {
         this.description = description;
     }
 
-    public String getDescriptionImage() {
-        return descriptionImage;
+    public String getFileId() {
+        return fileId;
     }
 
-    public void setDescriptionImage(String descriptionImage) {
-        this.descriptionImage = descriptionImage;
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
     }
 
     public boolean isRequired() {

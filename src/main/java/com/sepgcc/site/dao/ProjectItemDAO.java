@@ -8,4 +8,5 @@ public interface ProjectItemDAO {
     ProjectItemDO loadById(int id);
     List<ProjectItemDO> queryByProjectId(int projectId);
     int insert(ProjectItemDO projectItemDO);
+    boolean deleteByProjectId(int projectId);
 }

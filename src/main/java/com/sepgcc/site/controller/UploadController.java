@@ -1,6 +1,5 @@
 package com.sepgcc.site.controller;
 
-import com.google.common.collect.Lists;
 import com.sepgcc.site.constants.SiteConstants;
 import com.sepgcc.site.dto.*;
 import com.sepgcc.site.service.FileService;
@@ -45,11 +44,11 @@ public class UploadController extends BaseController {
     public @ResponseBody AjaxResponse<Paginate<Project>> projectList(@ModelAttribute User user, int page) throws Exception {
         int index = (page - 1) * SiteConstants.PAGE_SIZE;
         int limit = SiteConstants.PAGE_SIZE;
-        List<Project> projectList = projectService.queryWithLimit(index, limit, Lists.newArrayList(1));
-        int projectCount = projectService.countAll(Lists.newArrayList(1));
+        List<Project> projectList = projectService.queryWithLimit(index, limit, SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
+        int projectCount = projectService.countAll(SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
 
         Paginate<Project> paginate = new Paginate<Project>();
-        paginate.setPageCount(projectCount / SiteConstants.PAGE_SIZE + 1);
+        paginate.setPageCount(projectCount / (SiteConstants.PAGE_SIZE + 1) + 1);
         paginate.setList(projectList);
 
         return new AjaxResponse<Paginate<Project>>(HttpStatus.OK.value(), null, paginate);
@@ -68,7 +67,7 @@ public class UploadController extends BaseController {
         List<Upload> uploadList = uploadService.queryByUserIdWithLimit(user.getId(), index, limit);
 
         Paginate<Upload> paginate = new Paginate<Upload>();
-        paginate.setPageCount(uploadCount / SiteConstants.PAGE_SIZE + 1);
+        paginate.setPageCount(uploadCount / (SiteConstants.PAGE_SIZE + 1) + 1);
         paginate.setList(uploadList);
 
         return new AjaxResponse<Paginate<Upload>>(HttpStatus.OK.value(), null, paginate);
@@ -76,14 +75,14 @@ public class UploadController extends BaseController {
 
     @RequestMapping(value = {"/notice"}, method = RequestMethod.GET)
     public ModelAndView notice(int projectId, ModelMap modelMap) throws Exception {
-        Project project = projectService.loadById(projectId, Lists.newArrayList(1));
+        Project project = projectService.loadById(projectId, SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
         modelMap.put("project", project);
         return new ModelAndView("notice");
     }
 
     @RequestMapping(value = {"/upload"}, method = RequestMethod.GET)
     public ModelAndView upload(int projectId, ModelMap modelMap) throws Exception {
-        Project project = projectService.loadById(projectId, Lists.newArrayList(1));
+        Project project = projectService.loadById(projectId, SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
         modelMap.put("project", project);
         return new ModelAndView("upload");
     }
@@ -92,7 +91,7 @@ public class UploadController extends BaseController {
     public ModelAndView modify(int uploadId, @ModelAttribute User user, ModelMap modelMap) throws Exception {
         Upload upload = uploadService.loadById(uploadId, user.getId());
         if (upload != null) {
-            modelMap.put("project", projectService.loadById(upload.getProjectId(), Lists.newArrayList(1)));
+            modelMap.put("project", projectService.loadById(upload.getProjectId(), SiteConstants.USER_AVAILABLE_PROJECT_STATUS));
             modelMap.put("upload", upload);
             return new ModelAndView("modify");
         } else {

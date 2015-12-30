@@ -8,4 +8,5 @@ public interface ProjectAttachmentDAO {
 
     List<ProjectAttachmentDO> queryByProjectId(int projectId);
     int insert(ProjectAttachmentDO projectAttachmentDO);
+    boolean deleteByProjectId(int projectId);
 }

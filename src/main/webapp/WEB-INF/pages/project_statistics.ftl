@@ -5,7 +5,7 @@
 
     <ul class="nav nav-pills" style="padding: 15px 0;">
         <li role="presentation" class="active"><a href="/admin">项目管理</a></li>
-        <li role="presentation"><a href="/admin/userlist">用户管理</a></li>
+        <#--<li role="presentation"><a href="/admin/userlist">用户管理</a></li>-->
     </ul>
     <h2>${project.name}</h2>
     <div>
@@ -31,9 +31,9 @@
     </div>
 </div>
 <script>
-    var pageData = {
-        projectId: ${project.id}
-    };
+    window.PAGE_DATA = {
+        projectId: '${project.id}'
+    }
 </script>
 <script src="/js/component/pagelist.js"></script>
 <script src="/js/page/project_statistics.js"></script>
