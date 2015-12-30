@@ -14,7 +14,7 @@
         var self = this;
 
         var addFile = function(file) {
-            var fileItem = $('<div>' + file.fileName + ' ' + file.fileType + ' <a href="javascript:void(0);" title="删除">删除</a></div>');
+            var fileItem = $('<div>' + file.fileName + ' <a href="javascript:void(0);" title="删除">删除</a></div>');
             list.append(fileItem);
             this.files.push(file.fileId);
             this.finish--;
