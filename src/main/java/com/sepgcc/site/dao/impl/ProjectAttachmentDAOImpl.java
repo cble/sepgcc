@@ -15,7 +15,7 @@ public class ProjectAttachmentDAOImpl extends SqlMapClientDaoSupport implements 
 
     @Override
     public int insert(ProjectAttachmentDO projectAttachmentDO) {
-        Object insert = this.getSqlMapClientTemplate().insert("projectAttachment.queryByProjectId", projectAttachmentDO);
+        Object insert = this.getSqlMapClientTemplate().insert("projectAttachment.insert", projectAttachmentDO);
         return insert != null ? (Integer) insert : 0;
     }
 }
