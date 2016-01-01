@@ -7,6 +7,7 @@ import com.sepgcc.site.service.ProjectService;
 import com.sepgcc.site.service.UploadService;
 import com.sepgcc.site.utils.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -124,12 +125,14 @@ public class UploadController extends BaseController {
         Map<String, MultipartFile> mpfMap = request.getFileMap();
         for (MultipartFile mpf : mpfMap.values()) {
             FileMeta fileMeta = FileUtils.toFileMeta(mpf, user.getId());
-            fileMeta.setUserId(0);
-            // fileMeta.setType()
             String fileId = fileService.saveFile(fileMeta);
             if (StringUtils.isNotBlank(fileId)) {
-                fileMeta.setFileId(fileId);
-                fileUrl.put("url", fileId);
+                fileUrl.put("name", fileMeta.getFileName());
+                fileUrl.put("originalName", fileMeta.getFileName());
+                fileUrl.put("size", fileMeta.getBytes().length + "");
+                fileUrl.put("state", "SUCCESS");
+                fileUrl.put("type", fileMeta.getFileType());
+                fileUrl.put("url", "/img/" + fileId);
                 break;
             }
         }

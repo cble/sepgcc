@@ -59,7 +59,9 @@
                 //    'width',
                 //    progress + '%'
                 //);
-            }
+            },
+            dropZone: null,
+            pasteZone: null
         });
 
 
