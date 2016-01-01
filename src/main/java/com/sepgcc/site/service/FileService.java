@@ -3,6 +3,7 @@ package com.sepgcc.site.service;
 import com.sepgcc.site.dao.FileMetaDAO;
 import com.sepgcc.site.dao.entity.FileMetaDO;
 import com.sepgcc.site.dto.FileMeta;
+import com.sepgcc.site.exceptions.FileTypeNotSupportException;
 import com.sepgcc.site.utils.FileUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
@@ -24,6 +25,7 @@ public class FileService {
     public String saveFile(FileMeta fileMeta) {
         try {
             validate(fileMeta);
+            FileUtils.validateFileType(fileMeta.getFileName());
 
             String fileId = FileUtils.generateId(fileMeta);
             if (isFileExsists(fileId)) {
@@ -40,6 +42,8 @@ public class FileService {
             FileMetaDO fileMetaDO = FileUtils.toFileMetaDO(fileMeta);
             fileMetaDAO.insert(fileMetaDO);
             return fileId;
+        } catch (FileTypeNotSupportException e) {
+            throw e;
         } catch (IllegalArgumentException e) {
             log.warn(e);
         } catch (Exception e) {

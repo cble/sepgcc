@@ -2,27 +2,18 @@ package com.sepgcc.site.controller;
 
 import com.sepgcc.site.constants.SiteConstants;
 import com.sepgcc.site.dto.*;
-import com.sepgcc.site.service.FileService;
 import com.sepgcc.site.service.ProjectService;
 import com.sepgcc.site.service.UploadService;
-import com.sepgcc.site.utils.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class UploadController extends BaseController {
@@ -31,8 +22,6 @@ public class UploadController extends BaseController {
 
     @Resource
     private ProjectService projectService;
-    @Resource
-    private FileService fileService;
     @Resource
     private UploadService uploadService;
 
@@ -98,45 +87,6 @@ public class UploadController extends BaseController {
         } else {
             return new ModelAndView(new RedirectView("index"));
         }
-    }
-
-    @RequestMapping(value = {"/uploadfile"}, method = RequestMethod.POST)
-    public @ResponseBody List<FileMeta> uploadFile(
-            @ModelAttribute User user,
-            MultipartHttpServletRequest request) throws Exception {
-        Map<String, MultipartFile> mpfMap = request.getFileMap();
-        List<FileMeta> fileMetaList = new ArrayList<FileMeta>(mpfMap.size());
-        for (MultipartFile mpf : mpfMap.values()) {
-            FileMeta fileMeta = FileUtils.toFileMeta(mpf, user.getId());
-            String fileId = fileService.saveFile(fileMeta);
-            if (StringUtils.isNotBlank(fileId)) {
-                fileMeta.setFileId(fileId);
-                fileMetaList.add(fileMeta);
-            }
-        }
-        return fileMetaList;
-    }
-
-    @RequestMapping(value = {"/uploadfile2"}, method = RequestMethod.POST)
-    public @ResponseBody Map<String, String> uploadFile2(
-            @ModelAttribute User user,
-            MultipartHttpServletRequest request) throws Exception {
-        Map<String, String> fileUrl = new HashMap<String, String>();
-        Map<String, MultipartFile> mpfMap = request.getFileMap();
-        for (MultipartFile mpf : mpfMap.values()) {
-            FileMeta fileMeta = FileUtils.toFileMeta(mpf, user.getId());
-            String fileId = fileService.saveFile(fileMeta);
-            if (StringUtils.isNotBlank(fileId)) {
-                fileUrl.put("name", fileMeta.getFileName());
-                fileUrl.put("originalName", fileMeta.getFileName());
-                fileUrl.put("size", fileMeta.getBytes().length + "");
-                fileUrl.put("state", "SUCCESS");
-                fileUrl.put("type", fileMeta.getFileType());
-                fileUrl.put("url", "/img/" + fileId);
-                break;
-            }
-        }
-        return fileUrl;
     }
 
     @RequestMapping(value = {"/ajax/submitupload"}, method = RequestMethod.POST, consumes = "application/json")

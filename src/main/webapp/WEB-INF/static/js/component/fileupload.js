@@ -37,9 +37,12 @@
             dataType: 'json',
 
             done: function (e, data) {
-                $.each(data.result, function (index, file) {
-                    addFile(file);
-                });
+                var result = data.result;
+                if (result.state == 'SUCCESS') {
+                    addFile(result);
+                } else {
+                    alert(result.state);
+                }
             },
 
             start: function (e) {

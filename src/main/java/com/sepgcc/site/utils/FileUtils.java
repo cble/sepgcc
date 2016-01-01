@@ -3,6 +3,7 @@ package com.sepgcc.site.utils;
 import com.sepgcc.site.constants.SiteConstants;
 import com.sepgcc.site.dao.entity.FileMetaDO;
 import com.sepgcc.site.dto.FileMeta;
+import com.sepgcc.site.exceptions.FileTypeNotSupportException;
 import net.sf.cglib.beans.BeanCopier;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FileUtils {
@@ -117,5 +119,20 @@ public class FileUtils {
         } catch (Exception e) {
             return "file";
         }
+    }
+
+    public static void validateFileType(String fileName) {
+        int dotPostion = fileName.lastIndexOf(".");
+        if (dotPostion > 0) {
+            String extension = fileName.substring(dotPostion, fileName.length());
+            if (Arrays.asList(SiteConstants.FILE_EXTENSION_SUPPORT).contains(extension.toLowerCase())) {
+                return;
+            }
+        }
+        throw new FileTypeNotSupportException();
+    }
+
+    public static boolean isImageFile(FileMeta file) {
+        return file.getFileType().startsWith("image");
     }
 }
