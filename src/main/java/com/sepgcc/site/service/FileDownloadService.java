@@ -45,7 +45,7 @@ public class FileDownloadService {
                         for (FileMeta fileMeta : projectItemValue.getFileMetaList()) {
                             byte[] content = FileUtils.readFromDisk(fileMeta.getStoragePath());
                             appendToZip(zip,
-                                    FileUtils.joinPath(user.getNickname(), projectItemValue.getName(), fileMeta.getFileName()),
+                                    FileUtils.joinPath(project.getName(), user.getNickname(), projectItemValue.getName(), fileMeta.getFileName()),
                                     content);
                         }
                     }
