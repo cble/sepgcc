@@ -7,14 +7,21 @@
                 var data = {};
                 data.total = res.data.pageCount;
                 data.list = res.data.list.map(function (item) {
-                    return [item.name, item.endTimeStr, item];
+                    var operation;
+                    if (item.uploadId > 0) {
+                        operation = '<a href="/modify?uploadId={uploadId}">修改上传</a>';
+                    } else {
+                        operation = '<a href="/notice?projectId={id}">上传资料</a>';
+                    }
+                    return [item.name, item.endTimeStr, operation.replace(/\{(\w+)\}/g, function (m, $1) {
+                        return item[$1];
+                    })];
                 });
                 return data;
             }
             alert("接口挂了")
 
-        },
-        lastColumn: '<a href="/notice?projectId={id}">上传资料</a>'
+        }
     });
 
 })();

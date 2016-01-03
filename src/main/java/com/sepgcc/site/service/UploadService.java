@@ -76,10 +76,14 @@ public class UploadService {
 
     public int createUpload(final UploadSubmit submit, final int userId) throws IllegalArgumentException {
         try {
+            final int projectId = validateAndGetProjectId(submit);
+            List<Upload> uploadList = queryByProjectIdUserId(projectId, userId);
+            if (CollectionUtils.isNotEmpty(uploadList)) {
+                return uploadList.get(0).getId();
+            }
             return transactionTemplate.execute(new TransactionCallback<Integer>() {
                 @Override
                 public Integer doInTransaction(TransactionStatus transactionStatus) {
-                    int projectId = validateAndGetProjectId(submit);
                     int uploadId = createUpload(projectId, userId);
                     bindContact(projectId, uploadId, submit);
                     bindFile(projectId, uploadId, submit, userId);
@@ -97,10 +101,10 @@ public class UploadService {
 
     public int modifyUpload(final UploadSubmit submit, final int userId, final int uploadId) {
         try {
+            final int projectId = validateAndGetProjectId(submit);
             return transactionTemplate.execute(new TransactionCallback<Integer>() {
                 @Override
                 public Integer doInTransaction(TransactionStatus transactionStatus) {
-                    int projectId = validateAndGetProjectId(submit);
                     UploadDO uploadDO = uploadDAO.loadById(uploadId);
                     Validate.isTrue(uploadDO != null && uploadDO.getUserId() == userId, "操作失败");
                     projectContactValueDAO.deleteByUploadId(uploadId);
@@ -145,6 +149,18 @@ public class UploadService {
 
     public int countByProjectId(int projectId) {
         return uploadDAO.countByProjectId(projectId);
+    }
+
+    public List<Upload> queryByProjectIdUserId(int projectId, int userId) {
+        List<UploadDO> uploadDOList = uploadDAO.queryByProjectIdUserId(projectId, userId);
+        return Lists.transform(uploadDOList, new Function<UploadDO, Upload>() {
+            @Override
+            public Upload apply(UploadDO uploadDO) {
+                Upload upload = UploadUtils.toUpload(uploadDO);
+                fillUploadDetail(upload);
+                return upload;
+            }
+        });
     }
 
     private int validateAndGetProjectId(UploadSubmit submit) throws IllegalArgumentException {

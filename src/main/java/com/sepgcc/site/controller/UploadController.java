@@ -2,8 +2,10 @@ package com.sepgcc.site.controller;
 
 import com.sepgcc.site.constants.SiteConstants;
 import com.sepgcc.site.dto.*;
+import com.sepgcc.site.exceptions.ResourceNotFoundException;
 import com.sepgcc.site.service.ProjectService;
 import com.sepgcc.site.service.UploadService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -36,6 +38,12 @@ public class UploadController extends BaseController {
         int limit = SiteConstants.PAGE_SIZE;
         List<Project> projectList = projectService.queryWithLimit(index, limit, SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
         int projectCount = projectService.countAll(SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
+        for (Project project : projectList) {
+            List<Upload> uploadList = uploadService.queryByProjectIdUserId(project.getId(), user.getId());
+            if (CollectionUtils.isNotEmpty(uploadList)) {
+                project.setUploadId(uploadList.get(0).getId());
+            }
+        }
 
         Paginate<Project> paginate = new Paginate<Project>();
         paginate.setPageCount(projectCount / (SiteConstants.PAGE_SIZE + 1) + 1);
@@ -66,15 +74,26 @@ public class UploadController extends BaseController {
     @RequestMapping(value = {"/notice"}, method = RequestMethod.GET)
     public ModelAndView notice(int projectId, ModelMap modelMap) throws Exception {
         Project project = projectService.loadById(projectId, SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
+        if (project == null) {
+            throw new ResourceNotFoundException();
+        }
         modelMap.put("project", project);
         return new ModelAndView("notice");
     }
 
     @RequestMapping(value = {"/upload"}, method = RequestMethod.GET)
-    public ModelAndView upload(int projectId, ModelMap modelMap) throws Exception {
+    public ModelAndView upload(int projectId, @ModelAttribute User user, ModelMap modelMap) throws Exception {
         Project project = projectService.loadById(projectId, SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
-        modelMap.put("project", project);
-        return new ModelAndView("upload");
+        if (project == null) {
+            throw new ResourceNotFoundException();
+        }
+        List<Upload> uploadList = uploadService.queryByProjectIdUserId(projectId, user.getId());
+        if (CollectionUtils.isNotEmpty(uploadList)) {
+            return new ModelAndView(new RedirectView("modify?uploadId=" + uploadList.get(0).getId()));
+        } else {
+            modelMap.put("project", project);
+            return new ModelAndView("upload");
+        }
     }
 
     @RequestMapping(value = {"/modify"}, method = RequestMethod.GET)
@@ -99,7 +118,7 @@ public class UploadController extends BaseController {
             } else {
                 uploadService.createUpload(submit, user.getId());
             }
-            return new AjaxResponse<String>(HttpStatus.OK.value(), null, "/mylist");
+            return new AjaxResponse<String>(HttpStatus.OK.value(), null, "/");
         } catch (IllegalArgumentException e) {
             return new AjaxResponse<String>(HttpStatus.BAD_REQUEST.value(), e.getMessage(), null);
         }

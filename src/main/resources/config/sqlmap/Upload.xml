@@ -76,4 +76,15 @@
         </selectKey>
     </insert>
 
+    <select id="queryByProjectIdUserId" resultMap="uploadResult">
+        SELECT ID,
+        ProjectID,
+        UserID
+        FROM ZL_Upload
+        WHERE UserID = #userId#
+        AND ProjectID = #projectId#
+        AND Status > 0
+        ORDER BY ID DESC
+    </select>
+
 </sqlMap>

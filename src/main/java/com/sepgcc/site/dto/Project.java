@@ -27,6 +27,7 @@ public class Project implements Serializable {
     private List<ProjectContact> projectContactList;
     @JsonProperty
     private List<ProjectAttachment> projectAttachmentList;
+    private int uploadId;
 
     public int getId() {
         return id;
@@ -128,5 +129,13 @@ public class Project implements Serializable {
 
     public void setProjectAttachmentList(List<ProjectAttachment> projectAttachmentList) {
         this.projectAttachmentList = projectAttachmentList;
+    }
+
+    public int getUploadId() {
+        return uploadId;
+    }
+
+    public void setUploadId(int uploadId) {
+        this.uploadId = uploadId;
     }
 }
