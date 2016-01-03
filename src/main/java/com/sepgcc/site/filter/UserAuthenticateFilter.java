@@ -18,7 +18,7 @@ public class UserAuthenticateFilter implements Filter {
     private static final Logger log = Logger.getLogger(UserAuthenticateFilter.class);
 
     private static final String[] staticPaths = {"css", "js", "favicon.ico"};
-    private static final String[] noLoginPaths = {"login", "logout"};
+    private static final String[] noLoginPaths = {"login", "logout", "captcha"};
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
