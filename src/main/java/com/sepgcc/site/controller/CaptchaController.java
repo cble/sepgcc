@@ -1,5 +1,6 @@
 package com.sepgcc.site.controller;
 
+import com.sepgcc.site.constants.SecurityConstants;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,12 +20,12 @@ import java.util.Random;
 public class CaptchaController {
 
     private int xDelta = 10;
-    private int imgWidth = 200;
-    private int imgHeight = 80;
+    private int imgWidth = 100;
+    private int imgHeight = 44;
     private int codeCount = 4;
     private int x = imgWidth / (codeCount + 1);
-    private int fontHeight = imgHeight - 32;
-    private int codeY = imgHeight - 20;
+    private int fontHeight = imgHeight - 20;
+    private int codeY = imgHeight - 10;
     private String fontStyle = "Times New Roman";
 
     @RequestMapping(value = "/captcha", method = {RequestMethod.GET, RequestMethod.POST})
@@ -51,9 +52,9 @@ public class CaptchaController {
         g.setColor(new Color(55, 55, 12));
         g.drawRect(0, 0, imgWidth - 1, imgHeight - 1);
 
-        // 随机产生155条干扰线，使图象中的认证码不易被其它程序探测到
+        // 随机产生干扰线，使图象中的认证码不易被其它程序探测到
         g.setColor(getRandColor(160, 200));
-        for (int i = 0; i < 160; i++) {
+        for (int i = 0; i < 120; i++) {
             int x = random.nextInt(imgWidth);
             int y = random.nextInt(imgHeight);
             int xl = random.nextInt(12);
@@ -70,7 +71,7 @@ public class CaptchaController {
             blue = random.nextInt(255);
             int wordType = random.nextInt(3);
             char retWord = 0;
-            int degree = random.nextInt() % 20;
+            int degree = random.nextInt() % 10;
             switch (wordType) {
 //                case 0:
 //                    retWord = this.getSingleNumberChar();
@@ -93,7 +94,7 @@ public class CaptchaController {
 
         }
         // 将认证码存入SESSION
-        session.setAttribute("rand", sRand);
+        session.setAttribute(SecurityConstants.SESSION_CAPTCHA, sRand);
         // 图象生效
         g.dispose();
         ServletOutputStream responseOutputStream = response.getOutputStream();

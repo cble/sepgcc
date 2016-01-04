@@ -1,5 +1,6 @@
 package com.sepgcc.site.controller;
 
+import com.sepgcc.site.constants.SecurityConstants;
 import com.sepgcc.site.dto.User;
 import com.sepgcc.site.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +29,7 @@ public class LoginController extends BaseController {
             @ModelAttribute User user,
             String username,
             String password,
+            String captcha,
             String redirect,
             HttpServletRequest request) throws Exception {
         if (user != null) {
@@ -36,10 +38,15 @@ public class LoginController extends BaseController {
             } else {
                 return new ModelAndView(new RedirectView("index"));
             }
-        } else if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)) {
+        } else if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password) && StringUtils.isNotBlank(captcha)) {
+            String sessionCaptcha = getSessionCaptcha(request);
+            if (!sessionCaptcha.equals(captcha)) {
+                return new ModelAndView(new RedirectView("login"), new HashMap<String, Object>());
+            }
             user = userService.loadUser(username, password);
             if (user != null && user.isEnable()) {
                 setToken(request, user.getToken());
+                request.getSession().removeAttribute(SecurityConstants.SESSION_CAPTCHA);
                 return new ModelAndView(new RedirectView("index"));
             } else {
                 return new ModelAndView(new RedirectView("login"), new HashMap<String, Object>());
@@ -52,5 +59,10 @@ public class LoginController extends BaseController {
     public ModelAndView logout(HttpServletRequest request) throws Exception {
         setToken(request, null);
         return new ModelAndView(new RedirectView("login"));
+    }
+
+    private String getSessionCaptcha(HttpServletRequest request) {
+        Object captchaAttribute = request.getSession().getAttribute(SecurityConstants.SESSION_CAPTCHA);
+        return captchaAttribute != null ? String.valueOf(captchaAttribute) : "";
     }
 }
