@@ -23,6 +23,7 @@ public class FileService {
     private FileMetaDAO fileMetaDAO;
 
     public String saveFile(FileMeta fileMeta) {
+        log.info(String.format("saveFile input: %s", fileMeta));
         try {
             validate(fileMeta);
             FileUtils.validateFileType(fileMeta.getFileName());
@@ -43,6 +44,7 @@ public class FileService {
             fileMetaDAO.insert(fileMetaDO);
             return fileId;
         } catch (FileTypeNotSupportException e) {
+            log.warn(String.format("file type not support: %s", fileMeta));
             throw e;
         } catch (IllegalArgumentException e) {
             log.warn(e);

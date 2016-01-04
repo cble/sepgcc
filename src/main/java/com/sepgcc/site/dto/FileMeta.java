@@ -1,5 +1,8 @@
 package com.sepgcc.site.dto;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.io.Serializable;
@@ -75,5 +78,12 @@ public class FileMeta implements Serializable {
 
     public void setBytes(byte[] bytes) {
         this.bytes = bytes;
+    }
+
+    @Override
+    public String toString() {
+        ReflectionToStringBuilder toStringBuilder = new ReflectionToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        toStringBuilder.setExcludeFieldNames("bytes");
+        return toStringBuilder.toString();
     }
 }
