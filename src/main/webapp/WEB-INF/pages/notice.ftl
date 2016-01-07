@@ -9,7 +9,7 @@
     </div>
     <div>
         <#if project.projectAttachmentList?? && project.projectAttachmentList?size gt 0>
-            <span>下载附件：</span>
+            <h3>下载附件：</h3>
             <ul>
                 <#list project.projectAttachmentList as attachment>
                     <li>

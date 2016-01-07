@@ -73,7 +73,7 @@ public class FileController extends BaseController {
                 }
             }
         } catch (FileTypeNotSupportException e) {
-            result.put("state", "文件类型暂不支持");
+            result.put("state", e.getMessage());
         }
         return result;
     }

@@ -121,7 +121,12 @@ public class FileUtils {
         }
     }
 
-    public static void validateFileType(String fileName) {
+    public static void validateFile(FileMeta fileMeta) {
+        validateFileType(fileMeta.getFileName());
+        validateFileSize(fileMeta.getBytes());
+    }
+
+    private static void validateFileType(String fileName) {
         int dotPostion = fileName.lastIndexOf(".");
         if (dotPostion > 0) {
             String extension = fileName.substring(dotPostion, fileName.length());
@@ -129,7 +134,12 @@ public class FileUtils {
                 return;
             }
         }
-        throw new FileTypeNotSupportException();
+        throw new FileTypeNotSupportException("文件类型暂不支持");
+    }
+
+    private static void validateFileSize(byte[] content) {
+        if (content == null || content.length > SiteConstants.MAX_FILE_SIZE)
+        throw new FileTypeNotSupportException("文件大小不能超过5MB");
     }
 
     public static boolean isImageFile(FileMeta file) {

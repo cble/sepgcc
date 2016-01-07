@@ -26,7 +26,7 @@ public class FileService {
         log.info(String.format("saveFile input: %s", fileMeta));
         try {
             validate(fileMeta);
-            FileUtils.validateFileType(fileMeta.getFileName());
+            FileUtils.validateFile(fileMeta);
 
             String fileId = FileUtils.generateId(fileMeta);
             if (isFileExsists(fileId)) {
