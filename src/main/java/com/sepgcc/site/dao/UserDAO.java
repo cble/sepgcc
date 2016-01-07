@@ -11,4 +11,5 @@ public interface UserDAO {
     List<UserDO> queryWithLimit(int index, int limit);
     int countAll();
     int insert(UserDO userDO);
+    boolean updatePassword(int userId, String password);
 }

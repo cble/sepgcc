@@ -71,4 +71,19 @@ public class UserService {
         }
         return successNumber;
     }
+
+    public String changePassword(int userId, String oldPwd, String newPwd) {
+        UserDO userDO = userDAO.loadById(userId);
+        if (userDO != null) {
+            String encryptPassword = SecurityUtils.encryptPassword(oldPwd);
+            if (encryptPassword.equals(userDO.getPassword())) {
+                boolean updateSuccess = userDAO.updatePassword(userId, SecurityUtils.encryptPassword(newPwd));
+                return updateSuccess ? null : "系统错误，请稍后再试";
+            } else {
+                return "原密码错误";
+            }
+        } else {
+            return "用户不存在";
+        }
+    }
 }

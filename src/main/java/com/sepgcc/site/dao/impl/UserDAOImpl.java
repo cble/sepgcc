@@ -38,4 +38,12 @@ public class UserDAOImpl extends SqlMapClientDaoSupport implements UserDAO {
         Object insert = this.getSqlMapClientTemplate().insert("user.insert", userDO);
         return insert != null ? (Integer) insert : 0;
     }
+
+    @Override
+    public boolean updatePassword(int userId, String password) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("userId", userId);
+        param.put("password", password);
+        return this.getSqlMapClientTemplate().update("user.updatePassword", param) > 0;
+    }
 }

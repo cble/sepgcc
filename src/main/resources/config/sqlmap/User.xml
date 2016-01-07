@@ -64,4 +64,10 @@
         </selectKey>
     </insert>
 
+    <update id="updatePassword">
+        UPDATE ZL_User
+        SET Password = #password#
+        WHERE ID = #userId#
+    </update>
+
 </sqlMap>

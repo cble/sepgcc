@@ -1,14 +1,17 @@
 package com.sepgcc.site.controller;
 
 import com.sepgcc.site.constants.SecurityConstants;
+import com.sepgcc.site.dto.AjaxResponse;
 import com.sepgcc.site.dto.User;
 import com.sepgcc.site.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -59,6 +62,17 @@ public class LoginController extends BaseController {
     public ModelAndView logout(HttpServletRequest request) throws Exception {
         setToken(request, null);
         return new ModelAndView(new RedirectView("login"));
+    }
+
+    @RequestMapping(value = "/changepassword", method = RequestMethod.GET)
+    public ModelAndView changePassword() {
+        return new ModelAndView(new RedirectView("changepassword"));
+    }
+
+    @RequestMapping(value = "/ajax/changepassword", method = RequestMethod.GET)
+    public @ResponseBody AjaxResponse<Boolean> doChangePassword(@ModelAttribute User user, String oldPwd, String newPwd) {
+        String err = userService.changePassword(user.getId(), oldPwd, newPwd);
+        return new AjaxResponse<Boolean>(HttpStatus.OK.value(), err, err == null);
     }
 
     private String getSessionCaptcha(HttpServletRequest request) {
