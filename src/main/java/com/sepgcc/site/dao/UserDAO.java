@@ -10,4 +10,5 @@ public interface UserDAO {
     UserDO loadById(int id);
     List<UserDO> queryWithLimit(int index, int limit);
     int countAll();
+    int insert(UserDO userDO);
 }

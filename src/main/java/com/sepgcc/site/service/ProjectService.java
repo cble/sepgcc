@@ -63,7 +63,7 @@ public class ProjectService {
                 if (loadFile && StringUtils.isNotBlank(projectItem.getFileId())) {
                     FileMeta file = fileService.getFile(projectItem.getFileId(), 0, false);
                     projectItem.setFileName(file.getFileName());
-                    projectItem.setDescriptionImage("");
+                    projectItem.setDescriptionImage("/img/" + file.getFileId());
                 }
                 return projectItem;
             }

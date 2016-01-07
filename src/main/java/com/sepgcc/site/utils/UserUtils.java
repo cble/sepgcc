@@ -1,5 +1,6 @@
 package com.sepgcc.site.utils;
 
+import com.sepgcc.site.constants.SecurityConstants;
 import com.sepgcc.site.dao.entity.UserDO;
 import com.sepgcc.site.dto.User;
 import net.sf.cglib.beans.BeanCopier;
@@ -28,5 +29,9 @@ public class UserUtils {
             toUserDOCopier.copy(user, result, null);
         }
         return result;
+    }
+
+    public static String generateDefaultPassword(User user) {
+        return SecurityConstants.DEFAULT_PASSWORD;
     }
 }

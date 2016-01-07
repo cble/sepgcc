@@ -7,6 +7,7 @@ import com.sepgcc.site.dao.entity.UserDO;
 import com.sepgcc.site.dto.User;
 import com.sepgcc.site.utils.SecurityUtils;
 import com.sepgcc.site.utils.UserUtils;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -14,6 +15,8 @@ import java.util.List;
 
 @Service
 public class UserService {
+
+    private static final Logger log = Logger.getLogger(UserService.class);
 
     @Resource
     private UserDAO userDAO;
@@ -50,5 +53,22 @@ public class UserService {
 
     public int countAll() {
         return userDAO.countAll();
+    }
+
+    public int batchCreateUser(List<User> userList) {
+        int successNumber = 0;
+        for (User user : userList) {
+            try {
+                UserDO userDO = UserUtils.toUserDO(user);
+                userDO.setPassword(SecurityUtils.encryptPassword(UserUtils.generateDefaultPassword(user)));
+                int insertId = userDAO.insert(userDO);
+                if (insertId > 0) {
+                    successNumber++;
+                }
+            } catch (Exception e) {
+                log.error("batchCreateUser error", e);
+            }
+        }
+        return successNumber;
     }
 }

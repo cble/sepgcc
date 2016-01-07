@@ -39,6 +39,7 @@ body{
 }
 .file_upload_container{
     margin-top:5px;
+    display: inline-block;
 }
 form{
     padding:10px;

@@ -32,4 +32,10 @@ public class UserDAOImpl extends SqlMapClientDaoSupport implements UserDAO {
     public int countAll() {
         return (Integer) this.getSqlMapClientTemplate().queryForObject("user.countAll");
     }
+
+    @Override
+    public int insert(UserDO userDO) {
+        Object insert = this.getSqlMapClientTemplate().insert("user.insert", userDO);
+        return insert != null ? (Integer) insert : 0;
+    }
 }

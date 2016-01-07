@@ -47,4 +47,21 @@
         FROM ZL_User
     </select>
 
+    <insert id="insert">
+        INSERT INTO ZL_User (
+            Username,
+            Password,
+            Nickname,
+            UserGroup
+        ) VALUES (
+            #username#,
+            #password#,
+            #nickname#,
+            #userGroup#
+        )
+        <selectKey resultClass="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
 </sqlMap>
