@@ -72,7 +72,7 @@ public class UploadController extends BaseController {
     }
 
     @RequestMapping(value = {"/notice"}, method = RequestMethod.GET)
-    public ModelAndView notice(int projectId, ModelMap modelMap) throws Exception {
+    public ModelAndView notice(@RequestParam int projectId, ModelMap modelMap) throws Exception {
         Project project = projectService.loadById(projectId, SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
         if (project == null) {
             throw new ResourceNotFoundException();
@@ -82,7 +82,7 @@ public class UploadController extends BaseController {
     }
 
     @RequestMapping(value = {"/upload"}, method = RequestMethod.GET)
-    public ModelAndView upload(int projectId, @ModelAttribute User user, ModelMap modelMap) throws Exception {
+    public ModelAndView upload(@RequestParam int projectId, @ModelAttribute User user, ModelMap modelMap) throws Exception {
         Project project = projectService.loadById(projectId, SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
         if (project == null) {
             throw new ResourceNotFoundException();
@@ -97,7 +97,7 @@ public class UploadController extends BaseController {
     }
 
     @RequestMapping(value = {"/modify"}, method = RequestMethod.GET)
-    public ModelAndView modify(int uploadId, @ModelAttribute User user, ModelMap modelMap) throws Exception {
+    public ModelAndView modify(@RequestParam int uploadId, @ModelAttribute User user, ModelMap modelMap) throws Exception {
         Upload upload = uploadService.loadById(uploadId, user.getId());
         if (upload != null) {
             modelMap.put("project", projectService.loadById(upload.getProjectId(), SiteConstants.USER_AVAILABLE_PROJECT_STATUS));
