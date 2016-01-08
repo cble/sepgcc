@@ -66,10 +66,10 @@ public class LoginController extends BaseController {
 
     @RequestMapping(value = "/changepassword", method = RequestMethod.GET)
     public ModelAndView changePassword() {
-        return new ModelAndView(new RedirectView("changepassword"));
+        return new ModelAndView("changepassword");
     }
 
-    @RequestMapping(value = "/ajax/changepassword", method = RequestMethod.GET)
+    @RequestMapping(value = "/ajax/changepassword", method = RequestMethod.POST)
     public @ResponseBody AjaxResponse<Boolean> doChangePassword(@ModelAttribute User user, String oldPwd, String newPwd) {
         String err = userService.changePassword(user.getId(), oldPwd, newPwd);
         return new AjaxResponse<Boolean>(HttpStatus.OK.value(), err, err == null);
