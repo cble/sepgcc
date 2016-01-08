@@ -7,11 +7,13 @@
                 var data = {};
                 data.total = res.data.pageCount;
                 data.list = res.data.list.map(function (item) {
-                    var operation;
-                    if (item.uploadId > 0) {
-                        operation = '<a href="/modify?uploadId={uploadId}">修改上传</a>';
-                    } else {
-                        operation = '<a href="/notice?projectId={id}">上传资料</a>';
+                    var operation = "";
+                    if (item.available) {
+                        if (item.uploadId > 0) {
+                            operation = '<a href="/modify?uploadId={uploadId}">修改上传</a>';
+                        } else {
+                            operation = '<a href="/notice?projectId={id}">上传资料</a>';
+                        }
                     }
                     return [item.name, item.endTimeStr, operation.replace(/\{(\w+)\}/g, function (m, $1) {
                         return item[$1];

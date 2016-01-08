@@ -72,6 +72,13 @@ public class Project implements Serializable {
         this.endTime = endTime;
     }
 
+    public boolean isAvailable() {
+        Date now = new Date();
+        return status == 1
+                && now.after(beginTime)
+                && now.before(endTime);
+    }
+
     public String getBeginTimeStr() {
         return beginTime != null ? new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(beginTime) : null;
     }
