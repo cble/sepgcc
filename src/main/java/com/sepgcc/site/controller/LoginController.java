@@ -1,5 +1,6 @@
 package com.sepgcc.site.controller;
 
+import com.google.common.collect.ImmutableMap;
 import com.sepgcc.site.constants.SecurityConstants;
 import com.sepgcc.site.dto.AjaxResponse;
 import com.sepgcc.site.dto.User;
@@ -37,14 +38,14 @@ public class LoginController extends BaseController {
             HttpServletRequest request) throws Exception {
         if (user != null) {
             if (StringUtils.isNotBlank(redirect)) {
-                return new ModelAndView("redirect:" + redirect);
+                return new ModelAndView("redirect:" + redirect); // TODO
             } else {
                 return new ModelAndView(new RedirectView("index"));
             }
         } else if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password) && StringUtils.isNotBlank(captcha)) {
             String sessionCaptcha = getSessionCaptcha(request);
             if (!sessionCaptcha.equals(captcha)) {
-                return new ModelAndView(new RedirectView("login"), new HashMap<String, Object>());
+                return new ModelAndView("login", ImmutableMap.of("err", "验证码错误"));
             }
             user = userService.loadUser(username, password);
             if (user != null && user.isEnable()) {
@@ -52,7 +53,7 @@ public class LoginController extends BaseController {
                 request.getSession().removeAttribute(SecurityConstants.SESSION_CAPTCHA);
                 return new ModelAndView(new RedirectView("index"));
             } else {
-                return new ModelAndView(new RedirectView("login"), new HashMap<String, Object>());
+                return new ModelAndView("login", ImmutableMap.of("err", "用户名或密码错误"));
             }
         }
         return new ModelAndView("login");

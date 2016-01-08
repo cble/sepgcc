@@ -5,6 +5,9 @@
 
     <form class="form-signin" method="post" action="login">
         <h2 class="form-signin-heading">请先登录</h2>
+        <#if err??>
+            <div class="alert alert-danger" role="alert">${err}</div>
+        </#if>
         <div class="form-group">
             <input type="text" name="username" class="form-control" placeholder="用户名" required="" autofocus="" />
         </div>
