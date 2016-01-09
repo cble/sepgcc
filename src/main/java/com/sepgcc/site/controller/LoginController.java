@@ -18,12 +18,11 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 
 @Controller
 public class LoginController extends BaseController {
 
-    private static final Logger log = Logger.getLogger(LoginController.class);
+    private static final Logger accessLogger = Logger.getLogger("accessLogger");
 
     @Resource
     private UserService userService;
@@ -45,14 +44,18 @@ public class LoginController extends BaseController {
         } else if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password) && StringUtils.isNotBlank(captcha)) {
             String sessionCaptcha = getSessionCaptcha(request);
             if (!sessionCaptcha.equals(captcha)) {
+                accessLogger.info(String.format("captcha error: username=%s, captcha=%s, realcaptcha=%s",
+                        username, captcha, sessionCaptcha));
                 return new ModelAndView("login", ImmutableMap.of("err", "验证码错误"));
             }
             user = userService.loadUser(username, password);
             if (user != null && user.isEnable()) {
                 setToken(request, user.getToken());
                 request.getSession().removeAttribute(SecurityConstants.SESSION_CAPTCHA);
+                accessLogger.info(String.format("login success: username=%s", username));
                 return new ModelAndView(new RedirectView("index"));
             } else {
+                accessLogger.info(String.format("login failed: username=%s", username));
                 return new ModelAndView("login", ImmutableMap.of("err", "用户名或密码错误"));
             }
         }
@@ -73,6 +76,7 @@ public class LoginController extends BaseController {
     @RequestMapping(value = "/ajax/changepassword", method = RequestMethod.POST)
     public @ResponseBody AjaxResponse<Boolean> doChangePassword(@ModelAttribute User user, String oldPwd, String newPwd) {
         String err = userService.changePassword(user.getId(), oldPwd, newPwd);
+        accessLogger.info(String.format("change password: username=%s, result=%s", user.getUsername(), err));
         return new AjaxResponse<Boolean>(HttpStatus.OK.value(), err, err == null);
     }
 

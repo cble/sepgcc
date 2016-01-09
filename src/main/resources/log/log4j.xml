@@ -22,8 +22,8 @@
             <param name="ConversionPattern" value="[sepgcc-site]%d %-5p [%c] %m%n"/>
         </layout>
     </appender>
-    <appender name="illegalAccessAppender" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="File" value="/data/applogs/sepgcc-site/logs/illegalAccess.log"/>
+    <appender name="accessAppender" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="/data/applogs/sepgcc-site/logs/access.log"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="[sepgcc-site]%d %-5p [%c] %m%n"/>
         </layout>
@@ -36,6 +36,11 @@
     </appender>
 
 
+    <logger name="accessLogger" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="accessAppender"/>
+    </logger>
     <logger name="com.ibatis" additivity="false">
         <level value="ERROR"/>
         <appender-ref ref="CONSOLE"/>
