@@ -32,3 +32,4 @@ target/
 **/*.versionsBackup
 
 **/*.properties
+*.sh
