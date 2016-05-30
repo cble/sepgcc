@@ -60,7 +60,7 @@ public class UserService {
         for (User user : userList) {
             try {
                 UserDO userDO = UserUtils.toUserDO(user);
-                userDO.setPassword(SecurityUtils.encryptPassword(UserUtils.generateDefaultPassword(user)));
+                userDO.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
                 int insertId = userDAO.insert(userDO);
                 if (insertId > 0) {
                     successNumber++;

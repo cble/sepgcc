@@ -31,8 +31,9 @@ public class UserServiceTest {
 
 
     private String[][] importUserList = {
-            {"sepgcc_admin", "上海教育报刊总社", "99"},
-            {"fddx", "复旦大学", "1"},
+            {"FXQJYJ", "奉贤区教育局", "1", "44087579"},
+            {"SHKFDX", "上海开放大学", "1", "20342229"},
+            {"SHJRXY", "上海金融学院", "1", "49022435"},
     };
     @Test
     public void testBatchImportUser() {
@@ -42,6 +43,7 @@ public class UserServiceTest {
             user.setUsername(items[0]);
             user.setNickname(items[1]);
             user.setUserGroup(NumberUtils.toInt(items[2]));
+            user.setPassword(items[3]);
             userList.add(user);
         }
         int successNumber = userService.batchCreateUser(userList);

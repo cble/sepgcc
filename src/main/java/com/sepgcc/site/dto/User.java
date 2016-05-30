@@ -9,6 +9,7 @@ public class User implements Serializable {
     private String nickname;
     private int userGroup; // 0-普通用户 99-管理员
     private String token;
+    private String password;
 
     public int getId() {
         return id;
@@ -48,6 +49,14 @@ public class User implements Serializable {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public boolean isAdmin() {
