@@ -139,7 +139,7 @@ public class FileUtils {
 
     private static void validateFileSize(byte[] content) {
         if (content == null || content.length > SiteConstants.MAX_FILE_SIZE)
-        throw new FileTypeNotSupportException("文件大小不能超过5MB");
+        throw new FileTypeNotSupportException("文件大小不能超过60MB");
     }
 
     public static boolean isImageFile(FileMeta file) {

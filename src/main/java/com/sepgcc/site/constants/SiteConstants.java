@@ -15,7 +15,7 @@ public class SiteConstants {
             ".zip", ".rar", ".7z",
             ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx"
     };
-    public static final int MAX_FILE_SIZE = 1024 * 1024 * 5; // 5MB
+    public static final int MAX_FILE_SIZE = 1024 * 1024 * 60; // 5MB
 
     public static final List<Integer> ADMIN_AVAILABLE_PROJECT_STATUS = Lists.newArrayList(0, 1, 2);
     public static final List<Integer> USER_AVAILABLE_PROJECT_STATUS = Lists.newArrayList(1);
