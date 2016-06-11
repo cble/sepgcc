@@ -43,6 +43,9 @@
                 } else {
                     alert(result.state);
                 }
+                if (self.isFinish()) {
+                    loading.hide();
+                }
                 console.log(self.finish);
             },
 
@@ -60,7 +63,6 @@
             },
             progressall: function (e, data) {
                 //var progress = parseInt(data.loaded / data.total * 100, 10);
-                loading.hide();
                 //bar.css(
                 //    'width',
                 //    progress + '%'
