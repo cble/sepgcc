@@ -43,17 +43,20 @@
                 } else {
                     alert(result.state);
                 }
+                console.log(self.finish);
             },
 
             start: function (e) {
                 loading.show();
-                console.log('start', e);
-                self.finish++;
+            },
+
+            change: function (e, data) {
+                $.each(data.files, function () {
+                    self.finish++;
+                });
             },
 
             progress: function (e, data) {
-
-
             },
             progressall: function (e, data) {
                 //var progress = parseInt(data.loaded / data.total * 100, 10);
