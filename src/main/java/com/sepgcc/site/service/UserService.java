@@ -77,7 +77,7 @@ public class UserService {
         if (userDO != null) {
             String encryptPassword = SecurityUtils.encryptPassword(oldPwd);
             if (encryptPassword.equals(userDO.getPassword())) {
-                boolean updateSuccess = userDAO.updatePassword(userId, SecurityUtils.encryptPassword(newPwd));
+                boolean updateSuccess = resetPassword(userId, newPwd);
                 return updateSuccess ? null : "系统错误，请稍后再试";
             } else {
                 return "原密码错误";
@@ -85,5 +85,9 @@ public class UserService {
         } else {
             return "用户不存在";
         }
+    }
+
+    public boolean resetPassword(int userId, String newPwd) {
+        return userDAO.updatePassword(userId, SecurityUtils.encryptPassword(newPwd));
     }
 }

@@ -31,9 +31,8 @@ public class UserServiceTest {
 
 
     private String[][] importUserList = {
-            {"FXQJYJ", "奉贤区教育局", "1", "44087579"},
-            {"SHKFDX", "上海开放大学", "1", "20342229"},
-            {"SHJRXY", "上海金融学院", "1", "49022435"},
+            {"SHGWXX", "上海港湾学校", "1", "09024826"},
+            {"SHXZGLXX", "上海行政管理学校", "1", "67392859"},
     };
     @Test
     public void testBatchImportUser() {
@@ -48,5 +47,13 @@ public class UserServiceTest {
         }
         int successNumber = userService.batchCreateUser(userList);
         System.out.println("successNumber=" + successNumber);
+    }
+
+
+    private String[] resetUser = {"7", "12095764"};
+    @Test
+    public void testResetPassword() {
+        boolean success = userService.resetPassword(NumberUtils.toInt(resetUser[0]), resetUser[1]);
+        System.out.println("success=" + success);
     }
 }
