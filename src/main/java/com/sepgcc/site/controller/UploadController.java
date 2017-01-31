@@ -36,8 +36,8 @@ public class UploadController extends BaseController {
     public @ResponseBody AjaxResponse<Paginate<Project>> projectList(@ModelAttribute User user, int page) throws Exception {
         int index = (page - 1) * SiteConstants.PAGE_SIZE;
         int limit = SiteConstants.PAGE_SIZE;
-        List<Project> projectList = projectService.queryWithLimit(index, limit, SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
-        int projectCount = projectService.countAll(SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
+        List<Project> projectList = projectService.queryWithLimit(user, index, limit, SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
+        int projectCount = projectService.countAll(user, SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
         for (Project project : projectList) {
             List<Upload> uploadList = uploadService.queryByProjectIdUserId(project.getId(), user.getId());
             if (CollectionUtils.isNotEmpty(uploadList)) {

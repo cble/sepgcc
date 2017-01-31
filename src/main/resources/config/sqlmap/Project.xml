@@ -11,6 +11,7 @@
         <result column="BeginTime" property="beginTime" />
         <result column="EndTime" property="endTime" />
         <result column="Owner" property="owner" />
+        <result column="UserGroup" property="userGroup" />
         <result column="Status" property="status" />
         <result column="AddTime" property="addTime" />
         <result column="UpdateTime" property="updateTime" />
@@ -23,6 +24,7 @@
             BeginTime,
             EndTime,
             Owner,
+            UserGroup,
             Status,
             AddTime,
             UpdateTime
@@ -41,6 +43,7 @@
             BeginTime,
             EndTime,
             Owner,
+            UserGroup,
             Status,
             AddTime,
             UpdateTime
@@ -49,6 +52,9 @@
         <iterate property="status" open="(" close=")" conjunction="," >
             #status[]#
         </iterate>
+        <isNotEqual property="userGroup" compareValue="99">
+            UserGroup = #userGroup#
+        </isNotEqual>
         ORDER BY ID DESC
         LIMIT #index#, #limit#
     </select>
@@ -60,6 +66,9 @@
         <iterate property="status" open="(" close=")" conjunction="," >
             #status[]#
         </iterate>
+        <isNotEqual property="userGroup" compareValue="99">
+            UserGroup = #userGroup#
+        </isNotEqual>
     </select>
 
     <insert id="insert" parameterClass="projectDO">
@@ -69,6 +78,7 @@
             BeginTime,
             EndTime,
             Owner,
+            UserGroup,
             Status,
             AddTime,
             UpdateTime
@@ -78,6 +88,7 @@
             #beginTime#,
             #endTime#,
             #owner#,
+            #userGroup#,
             0,
             NOW(),
             NOW()
@@ -99,7 +110,8 @@
             Description = #description#,
             BeginTime = #beginTime#,
             EndTime = #endTime#,
-            Owner = #owner#
+            Owner = #owner#,
+            UserGroup = #userGroup#
         WHERE ID = #id#
     </update>
 

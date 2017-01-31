@@ -110,6 +110,17 @@
                                name="endTime" value="${project.endTimeStr}"/>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">用户组</label>
+                    <div class="col-sm-10">
+                        <label class="radio-inline" for="usergroup-1">
+                            <input id="usergroup-1" type="radio" name="userGroup" value="1" <#if project.userGroup == 1>checked</#if>> 学校用户
+                        </label>
+                        <label class="radio-inline" for="usergroup-2">
+                            <input id="usergroup-2" type="radio" name="userGroup" value="2" <#if project.userGroup == 2>checked</#if>> 剧院用户
+                        </label>
+                    </div>
+                </div>
             </div>
         </div>
     </form>

@@ -8,9 +8,8 @@ import com.sepgcc.site.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -26,10 +25,10 @@ public class UserAdminController extends BaseController {
 
     @RequestMapping(value = "/admin/userlist", method = RequestMethod.GET)
     public ModelAndView userList() {
-        return new ModelAndView("user_manager");
+        return new ModelAndView("user_list");
     }
 
-    @RequestMapping(value = {"/ajax/admin/usermanagerlist"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/ajax/admin/userlist"}, method = RequestMethod.POST)
     public @ResponseBody AjaxResponse<Paginate<User>> userList(int page) throws Exception {
         int index = (page - 1) * SiteConstants.PAGE_SIZE;
         int limit = SiteConstants.PAGE_SIZE;
@@ -41,6 +40,18 @@ public class UserAdminController extends BaseController {
         paginate.setList(users);
 
         return new AjaxResponse<Paginate<User>>(HttpStatus.OK.value(), null, paginate);
+    }
+
+    @RequestMapping(value = "/admin/resetpassword/{userId}", method = RequestMethod.GET)
+    public ModelAndView resetPassword(@PathVariable int userId, ModelMap modelMap) {
+        modelMap.put("userId", userId);
+        return new ModelAndView("user_reset_password");
+    }
+
+    @RequestMapping(value = {"/ajax/admin/resetpassword"}, method = RequestMethod.POST)
+    public @ResponseBody AjaxResponse<Boolean> doResetPassword(@ModelAttribute User user, String newPwd) throws Exception {
+        boolean result = userService.resetPassword(user.getId(), newPwd);
+        return new AjaxResponse<Boolean>(HttpStatus.OK.value(), "", result);
     }
 
     @RequestMapping(value = "/admin/importuser", method = RequestMethod.GET)

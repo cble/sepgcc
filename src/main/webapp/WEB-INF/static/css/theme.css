@@ -1,0 +1,20 @@
+.navbar-inverse {
+    /*background-color: #2c5095;*/
+    /*border-color: #2c5095;*/
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+
+.navbar-inverse .navbar-brand {
+    color: #ffffff;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+    color: #ffffff;
+}
+.navbar-inverse .navbar-nav>li>a:hover {
+    text-decoration: underline;
+}
+.navbar-inverse .navbar-nav>li>a.mute:hover {
+    text-decoration: none;
+}

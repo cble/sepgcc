@@ -41,11 +41,11 @@ public class ProjectAdminController extends BaseController {
     }
 
     @RequestMapping(value = {"/ajax/admin/projectmanagerlist"}, method = RequestMethod.POST)
-    public @ResponseBody AjaxResponse<Paginate<Project>> projectList(@RequestParam int page) throws Exception {
+    public @ResponseBody AjaxResponse<Paginate<Project>> projectList(@RequestParam int page, @ModelAttribute User user) throws Exception {
         int index = (page - 1) * SiteConstants.PAGE_SIZE;
         int limit = SiteConstants.PAGE_SIZE;
-        List<Project> projectList = projectService.queryWithLimit(index, limit, SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
-        int projectCount = projectService.countAll(SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
+        List<Project> projectList = projectService.queryWithLimit(user, index, limit, SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
+        int projectCount = projectService.countAll(user, SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
 
         for (Project project : projectList) {
             project.setSuccessNumber(uploadService.countByProjectId(project.getId()));

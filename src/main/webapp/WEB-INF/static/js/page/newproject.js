@@ -8,7 +8,7 @@
         container = $(container);
         var loadedFiles = pageData.attachments;
         this.FileComponent = new FileComponent(container, loadedFiles);
-    })
+    });
 
     $(".J_meta .file_upload_container").each(function (i, container) {
         container = $(container);
@@ -45,7 +45,10 @@
             var data = {projectItemList: [], projectContactList: []};
 
             //项目信息
-            $(".J_info").find("input").each(function (i, item) {
+            $(".J_info").find("input[type=text]").each(function (i, item) {
+                data[$(item).attr("name")] = item.value;
+            });
+            $(".J_info").find("input:checked").each(function (i, item) {
                 data[$(item).attr("name")] = item.value;
             });
 

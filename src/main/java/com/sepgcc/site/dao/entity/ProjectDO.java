@@ -10,6 +10,7 @@ public class ProjectDO {
     private Date beginTime;
     private Date endTime;
     private String owner;
+    private int userGroup;
     private int status;
     private Date addTime;
     private Date updateTime;
@@ -60,6 +61,14 @@ public class ProjectDO {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public int getUserGroup() {
+        return userGroup;
+    }
+
+    public void setUserGroup(int userGroup) {
+        this.userGroup = userGroup;
     }
 
     public int getStatus() {

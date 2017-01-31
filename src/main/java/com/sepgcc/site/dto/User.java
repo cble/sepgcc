@@ -7,7 +7,7 @@ public class User implements Serializable {
     private int id;
     private String username;
     private String nickname;
-    private int userGroup; // 0-普通用户 99-管理员
+    private int userGroup; // 1-学校用户 2-剧院用户 99-管理员
     private String token;
     private String password;
 
@@ -61,6 +61,14 @@ public class User implements Serializable {
 
     public boolean isAdmin() {
         return userGroup == 99;
+    }
+
+    public boolean isSchoolUser() {
+        return userGroup == 1;
+    }
+
+    public boolean isTheatreUser() {
+        return userGroup == 2;
     }
 
     public boolean isEnable() {

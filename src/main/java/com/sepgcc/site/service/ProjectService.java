@@ -23,6 +23,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -95,9 +96,12 @@ public class ProjectService {
         });
     }
 
-    public List<Project> queryWithLimit(int index, int limit, List<Integer> status) {
+    public List<Project> queryWithLimit(User user, int index, int limit, List<Integer> status) {
+        if (user == null) {
+            return Collections.emptyList();
+        }
         List<Project> resultList = new ArrayList<Project>();
-        List<ProjectDO> projectDOs = projectDAO.queryWithLimit(status, index, limit);
+        List<ProjectDO> projectDOs = projectDAO.queryWithLimit(user.getUserGroup(), status, index, limit);
         for (ProjectDO projectDO : projectDOs) {
             Project project = ProjectUtils.toProject(projectDO);
             if (project != null) {
@@ -109,8 +113,11 @@ public class ProjectService {
         return resultList;
     }
 
-    public int countAll(List<Integer> status) {
-        return projectDAO.countAll(status);
+    public int countAll(User user, List<Integer> status) {
+        if (user == null) {
+            return 0;
+        }
+        return projectDAO.countAll(user.getUserGroup(), status);
     }
 
     public int createProject(final Project project) {

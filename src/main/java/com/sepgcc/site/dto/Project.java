@@ -20,6 +20,7 @@ public class Project implements Serializable {
     private Date endTime;
     private int successNumber;
     private String owner;
+    private int userGroup;
     private int status;
     @JsonProperty
     private List<ProjectItem> projectItemList;
@@ -101,6 +102,14 @@ public class Project implements Serializable {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public int getUserGroup() {
+        return userGroup;
+    }
+
+    public void setUserGroup(int userGroup) {
+        this.userGroup = userGroup;
     }
 
     public int getStatus() {

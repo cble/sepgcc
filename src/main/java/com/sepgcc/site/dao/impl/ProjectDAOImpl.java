@@ -19,18 +19,20 @@ public class ProjectDAOImpl extends SqlMapClientDaoSupport implements ProjectDAO
     }
 
     @Override
-    public List<ProjectDO> queryWithLimit(List<Integer> status, int index, int limit) {
+    public List<ProjectDO> queryWithLimit(int userGroup, List<Integer> status, int index, int limit) {
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("status", status);
+        param.put("userGroup", userGroup);
         param.put("index", index);
         param.put("limit", limit);
         return this.getSqlMapClientTemplate().queryForList("project.queryWithLimit", param);
     }
 
     @Override
-    public int countAll(List<Integer> status) {
+    public int countAll(int userGroup, List<Integer> status) {
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("status", status);
+        param.put("userGroup", userGroup);
         return (Integer) this.getSqlMapClientTemplate().queryForObject("project.countAll", param);
     }
 

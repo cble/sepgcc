@@ -17,7 +17,7 @@
             <tr>
                 <td>用户名</td>
                 <td>单位名</td>
-                <td>状态</td>
+                <td>用户类型</td>
                 <td>操作</td>
             </tr>
             </thead>
@@ -27,5 +27,5 @@
     </div>
 </div>
 <script src="/js/component/pagelist.js"></script>
-<script src="/js/page/user_manager.js"></script>
+<script src="/js/page/user_list.js"></script>
 </@pageFrame>
