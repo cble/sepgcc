@@ -29,7 +29,7 @@ public class ProjectStatisticsService {
 
     public FileMeta generateStatisticsFile(int projectId) {
         try {
-            Project project = projectService.loadById(projectId, SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
+            Project project = projectService.loadById(projectId, 99, SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
             List<Upload> uploadList = uploadService.queryByProjectId(projectId);
             if (CollectionUtils.isNotEmpty(uploadList)) {
                 ExcelUtils excelUtils = initExcelUtils(project);

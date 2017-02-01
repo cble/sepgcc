@@ -79,4 +79,8 @@ public class SecurityUtils {
         }
         return null;
     }
+
+    public static boolean isSafeRedirect(String url) {
+        return url.startsWith("www.sepgcc.com");
+    }
 }

@@ -27,17 +27,11 @@
         </div>
 
         <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
-            <#if user??>
+            <#if user?? && user.isAdmin()>
             <ul class="nav navbar-nav">
-                <#if user.isAdmin()>
-                <li><a href="/index">学校用户入口</a></li>
-                <li><a href="/index">剧院用户入口</a></li>
+                <li><a href="/school">学校用户入口</a></li>
+                <li><a href="/theatre">剧院用户入口</a></li>
                 <li><a href="/admin">管理员入口</a></li>
-                <#elseif user.isSchoolUser()>
-                <li><a href="/index">学校用户入口</a></li>
-                <#elseif user.isisTheatreUser()>
-                <li><a href="/index">剧院用户入口</a></li>
-                </#if>
             </ul>
             </#if>
 

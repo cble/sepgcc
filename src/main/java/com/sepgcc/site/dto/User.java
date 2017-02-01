@@ -78,7 +78,7 @@ public class User implements Serializable {
     public String getGroupStr() {
         switch (userGroup) {
             case 1: return "学校用户";
-            case 2: return "会展用户";
+            case 2: return "剧院用户";
             case 99: return "管理员";
             default: return "停用用户";
         }

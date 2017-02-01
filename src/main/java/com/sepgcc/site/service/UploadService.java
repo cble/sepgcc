@@ -63,7 +63,7 @@ public class UploadService {
             public Upload apply(UploadDO uploadDO) {
                 Upload upload = UploadUtils.toUpload(uploadDO);
                 if (upload != null) {
-                    upload.setProject(projectService.loadById(upload.getProjectId(), SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS));
+                    upload.setProject(projectService.loadById(upload.getProjectId(), 99, SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS));
                 }
                 return upload;
             }

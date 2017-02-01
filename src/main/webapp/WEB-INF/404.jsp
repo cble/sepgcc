@@ -7,6 +7,7 @@
     <title>页面不存在-上海教育报刊总社资料收集平台</title>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="/css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/theme.css" />
     <script src="/js/jquery.1.9.1.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
 </head>

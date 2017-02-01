@@ -8,6 +8,7 @@ import com.sepgcc.site.service.ProjectService;
 import com.sepgcc.site.service.ProjectStatisticsService;
 import com.sepgcc.site.service.UploadService;
 import com.sepgcc.site.utils.FileUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -44,8 +45,8 @@ public class ProjectAdminController extends BaseController {
     public @ResponseBody AjaxResponse<Paginate<Project>> projectList(@RequestParam int page, @ModelAttribute User user) throws Exception {
         int index = (page - 1) * SiteConstants.PAGE_SIZE;
         int limit = SiteConstants.PAGE_SIZE;
-        List<Project> projectList = projectService.queryWithLimit(user, index, limit, SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
-        int projectCount = projectService.countAll(user, SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
+        List<Project> projectList = projectService.queryWithLimit(user.getUserGroup(), index, limit, SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
+        int projectCount = projectService.countAll(user.getUserGroup(), SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
 
         for (Project project : projectList) {
             project.setSuccessNumber(uploadService.countByProjectId(project.getId()));
@@ -59,8 +60,8 @@ public class ProjectAdminController extends BaseController {
     }
 
     @RequestMapping(value = "/admin/projectstatistics", method = RequestMethod.GET)
-    public ModelAndView projectStatistics(@RequestParam int projectId, ModelMap modelMap) {
-        Project project = projectService.loadById(projectId, SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
+    public ModelAndView projectStatistics(@RequestParam int projectId, @ModelAttribute User user, ModelMap modelMap) {
+        Project project = projectService.loadById(projectId, user.getUserGroup(), SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
         if (project != null) {
             modelMap.put("project", project);
             return new ModelAndView("project_statistics");
@@ -70,12 +71,12 @@ public class ProjectAdminController extends BaseController {
     }
 
     @RequestMapping(value = "/ajax/admin/projectstatistics", method = RequestMethod.POST)
-    public @ResponseBody AjaxResponse<Paginate<Map<String, String>>> projectStatistics(@RequestParam int projectId, @RequestParam int page) {
+    public @ResponseBody AjaxResponse<Paginate<Map<String, String>>> projectStatistics(@RequestParam int projectId, @RequestParam int page, @ModelAttribute User user) {
         int index = (page - 1) * SiteConstants.PAGE_SIZE;
         int limit = SiteConstants.PAGE_SIZE;
         List<Upload> uploadList = uploadService.queryByProjectIdWithLimit(projectId, index, limit);
         int uploadCount = uploadService.countByProjectId(projectId);
-        Project project = projectService.loadById(projectId, SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
+        Project project = projectService.loadById(projectId, user.getUserGroup(), SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
 
         Paginate<Map<String, String>> paginate = new Paginate<Map<String, String>>();
         paginate.setPageCount(uploadCount / (SiteConstants.PAGE_SIZE + 1) + 1);
@@ -114,10 +115,10 @@ public class ProjectAdminController extends BaseController {
     }
 
     @RequestMapping(value = {"/ajax/admin/createnewproject"}, method = RequestMethod.POST)
-    public @ResponseBody AjaxResponse<String> createNewProject(@RequestBody Project project) {
+    public @ResponseBody AjaxResponse<String> createNewProject(@RequestBody Project project, @ModelAttribute User user) {
         try {
             if (project.getId() > 0) {
-                projectService.modifyProject(project);
+                projectService.modifyProject(project, user.getUserGroup());
             } else {
                 projectService.createProject(project);
             }
@@ -128,8 +129,8 @@ public class ProjectAdminController extends BaseController {
     }
 
     @RequestMapping(value = "/admin/modifyproject", method = RequestMethod.GET)
-    public ModelAndView modifyProject(@RequestParam int projectId, ModelMap modelMap) {
-        Project project = projectService.loadById(projectId, SiteConstants.EDITABLE_PROJECT_STATUS);
+    public ModelAndView modifyProject(@RequestParam int projectId, @ModelAttribute User user, ModelMap modelMap) {
+        Project project = projectService.loadById(projectId, user.getUserGroup(), SiteConstants.EDITABLE_PROJECT_STATUS);
         if (project != null) {
             modelMap.put("project", project);
             return new ModelAndView("modifyproject");
@@ -156,5 +157,35 @@ public class ProjectAdminController extends BaseController {
         return new AjaxResponse<Boolean>(HttpStatus.OK.value(), null, result);
     }
 
+    @RequestMapping(value = {"/school"}, method = RequestMethod.GET)
+    public ModelAndView schoolList(@ModelAttribute User user, ModelMap modelMap) throws Exception {
+        modelMap.put("userGroup", 1);
+        return new ModelAndView("preview", modelMap);
+    }
 
+    @RequestMapping(value = {"/theatre"}, method = RequestMethod.GET)
+    public ModelAndView theatreList(@ModelAttribute User user, ModelMap modelMap) throws Exception {
+        modelMap.put("userGroup", 2);
+        return new ModelAndView("preview", modelMap);
+    }
+
+    @RequestMapping(value = {"/ajax/admin/projectlist/{userGroup}"}, method = RequestMethod.POST)
+    public @ResponseBody AjaxResponse<Paginate<Project>> projectList(@ModelAttribute User user, @PathVariable int userGroup, @RequestParam int page) throws Exception {
+        int index = (page - 1) * SiteConstants.PAGE_SIZE;
+        int limit = SiteConstants.PAGE_SIZE;
+        List<Project> projectList = projectService.queryWithLimit(userGroup, index, limit, SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
+        int projectCount = projectService.countAll(userGroup, SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
+        for (Project project : projectList) {
+            List<Upload> uploadList = uploadService.queryByProjectIdUserId(project.getId(), user.getId());
+            if (CollectionUtils.isNotEmpty(uploadList)) {
+                project.setUploadId(uploadList.get(0).getId());
+            }
+        }
+
+        Paginate<Project> paginate = new Paginate<Project>();
+        paginate.setPageCount(projectCount / (SiteConstants.PAGE_SIZE + 1) + 1);
+        paginate.setList(projectList);
+
+        return new AjaxResponse<Paginate<Project>>(HttpStatus.OK.value(), null, paginate);
+    }
 }

@@ -8,8 +8,8 @@
         <li role="presentation" class="active"><a href="/admin/userlist">用户管理</a></li>
     </ul>
     <h2>用户列表</h2>
-    <div>
-        <a class="btn btn-primary" href="/admin/importuser">导入新用户</a>
+    <div style="text-align: right;">
+        <a class="btn btn-primary" href="/admin/newuser">创建新用户</a>
     </div>
     <div class="J_pagelist">
         <table class="table table-bordered table-striped table-hover">

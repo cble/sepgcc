@@ -29,7 +29,7 @@ public class FileDownloadService {
     public FileMeta compressProjectFile(int projectId) {
         ZipOutputStream zip = null;
         try {
-            Project project = projectService.loadById(projectId, SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
+            Project project = projectService.loadById(projectId, 99, SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
             List<Upload> uploadList = uploadService.queryByProjectId(projectId);
             if (CollectionUtils.isNotEmpty(uploadList)) {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();

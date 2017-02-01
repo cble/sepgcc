@@ -84,7 +84,7 @@ function deleteproject(id) {
                     } else if (item.status == 2) {
                         operation = '<a href="/admin/projectstatistics?projectId={id}">查看上传情况</a>';
                     }
-                    return [item.name, item.endTimeStr, item.successNumber, operation.replace(/\{(\w+)\}/g, function (m, $1) {
+                    return [item.name, item.endTimeStr, item.groupStr, item.successNumber, operation.replace(/\{(\w+)\}/g, function (m, $1) {
                         return item[$1];
                     })];
                 });

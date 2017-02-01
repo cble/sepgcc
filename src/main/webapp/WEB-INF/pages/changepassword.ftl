@@ -16,13 +16,13 @@
             <div class="form-group">
                 <label for="" class="col-sm-2 control-label">新密码</label>
                 <div class="col-sm-3">
-                    <input class="form-control J_newpassword1" type="password" name="newpassword1" required="" />
+                    <input class="form-control J_newpassword1" type="password" name="newpassword1" required="" placeholder="请输入8位以上的字母和数字" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="" class="col-sm-2 control-label">再次输入新密码</label>
                 <div class="col-sm-3">
-                    <input class="form-control J_newpassword2" type="password" name="newpassword2" required="" />
+                    <input class="form-control J_newpassword2" type="password" name="newpassword2" required="" placeholder="请输入8位以上的字母和数字" />
                 </div>
             </div>
 

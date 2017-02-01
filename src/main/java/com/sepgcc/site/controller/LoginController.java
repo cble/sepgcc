@@ -5,6 +5,7 @@ import com.sepgcc.site.constants.SecurityConstants;
 import com.sepgcc.site.dto.AjaxResponse;
 import com.sepgcc.site.dto.User;
 import com.sepgcc.site.service.UserService;
+import com.sepgcc.site.utils.SecurityUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -36,10 +37,10 @@ public class LoginController extends BaseController {
             String redirect,
             HttpServletRequest request) throws Exception {
         if (user != null) {
-            if (StringUtils.isNotBlank(redirect)) {
-                return new ModelAndView("redirect:" + redirect); // TODO
+            if (StringUtils.isNotBlank(redirect) && SecurityUtils.isSafeRedirect(redirect)) {
+                return new ModelAndView("redirect:" + redirect); // TODO fix?
             } else {
-                return new ModelAndView(new RedirectView("index"));
+                return new ModelAndView(new RedirectView(user.isAdmin() ? "admin" : "index"));
             }
         } else if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password) && StringUtils.isNotBlank(captcha)) {
             String sessionCaptcha = getSessionCaptcha(request);
@@ -53,7 +54,7 @@ public class LoginController extends BaseController {
                 setToken(request, user.getToken());
                 request.getSession().removeAttribute(SecurityConstants.SESSION_CAPTCHA);
                 accessLogger.info(String.format("login success: username=%s", username));
-                return new ModelAndView(new RedirectView("index"));
+                return new ModelAndView(new RedirectView(user.isAdmin() ? "admin" : "index"));
             } else {
                 accessLogger.info(String.format("login failed: username=%s", username));
                 return new ModelAndView("login", ImmutableMap.of("err", "用户名或密码错误"));

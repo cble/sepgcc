@@ -34,6 +34,9 @@
         <iterate property="status" open="(" close=")" conjunction="," >
             #status[]#
         </iterate>
+        <isNotEqual property="userGroup" compareValue="99">
+            AND UserGroup = #userGroup#
+        </isNotEqual>
     </select>
 
     <select id="queryWithLimit" resultMap="projectResult">
@@ -53,7 +56,7 @@
             #status[]#
         </iterate>
         <isNotEqual property="userGroup" compareValue="99">
-            UserGroup = #userGroup#
+            AND UserGroup = #userGroup#
         </isNotEqual>
         ORDER BY ID DESC
         LIMIT #index#, #limit#
@@ -67,7 +70,7 @@
             #status[]#
         </iterate>
         <isNotEqual property="userGroup" compareValue="99">
-            UserGroup = #userGroup#
+            AND UserGroup = #userGroup#
         </isNotEqual>
     </select>
 

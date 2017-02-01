@@ -1,8 +1,10 @@
 package com.sepgcc.site.controller;
 
+import com.google.common.collect.Lists;
 import com.sepgcc.site.constants.SiteConstants;
 import com.sepgcc.site.dto.AjaxResponse;
 import com.sepgcc.site.dto.Paginate;
+import com.sepgcc.site.dto.Project;
 import com.sepgcc.site.dto.User;
 import com.sepgcc.site.service.UserService;
 import org.apache.log4j.Logger;
@@ -54,8 +56,18 @@ public class UserAdminController extends BaseController {
         return new AjaxResponse<Boolean>(HttpStatus.OK.value(), "", result);
     }
 
-    @RequestMapping(value = "/admin/importuser", method = RequestMethod.GET)
-    public ModelAndView importNewUser() {
-        return new ModelAndView("importuser");
+    @RequestMapping(value = "/admin/newuser", method = RequestMethod.GET)
+    public ModelAndView newUser() {
+        return new ModelAndView("newuser");
+    }
+
+    @RequestMapping(value = {"/ajax/admin/newuser"}, method = RequestMethod.POST)
+    public @ResponseBody AjaxResponse<Boolean> createNewProject(@RequestBody User user) {
+        try {
+            int successNumber = userService.batchCreateUser(Lists.newArrayList(user));
+            return new AjaxResponse<Boolean>(HttpStatus.OK.value(), null, successNumber > 0);
+        } catch (IllegalArgumentException e) {
+            return new AjaxResponse<Boolean>(HttpStatus.BAD_REQUEST.value(), e.getMessage(), false);
+        }
     }
 }

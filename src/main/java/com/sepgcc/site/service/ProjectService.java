@@ -23,7 +23,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -44,8 +43,8 @@ public class ProjectService {
     @Resource
     private FileService fileService;
 
-    public Project loadById(int projectId, List<Integer> status) {
-        ProjectDO projectDO = projectDAO.loadById(projectId, status);
+    public Project loadById(int projectId, int userGroup, List<Integer> status) {
+        ProjectDO projectDO = projectDAO.loadById(projectId, userGroup, status);
         Project project = ProjectUtils.toProject(projectDO);
         if (project != null) {
             project.setProjectItemList(queryProjectItemList(projectId, true));
@@ -96,12 +95,9 @@ public class ProjectService {
         });
     }
 
-    public List<Project> queryWithLimit(User user, int index, int limit, List<Integer> status) {
-        if (user == null) {
-            return Collections.emptyList();
-        }
+    public List<Project> queryWithLimit(int userGroup, int index, int limit, List<Integer> status) {
         List<Project> resultList = new ArrayList<Project>();
-        List<ProjectDO> projectDOs = projectDAO.queryWithLimit(user.getUserGroup(), status, index, limit);
+        List<ProjectDO> projectDOs = projectDAO.queryWithLimit(userGroup, status, index, limit);
         for (ProjectDO projectDO : projectDOs) {
             Project project = ProjectUtils.toProject(projectDO);
             if (project != null) {
@@ -113,11 +109,8 @@ public class ProjectService {
         return resultList;
     }
 
-    public int countAll(User user, List<Integer> status) {
-        if (user == null) {
-            return 0;
-        }
-        return projectDAO.countAll(user.getUserGroup(), status);
+    public int countAll(int userGroup, List<Integer> status) {
+        return projectDAO.countAll(userGroup, status);
     }
 
     public int createProject(final Project project) {
@@ -141,13 +134,13 @@ public class ProjectService {
         }
     }
 
-    public int modifyProject(final Project project) {
+    public int modifyProject(final Project project, final int userGroup) {
         try {
             return transactionTemplate.execute(new TransactionCallback<Integer>() {
                 @Override
                 public Integer doInTransaction(TransactionStatus transactionStatus) {
                     int projectId = project.getId();
-                    ProjectDO projectDO = projectDAO.loadById(projectId, SiteConstants.EDITABLE_PROJECT_STATUS);
+                    ProjectDO projectDO = projectDAO.loadById(projectId, userGroup, SiteConstants.EDITABLE_PROJECT_STATUS);
                     Validate.isTrue(projectDO != null, "操作失败，已发布的活动不能修改");
 
                     projectContactDAO.deleteByProjectId(projectId);

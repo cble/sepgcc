@@ -1,7 +1,5 @@
 (function () {
 
-    var userId = PAGE_DATA.userId;
-
     var $tip = $(".J_tip");
     var $process = $(".J_process");
 
@@ -19,9 +17,12 @@
         $tip.addClass("hide");
         $process.removeClass("hide");
 
+        var userName = $(".J_username").val();
+        var nickName = $(".J_nickname").val();
         var password = $(".J_password").val();
+        var userGroup = $(".J_usergroup:checked").val();
 
-        if (!password) {
+        if (!userName || !nickName || !password || !userGroup) {
             showErr("输入错误");
             return;
         }
@@ -31,11 +32,14 @@
             return;
         }
         $.ajax({
-            url: "/ajax/admin/resetpassword",
-            data: {
-                userId: userId,
-                newPwd: password
-            },
+            contentType: "application/json;charset=UTF-8",
+            url: "/ajax/admin/newuser",
+            data: JSON.stringify({
+                username: userName,
+                nickname: nickName,
+                userGroup: userGroup,
+                password: password
+            }),
             dataType: "json",
             type: "post",
             success: function (res) {

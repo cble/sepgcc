@@ -36,8 +36,8 @@ public class UploadController extends BaseController {
     public @ResponseBody AjaxResponse<Paginate<Project>> projectList(@ModelAttribute User user, int page) throws Exception {
         int index = (page - 1) * SiteConstants.PAGE_SIZE;
         int limit = SiteConstants.PAGE_SIZE;
-        List<Project> projectList = projectService.queryWithLimit(user, index, limit, SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
-        int projectCount = projectService.countAll(user, SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
+        List<Project> projectList = projectService.queryWithLimit(user.getUserGroup(), index, limit, SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
+        int projectCount = projectService.countAll(user.getUserGroup(), SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
         for (Project project : projectList) {
             List<Upload> uploadList = uploadService.queryByProjectIdUserId(project.getId(), user.getId());
             if (CollectionUtils.isNotEmpty(uploadList)) {
@@ -72,8 +72,8 @@ public class UploadController extends BaseController {
     }
 
     @RequestMapping(value = {"/notice"}, method = RequestMethod.GET)
-    public ModelAndView notice(@RequestParam int projectId, ModelMap modelMap) throws Exception {
-        Project project = projectService.loadById(projectId, SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
+    public ModelAndView notice(@RequestParam int projectId, @ModelAttribute User user, ModelMap modelMap) throws Exception {
+        Project project = projectService.loadById(projectId, user.getUserGroup(), SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
         if (project == null) {
             throw new ResourceNotFoundException();
         }
@@ -83,7 +83,7 @@ public class UploadController extends BaseController {
 
     @RequestMapping(value = {"/upload"}, method = RequestMethod.GET)
     public ModelAndView upload(@RequestParam int projectId, @ModelAttribute User user, ModelMap modelMap) throws Exception {
-        Project project = projectService.loadById(projectId, SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
+        Project project = projectService.loadById(projectId, user.getUserGroup(), SiteConstants.USER_AVAILABLE_PROJECT_STATUS);
         if (project == null) {
             throw new ResourceNotFoundException();
         }
@@ -100,7 +100,7 @@ public class UploadController extends BaseController {
     public ModelAndView modify(@RequestParam int uploadId, @ModelAttribute User user, ModelMap modelMap) throws Exception {
         Upload upload = uploadService.loadById(uploadId, user.getId());
         if (upload != null) {
-            modelMap.put("project", projectService.loadById(upload.getProjectId(), SiteConstants.USER_AVAILABLE_PROJECT_STATUS));
+            modelMap.put("project", projectService.loadById(upload.getProjectId(), user.getUserGroup(), SiteConstants.USER_AVAILABLE_PROJECT_STATUS));
             modelMap.put("upload", upload);
             return new ModelAndView("modify");
         } else {

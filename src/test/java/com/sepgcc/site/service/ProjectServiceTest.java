@@ -21,7 +21,7 @@ public class ProjectServiceTest {
 
     @Test
     public void testLoadProjectById() throws Exception {
-        Project project = projectService.loadById(1, SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
+        Project project = projectService.loadById(1, 99, SiteConstants.ADMIN_AVAILABLE_PROJECT_STATUS);
         Assert.notNull(project, "oops...");
     }
 }

@@ -11,9 +11,10 @@ import java.util.Map;
 public class ProjectDAOImpl extends SqlMapClientDaoSupport implements ProjectDAO {
 
     @Override
-    public ProjectDO loadById(int id, List<Integer> status) {
+    public ProjectDO loadById(int id, int userGroup, List<Integer> status) {
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("id", id);
+        param.put("userGroup", userGroup);
         param.put("status", status);
         return (ProjectDO) this.getSqlMapClientTemplate().queryForObject("project.loadById", param);
     }
